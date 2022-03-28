@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/MTShopCommon/pom.xml" />
         <option value="$PROJECT_DIR$/MTShopWebParent/pom.xml" />
         <option value="$PROJECT_DIR$/MTShopWebParent/MTShopBackend/pom.xml" />
+        <option value="$PROJECT_DIR$/MTShopWebParent/MTShopFrontend/pom.xml" />
       </list>
     </option>
   </component>
