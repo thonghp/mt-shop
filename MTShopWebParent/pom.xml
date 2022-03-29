@@ -20,6 +20,7 @@
 
     <modules>
         <module>MTShopBackend</module>
+        <module>MTShopFrontend</module>
     </modules>
 
     <dependencies>
