@@ -22,6 +22,11 @@ public class Role {
     public Role() {
     }
 
+    // find by id
+    public Role(Integer id) {
+        this.id = id;
+    }
+
     public Role(String name) {
         this.name = name;
     }
