@@ -91,9 +91,14 @@
     <!-- user form -->
     <div>
         <h2>Manage Users</h2>
-        <a th:href="@{/user-form}" class="fas fa-user-plus fa-2x icon-dark"></a>
+        <a th:href="@{/users/new}" class="fas fa-user-plus fa-2x icon-dark"></a>
     </div>
     <!-- user form -->
+
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
 
     <!-- search -->
     <form action="search?keyword=${keyword}&page=1" class="form-inline mt-3" method="get">
