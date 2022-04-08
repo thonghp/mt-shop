@@ -14,6 +14,7 @@ public class PasswordEncoderTest {
 
         System.out.println(encodedPassword);
 
+        // check if there is a match
         boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);
 
         assertThat(matches).isTrue();

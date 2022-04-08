@@ -13,11 +13,11 @@ import java.util.List;
 
 /*
  * view -> controller -> service -> repository -> entity
- * @Controller is a special case of @Component, use at presentation layer and only apply to class
- * @GetMapping map to http get
- * Model is an object that stores information and is used by Template Engine to generate webpage. It can be understood
- * as the Context of Thymeleaf
- * Model stores information as key-values.
+ * - @Controller is a special case of @Component, use at presentation layer and only apply to class
+ * - @GetMapping map to http get
+ * - Model is an object attached to each response.
+ * -- contains the return information and the Template Engine will extract the information into html and send it to the user.
+ * -- It can be understood as the Context of Thymeleaf and stores information as key-values.
  * addFlashAttribute() stores the attribute in the flashmap, persists internally in the user session, and is deleted
  * when a redirect is requested, Multiple object types can be stored inside
  */
