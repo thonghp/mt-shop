@@ -10,16 +10,9 @@
 
     <title>Create New User</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
-          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
-          crossorigin="anonymous">
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
-            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -62,7 +55,7 @@
                         <a th:href="@{/customers}" class="nav-link">Customers</a>
                     </li>
                     <li class="nav-item">
-                        <a href="shipping" class="nav-link">Shipping</a>
+                        <a th:href="@{/shipping}" class="nav-link">Shipping</a>
                     </li>
                     <li class="nav-item">
                         <a th:href="@{/orders}" class="nav-link">Orders</a>
@@ -93,12 +86,8 @@
     </div>
     <!-- user form -->
 
-    <!--
-    th:object in the form there is only 1 property, containing a reference to the command object
-    th: field used to bind to the getter of a property in the bean class
-    -->
-
-    <form th:action="@{/users/save}" method="post" style="max-width: 700px; margin: 0 auto" th:object="${user}">
+    <form th:action="@{/users/save}" method="post" style="max-width: 700px; margin: 0 auto" th:object="${user}"
+          onsubmit="return checkEmailUnique(this);">
         <div class="border border-secondary rounded p-3">
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">E-mail</label>
@@ -155,6 +144,28 @@
         </div>
     </form>
 
+    <!-- modal -->
+    <div class="modal fade text-center" id="modalDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalTitle">Warning</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="modalBody"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+<!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal -->
+
     <!-- footer -->
     <div class="text-center">
         <p>MTShop Control Panel - Copyright &copy; MT</p>
@@ -163,15 +174,42 @@
 
 </div>
 
-<!-- navigate when pressing cancel button -->
 <script type="text/javascript">
     $(document).ready(function () {
         $("#btnCancel").on("click", function () {
             window.location = "[[@{/users}]]";
         });
     });
+
+    <!-- navigate when pressing cancel button -->
+
+    function checkEmailUnique(form) {
+        url = "[[@{/users/check_email}]]";
+        userEmail = $("#email").val(); // email of th:field, val() get the value of an input
+        csrfValue = $("input[name='_csrf']").val();
+        params = {email: userEmail, _csrf: csrfValue};
+
+        $.post(url, params, function (response) { // method post => url, data, callback
+            if (response == "OK") {
+                form.submit();
+            } else if (response == "Duplicated") {
+                showModalDialog("Warning", "there is another user having the email " + userEmail)
+            } else {
+                showModalDialog("Error", "Unknown response from server");
+            }
+        }).fail(function () {
+            showModalDialog("Error", "Could not connect to the server"); // this line runs when the above url is wrong
+        });
+
+        return false;
+    }
+
+    function showModalDialog(title, message) {
+        $("#modalTitle").text(title);
+        $("#modalBody").text(message);
+        $("#modalDialog").modal();
+    }
 </script>
-<!-- navigate when pressing cancel button -->
 
 </body>
 </html>
