@@ -57,7 +57,7 @@ public class UserController {
     public String saveUser(User user, RedirectAttributes redirectAttributes) {
         userService.save(user);
 
-        redirectAttributes.addFlashAttribute("message", "The user has bean saved successfully");
+        redirectAttributes.addFlashAttribute("message", "User lưu thành công !");
 
         return "redirect:/users";
     }
@@ -75,7 +75,21 @@ public class UserController {
             return "user_form";
         } catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
+
             return "redirect:/users";
         }
+    }
+
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            userService.delete(id);
+
+            redirectAttributes.addFlashAttribute("message", "User " + id + " xoá thành công !");
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
+
+        return "redirect:/users";
     }
 }

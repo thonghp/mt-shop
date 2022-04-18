@@ -144,9 +144,9 @@
                 </td>
                 <td>
                     <a th:href="@{'/users/edit/'+${user.id}}" class="fas fa-edit fa-2x icon-green"
-                       title="Edit this user"></a>
+                       title="Chỉnh sửa user"></a>
                     <a th:href="@{'/users/delete/'+${user.id}}" class="fas fa-trash fa-2x icon-dark link-delete"
-                       title="Delete this user"></a>
+                       th:userId="${user.id}" title="Xoá user"></a>
                 </td>
             </tr>
             </tbody>
@@ -227,5 +227,23 @@
     <!-- footer -->
 
 </div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".link-delete").on("click", function (e) {
+            e.preventDefault(); // Prevent a link from opening the URL
+
+            link = $(this); // object jquery, can call all jQuery methods and functions but not DOM methods.
+            userId = link.attr("userId"); //  Return the value of an attribute
+            userId = link.attr("userId"); //  Return the value of an attribute
+
+            $("#yesButton").attr("href",link.attr("href")); // set value of attribute
+            $("#confirmText").text("Bạn có muốn xoá user " + userId + " không ?");
+            $("#confirmModal").modal();
+        });
+    });
+</script>
+
 </body>
 </html>
