@@ -5,6 +5,7 @@ import com.mtshop.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -15,6 +16,7 @@ import java.util.NoSuchElementException;
  */
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
@@ -90,5 +92,9 @@ public class UserService {
         }
 
         userRepository.deleteById(id);
+    }
+
+    public void updateUpdateUserEnabledStatus(Integer id, boolean enabled) {
+        userRepository.updateEnabledStatus(id, enabled);
     }
 }
