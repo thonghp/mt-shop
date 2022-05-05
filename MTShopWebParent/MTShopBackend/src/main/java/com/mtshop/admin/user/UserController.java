@@ -68,7 +68,7 @@ public class UserController {
 
             User savedUser = userService.save(user);
 
-            String uploadDir = "user-photos/" + savedUser.getId();
+            String uploadDir = "images/user-photos/" + savedUser.getId();
 
             FileUploadUtil.cleanDir(uploadDir); // remove ảnh cũ khi có ảnh mới
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
