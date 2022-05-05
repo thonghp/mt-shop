@@ -51,7 +51,7 @@ public class User {
      * Cons: takes a lot of time and memory when selecting, the data retrieved is redundant and unnecessary.
      */
 
-//    @ManyToMany(fetch = FetchType.EAGER)
+    //    @ManyToMany(fetch = FetchType.EAGER)
     @ManyToMany()
     @JoinTable(
             name = "user_role",
@@ -141,5 +141,12 @@ public class User {
     public String toString() {
         return "User{" + "id=" + id + ", email='" + email + '\'' + ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' + ", roles=" + roles + '}';
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (id == null || photos == null) return "/images/default-user.png";
+
+        return "/user-photos/" + this.id + "/" + this.photos;
     }
 }
