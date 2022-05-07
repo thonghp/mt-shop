@@ -3,6 +3,9 @@ package com.mtshop.admin.user;
 import com.mtshop.common.entity.Role;
 import com.mtshop.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +21,8 @@ import java.util.NoSuchElementException;
 @Service
 @Transactional
 public class UserService {
+
+    public static final int USER_PER_PAGE = 5;
 
     @Autowired
     private UserRepository userRepository;
@@ -96,5 +101,11 @@ public class UserService {
 
     public void updateUserEnabledStatus(Integer id, boolean enabled) {
         userRepository.updateEnabledStatus(id, enabled);
+    }
+
+    public Page<User> listByPage(int pageNum) {
+        Pageable pageable = PageRequest.of(pageNum - 1, USER_PER_PAGE);
+
+        return userRepository.findAll(pageable);
     }
 }

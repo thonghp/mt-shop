@@ -161,45 +161,33 @@
     </div>
     <!-- table -->
 
+    <!-- pagination -->
+    <div class="text-center m-1" th:if="${totalItems>0}">
+        <span>#[[${startCount}]] đến #[[${endCount}]] của [[${totalItems}]] </span>
+    </div>
+    <div class="text-center m-1" th:unless="${totalItems>0}">
+        <span>Không tìm thấy User</span>
+    </div>
     <div>
         <nav>
             <ul class="pagination justify-content-center">
-
-                <!-- paging -->
-                <li class="page-item">
-                    <a class="page-link" href="user?page=1">First</a>
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                    <a th:href="@{/users/page/1}" class="page-link">First</a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link" href="user?page=${previousPage}">Previous</a>
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                    <a th:href="@{'/users/page/'+${currentPage - 1}}" class="page-link">Previous</a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link" href="user?page=${i}">${i}</a>
+                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+                    th:each="i : ${#numbers.sequence(1,totalPages)}">
+                    <a th:href="@{'/users/page/'+${i}}" class="page-link">[[${i}]]</a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link" href="user?page=${nextPage}">Next</a>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                    <a th:href="@{'/users/page/'+${currentPage + 1}}" class="page-link">Next</a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link" href="user?page=${totalPages}">Last</a>
-                </li>
-
-                <li class="page-item">
-                    <a class="page-link" href="search?keyword=${keyword}&page=1">First</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="search?keyword=${keyword}&page=${previousPage}">Previous</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="search?keyword=${keyword}&page=${i}">${i}</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="search?keyword=${keyword}&page=${nextPage}">Next</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="search?keyword=${keyword}&page=${totalPages}">Last</a>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                    <a th:href="@{'/users/page/'+${totalPages}}" class="page-link">Last</a>
                 </li>
             </ul>
-            <!-- paging -->
-
         </nav>
     </div>
 
