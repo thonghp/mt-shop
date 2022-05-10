@@ -40,13 +40,14 @@ public class UserController {
 
     @GetMapping("/users") // http://localhost:8080/MTShopAdmin/users
     public String listFirstPage(Model model) {
-        return listByPage(1, model, "firstName", "asc");
+        return listByPage(1, model, "firstName", "asc", null);
     }
 
     @GetMapping("/users/page/{pageNumber}")
     public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
-                             @Param("sortField") String sortField, @Param("sortType") String sortType) {
-        Page<User> page = userService.listByPage(pageNum, sortField, sortType);
+                             @Param("sortField") String sortField, @Param("sortType") String sortType,
+                             @Param("keyword") String keyword) {
+        Page<User> page = userService.listByPage(pageNum, sortField, sortType, keyword);
         List<User> listUsers = page.getContent();
 
         long startElementOfPage = (pageNum - 1) * UserService.USER_PER_PAGE + 1;
@@ -67,6 +68,7 @@ public class UserController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortType", sortType);
         model.addAttribute("reverseSortType", reverseSortType);
+        model.addAttribute("keyword", keyword);
 
         return "users";
     }
@@ -81,7 +83,7 @@ public class UserController {
 //      User(null,...,true,...)
         model.addAttribute("user", user);
         model.addAttribute("listRoles", listRoles);
-        model.addAttribute("pageTitle", "Create New User");
+        model.addAttribute("pageTitle", "Tạo người dùng mới");
 
         return "user_form";
     }
@@ -118,7 +120,7 @@ public class UserController {
 
             model.addAttribute("user", user);
             model.addAttribute("listRoles", listRoles);
-            model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
+            model.addAttribute("pageTitle", "Sửa người dùng (ID: " + id + ")");
 
             return "user_form";
         } catch (UserNotFoundException e) {
