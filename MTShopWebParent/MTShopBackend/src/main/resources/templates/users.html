@@ -101,13 +101,17 @@
     <!-- search -->
     <div>
         <form th:action="@{/users/page/1}" class="form-inline m-3">
+            <a th:href="@{/users/new}" class="fas fa-user-plus fa-2x icon-dark"></a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a th:href="@{/users/export/csv}" class="fas">CSV</a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a th:href="@{/users/export/pdf}" class="fas">PDF</a>
+
             <input type="hidden" name="sortField" th:value="${sortField}"/>
             <input type="hidden" name="sortType" th:value="${sortType}"/>
-
-            <a th:href="@{/users/new}" class="fas fa-user-plus fa-2x icon-dark"></a>
-            &nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;
             Tìm Kiếm: &nbsp;
-            <input type="search" name="keyword" class="form-control" required placeholder="Search"/>
+            <input type="search" name="keyword" class="form-control w-50" required placeholder="Search"/>
             &nbsp;&nbsp;
             <input type="submit" value="Search" class="btn btn-primary"/>
             &nbsp;&nbsp;

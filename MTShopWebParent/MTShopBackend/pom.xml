@@ -12,13 +12,18 @@
 
     <artifactId>MTShopBackend</artifactId>
     <name>MTShopBackend</name>
-    <description>MTShop admin project</description>
+    <description>Module containing backend</description>
 
     <properties>
         <java.version>11</java.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>net.sf.supercsv</groupId>
+            <artifactId>super-csv</artifactId>
+            <version>2.4.0</version>
+        </dependency>
     </dependencies>
 
     <build>
