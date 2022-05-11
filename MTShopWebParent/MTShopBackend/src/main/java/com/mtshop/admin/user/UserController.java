@@ -109,7 +109,12 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("message", "User đã được lưu thành công !");
 
-        return "redirect:/users";
+        return getRedirectURLToAffectedUser(user);
+    }
+
+    private String getRedirectURLToAffectedUser(User user) {
+        String firstPartOfEmail = user.getEmail().split("@")[0];
+        return "redirect:/users/page/1?sortField=id&sortType=asc&keyword=" + firstPartOfEmail;
     }
 
     @GetMapping("/users/edit/{id}")
