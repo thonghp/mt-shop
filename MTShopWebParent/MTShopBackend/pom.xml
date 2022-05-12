@@ -19,10 +19,17 @@
     </properties>
 
     <dependencies>
+        <!-- maven export file csv -->
         <dependency>
             <groupId>net.sf.supercsv</groupId>
             <artifactId>super-csv</artifactId>
             <version>2.4.0</version>
+        </dependency>
+        <!-- maven export file excel -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.2</version>
         </dependency>
     </dependencies>
 

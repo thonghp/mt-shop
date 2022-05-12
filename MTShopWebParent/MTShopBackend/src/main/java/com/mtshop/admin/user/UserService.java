@@ -35,7 +35,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public List<User> listAll() {
-        return (List<User>) userRepository.findAll(Sort.by("firstName").ascending());
+        return (List<User>) userRepository.findAll(Sort.by("id").ascending());
     }
 
     public List<Role> listRoles() {
