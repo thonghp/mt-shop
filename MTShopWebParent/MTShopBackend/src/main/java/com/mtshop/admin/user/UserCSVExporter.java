@@ -7,22 +7,11 @@ import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-public class UserCSVExporter {
+public class UserCSVExporter extends AbstractExporter {
     public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
-        DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String timestamp = dateFormater.format(new Date());
-        String fileName = "users_" + timestamp + ".csv";
-
-        response.setContentType("text/csv");
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; fileName=" + fileName;
-        response.setHeader(headerKey, headerValue);
+        super.setReponseHeader(response, "text/csv", ".csv");
 
         ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
 
