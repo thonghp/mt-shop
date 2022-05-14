@@ -90,7 +90,15 @@
 
     <!-- user form -->
     <div>
-        <h2 class="text-center mt-3 mb-3">Quản Lý Người Dùng</h2>
+        <!-- class="text-center mt-3 mb-3" -->
+        <h2>Quản Lý Người Dùng</h2>
+        <a th:href="@{/users/new}" class="fas fa-user-plus fa-2x icon-dark mr-2"></a>
+
+        <a th:href="@{/users/export/csv}" class="fas fa-file-csv fa-2x mr-2" style="color: #007c01"></a>
+
+        <a th:href="@{/users/export/excel}" class="fas fa-file-excel fa-2x mr-2" style="color: #1e6b3f"></a>
+
+        <a th:href="@{/users/export/pdf}" class="fas fa-file-pdf fa-2x" style="color: #db0001"></a>
     </div>
     <!-- user form -->
 
@@ -101,37 +109,42 @@
     <!-- search -->
     <div>
         <form th:action="@{/users/page/1}" class="form-inline m-3">
-            <a th:href="@{/users/new}" class="fas fa-user-plus fa-2x icon-dark"></a>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <a th:href="@{/users/export/csv}" class="fas">CSV</a>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <a th:href="@{/users/export/excel}" class="fas">Excel</a>
-            &nbsp;|&nbsp;&nbsp;
-            <a th:href="@{/users/export/pdf}" class="fas">PDF</a>
-
             <input type="hidden" name="sortField" th:value="${sortField}"/>
             <input type="hidden" name="sortType" th:value="${sortType}"/>
-            &nbsp;&nbsp;
+
             Tìm Kiếm: &nbsp;
-            <input type="search" name="keyword" class="form-control w-50" required placeholder="Search"/>
+            <input type="search" name="keyword" class="form-control" required placeholder="Search"/>
             &nbsp;&nbsp;
-            <input type="submit" value="Search" class="btn btn-primary"/>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i>
+            </button>
             &nbsp;&nbsp;
-            <input type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()"/>
+            <button type="button" class="btn btn-secondary" onclick="clearFilter()" title="Xoá">
+                <i class="fas fa-eraser"></i>
+            </button>
         </form>
     </div>
     <!-- search -->
 
     <!-- table -->
-    <div>
-        <table class="table table-bordered table-hover table-responsive-xl">
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
-                <th th:replace="fragments :: column_link('id', 'ID')"/>
+                <th class="hideable-column">
+                <th th:replace="fragments :: column_link('id', 'ID', 'tag')"/>
+                </th>
+
                 <th>Ảnh</th>
-                <th th:replace="fragments :: column_link('email', 'Email')"/>
-                <th th:replace="fragments :: column_link('firstName', 'Tên')"/>
-                <th th:replace="fragments :: column_link('lastName', 'Họ')"/>
+
+                <th class="hideable-column">
+                <th th:replace="fragments :: column_link('email', 'Email', 'tag')"/>
+                </th>
+
+                <th th:replace="fragments :: column_link('firstName', 'Tên', 'none')"/>
+
+                <th th:replace="fragments :: column_link('lastName', 'Họ', 'none')"/>
+
                 <th>Vai trò</th>
                 <th>Trạng thái</th>
                 <th></th>
@@ -141,12 +154,12 @@
             <!-- load user list -->
             <tbody>
             <tr th:each="user: ${listUsers}">
-                <td>[[${user.id}]]</td>
+                <td class="hideable-column">[[${user.id}]]</td>
                 <td>
                     <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
                     <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" style="width: 100px"/>
                 </td>
-                <td>[[${user.email}]]</td>
+                <td class="hideable-column">[[${user.email}]]</td>
                 <td>[[${user.firstName}]]</td>
                 <td>[[${user.lastName}]]</td>
                 <td>[[${user.roles}]]</td>
@@ -170,6 +183,30 @@
     </div>
     <!-- table -->
 
+    <div class="less-details">
+        <div th:each="user: ${listUsers}" class="row m-1">
+            <div class="col-4">
+                <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
+                <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" style="width: 100px"/>
+            </div>
+            <div class="col-8">
+                <div>[[${user.fullName}]]</div>
+                <div>[[${user.roles}]]</div>
+                <div>
+                    <a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+                       th:href="@{'/users/' + ${user.id} + '/enabled/false'}" title="Vô hiệu hoá user"></a>
+                    <a th:if="${user.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
+                       th:href="@{'/users/' + ${user.id} + '/enabled/true'}" title="Kích hoạt user"></a>
+                    <a th:href="@{'/users/edit/' + ${user.id}}" class="fas fa-edit fa-2x icon-green"
+                       title="Chỉnh sửa user"></a>
+                    <a th:href="@{'/users/delete/' + ${user.id}}" class="fas fa-trash fa-2x icon-dark link-delete"
+                       th:userId="${user.id}" title="Xoá user"></a>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </div>
+    </div>
+
     <!-- pagination -->
     <div class="text-center m-1" th:if="${totalItems>0}">
         <span>#[[${startCount}]] đến #[[${endCount}]] của [[${totalItems}]] </span>
@@ -181,7 +218,7 @@
 
     <div th:if="${totalPages > 0}">
         <nav>
-            <ul class="pagination justify-content-center">
+            <ul class="pagination justify-content-center flex-wrap">
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
                     <a th:replace="fragments :: page_link(1, 'First')"></a>
                 </li>
