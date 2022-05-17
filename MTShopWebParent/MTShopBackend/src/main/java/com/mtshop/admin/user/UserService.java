@@ -106,7 +106,7 @@ public class UserService {
 
     public Page<User> listByPage(int pageNum, String sortField, String sortType, String keyword) {
         Sort sort = Sort.by(sortField);
-        sort = sortType.equals("asc") ? sort.ascending() : sort.descending();
+        sort = sortType.equals("desc") ? sort.descending() : sort.ascending();
 
         Pageable pageable = PageRequest.of(pageNum - 1, USER_PER_PAGE, sort);
 

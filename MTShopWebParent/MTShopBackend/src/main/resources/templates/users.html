@@ -216,7 +216,7 @@
         <span>Không tìm thấy User</span>
     </div>
 
-    <div th:if="${totalPages > 0}">
+    <div th:if="${totalPages > 1}">
         <nav>
             <ul class="pagination justify-content-center flex-wrap">
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">

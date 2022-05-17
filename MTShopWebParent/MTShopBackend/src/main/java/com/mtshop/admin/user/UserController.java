@@ -41,13 +41,13 @@ public class UserController {
 
     @GetMapping("/users") // http://localhost:8080/MTShopAdmin/users
     public String listFirstPage(Model model) {
-        return listByPage(1, model, "firstName", "asc", null);
+        return listByPage(1, model, "id", "asc", null);
     }
 
     @GetMapping("/users/page/{pageNumber}")
     public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
-                             @Param("sortField") String sortField, @Param("sortType") String sortType,
-                             @Param("keyword") String keyword) {
+                             @RequestParam("sortField") String sortField, @RequestParam("sortType") String sortType,
+                             @RequestParam(value = "keyword", required = false) String keyword) {
         Page<User> page = userService.listByPage(pageNum, sortField, sortType, keyword);
         List<User> listUsers = page.getContent();
 
@@ -58,7 +58,7 @@ public class UserController {
             endElementOfPage = page.getTotalElements();
         }
 
-        String reverseSortType = "asc".equals(sortType) ? "desc" : "asc";
+        String reverseSortType = "desc".equals(sortType) ? "asc" : "desc";
 
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", page.getTotalPages());
