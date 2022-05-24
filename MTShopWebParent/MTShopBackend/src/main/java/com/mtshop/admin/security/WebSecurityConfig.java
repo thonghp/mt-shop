@@ -1,6 +1,5 @@
 package com.mtshop.admin.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,8 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.sql.DataSource;
-
 /*
  * - @Configuration also a @Component but @Component cannot act like @Configuration
  * -- contains 1 or more @Bean
@@ -26,9 +23,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private DataSource dataSource;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -59,13 +53,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .usernameParameter("email")
-                .permitAll();
+                .formLogin().loginPage("/login").usernameParameter("email").permitAll()
+                .and()
+                .logout().permitAll();
+
     }
 
-    // bỏ qua image và js trong source ko cần xác thực vẫn hiện
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
