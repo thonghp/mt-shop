@@ -1,85 +1,13 @@
 <!DOCTYPE html>
-
-<!-- use thymeleaf -->
 <html xmlns:th="http://www.thymeleaf.org">
-<!-- use thymeleaf -->
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+<head th:replace="fragments :: page_head('Quản lý người dùng - MTShop Admin')"/>
 
-    <title>Home - MTShop Admin</title>
-
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
-    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-</head>
 <body>
 <div class="container-fluid">
 
-    <!-- header -->
-    <div>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-
-            <!-- logo -->
-            <a th:href="@{/}" class="navbar-brand">
-                <img th:src="@{/images/logo.png}"/>
-            </a>
-            <!-- logo -->
-
-            <!-- toggle -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- toggle -->
-
-            <!-- navigation -->
-            <div class="collapse navbar-collapse" id="topNavbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a th:href="@{/users}" class="nav-link">Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/categories}" class="nav-link">Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/brands}" class="nav-link">Brands</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/products}" class="nav-link">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/customers}" class="nav-link">Customers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/shipping}" class="nav-link">Shipping</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/orders}" class="nav-link">Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/report}" class="nav-link">Sales Report</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/articles}" class="nav-link">Articles</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/menus}" class="nav-link">Menus</a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:href="@{/settings}" class="nav-link">Settings</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- navigation -->
-
-        </nav>
-    </div>
-    <!-- header -->
+    <!-- navigation -->
+    <div th:replace="navigation::menu"></div>
 
     <!-- user form -->
     <div>
@@ -255,10 +183,7 @@
     <!--    confirm modal -->
 
     <!-- footer -->
-    <div class="text-center">
-        <p>MTShop Control Panel - Copyright &copy; MT</p>
-    </div>
-    <!-- footer -->
+    <div th:replace="fragments :: footer"></div>
 
 </div>
 
