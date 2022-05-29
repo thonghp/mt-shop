@@ -1,5 +1,6 @@
-package com.mtshop.admin.user;
+package com.mtshop.admin.user.export;
 
+import com.mtshop.admin.user.AbstractExporter;
 import com.mtshop.common.entity.User;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
