@@ -26,7 +26,7 @@ public class UserService {
     public static final int USER_PER_PAGE = 5;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepo;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -35,7 +35,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public List<User> listAll() {
-        return (List<User>) userRepository.findAll(Sort.by("id").ascending());
+        return (List<User>) userRepo.findAll(Sort.by("id").ascending());
     }
 
     public List<Role> listRoles() {
@@ -46,7 +46,7 @@ public class UserService {
         boolean isUpdatingUser = (user.getId() != null);
 
         if (isUpdatingUser) {
-            User existingUser = userRepository.findById(user.getId()).get();
+            User existingUser = userRepo.findById(user.getId()).get();
 
             if (user.getPassword().isEmpty()) {
                 user.setPassword(existingUser.getPassword());
@@ -58,7 +58,7 @@ public class UserService {
             encodePassword(user);
         }
 
-        return userRepository.save(user);
+        return userRepo.save(user);
     }
 
     private void encodePassword(User user) {
@@ -67,7 +67,7 @@ public class UserService {
     }
 
     public boolean isEmailUnique(Integer id, String email) {
-        User userByEmail = userRepository.getUserByEmail(email);
+        User userByEmail = userRepo.getUserByEmail(email);
 
         if (userByEmail == null) return true;
 
@@ -84,24 +84,24 @@ public class UserService {
 
     public User get(Integer id) throws UserNotFoundException {
         try {
-            return userRepository.findById(id).get();
+            return userRepo.findById(id).get();
         } catch (NoSuchElementException ex) {
             throw new UserNotFoundException("Could not find any user with ID" + id);
         }
     }
 
     public void delete(Integer id) throws UserNotFoundException {
-        Long countById = userRepository.countById(id);
+        Long countById = userRepo.countById(id);
 
         if (countById == null || countById == 0) {
             throw new UserNotFoundException("Could not find any user with ID" + id);
         }
 
-        userRepository.deleteById(id);
+        userRepo.deleteById(id);
     }
 
     public void updateUserEnabledStatus(Integer id, boolean enabled) {
-        userRepository.updateEnabledStatus(id, enabled);
+        userRepo.updateEnabledStatus(id, enabled);
     }
 
     public Page<User> listByPage(int pageNum, String sortField, String sortType, String keyword) {
@@ -111,8 +111,29 @@ public class UserService {
         Pageable pageable = PageRequest.of(pageNum - 1, USER_PER_PAGE, sort);
 
         if (keyword != null)
-            return userRepository.findAll(keyword, pageable);
+            return userRepo.findAll(keyword, pageable);
 
-        return userRepository.findAll(pageable);
+        return userRepo.findAll(pageable);
+    }
+
+    public User getByEmail(String email) {
+        return userRepo.getUserByEmail(email);
+    }
+
+    public User updateAccount(User userInForm) {
+        User userInDB = userRepo.findById(userInForm.getId()).get();
+
+        if (!userInForm.getPassword().isEmpty()) {
+            userInDB.setPassword(userInForm.getPassword());
+            encodePassword(userInDB);
+        }
+
+        if (userInForm.getPhotos() != null)
+            userInDB.setPhotos(userInForm.getPhotos());
+
+        userInDB.setFirstName(userInForm.getFirstName());
+        userInDB.setLastName(userInForm.getLastName());
+
+        return userRepo.save(userInDB);
     }
 }
