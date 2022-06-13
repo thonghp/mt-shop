@@ -94,7 +94,7 @@ public class UserRepositoryTests {
     @Test
     public void testGetUserByEmail() {
         String email = "thong@gmail.com";
-        User user = userRepository.getUserByEmail(email);
+        User user = userRepository.findByEmail(email);
 
         assertThat(user).isNotNull();
     }

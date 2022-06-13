@@ -14,7 +14,7 @@ public class MTShopUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepo.getUserByEmail(email);
+        User user = userRepo.findByEmail(email);
 
         if (user != null) {
             return new MTShopUserDetails(user);

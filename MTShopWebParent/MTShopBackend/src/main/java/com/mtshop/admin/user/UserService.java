@@ -67,7 +67,7 @@ public class UserService {
     }
 
     public boolean isEmailUnique(Integer id, String email) {
-        User userByEmail = userRepo.getUserByEmail(email);
+        User userByEmail = userRepo.findByEmail(email);
 
         if (userByEmail == null) return true;
 
@@ -117,7 +117,7 @@ public class UserService {
     }
 
     public User getByEmail(String email) {
-        return userRepo.getUserByEmail(email);
+        return userRepo.findByEmail(email);
     }
 
     public User updateAccount(User userInForm) {
