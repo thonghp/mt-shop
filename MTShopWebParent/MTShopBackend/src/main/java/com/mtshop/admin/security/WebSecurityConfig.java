@@ -12,14 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/*
- * - @Configuration also a @Component but @Component cannot act like @Configuration
- * -- contains 1 or more @Bean
- * - @EnableWebSecurity used to enable Spring security
- * - WebSecurityConfigurerAdapter is a utility interface of Spring Security that helps us to install information more easily.
- * - @Bean commonly declared in class @Configuration, instantiate the instance then put the bean in the context
- */
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -51,6 +43,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/users/**").hasAuthority("Admin")
+//                .antMatchers("/categories/**").hasAnyAuthority("Admin", "Editor")
+//                .antMatchers("/brands/**").hasAnyAuthority("Admin", "Editor")
+//                .antMatchers("/articles/**").hasAnyAuthority("Admin", "Editor")
+//                .antMatchers("/menus/**").hasAnyAuthority("Admin", "Editor")
+//                .antMatchers("/products/**").hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
+//                .antMatchers("/questions/**").hasAnyAuthority("Admin", "Assistant")
+//                .antMatchers("/reviews/**").hasAnyAuthority("Admin", "Assistant")
+//                .antMatchers("/customers/**").hasAnyAuthority("Admin", "Salesperson")
+//                .antMatchers("/shippings/**").hasAnyAuthority("Admin", "Salesperson")
+//                .antMatchers("/reports/**").hasAnyAuthority("Admin", "Salesperson")
+//                .antMatchers("/orders/**").hasAnyAuthority("Admin", "Salesperson", "Shipper")
+                .antMatchers("/setting/**").hasAuthority("Admin")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("email").permitAll()
