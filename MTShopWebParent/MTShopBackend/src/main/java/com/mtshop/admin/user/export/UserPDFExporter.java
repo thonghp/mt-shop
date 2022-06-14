@@ -5,7 +5,6 @@ import com.lowagie.text.Font;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.mtshop.admin.user.AbstractExporter;
 import com.mtshop.common.entity.User;
 
 import javax.servlet.http.HttpServletResponse;

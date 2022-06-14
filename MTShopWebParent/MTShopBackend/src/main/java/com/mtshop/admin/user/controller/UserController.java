@@ -1,6 +1,8 @@
-package com.mtshop.admin.user;
+package com.mtshop.admin.user.controller;
 
 import com.mtshop.admin.FileUploadUtil;
+import com.mtshop.admin.user.UserNotFoundException;
+import com.mtshop.admin.user.UserService;
 import com.mtshop.admin.user.export.UserCSVExporter;
 import com.mtshop.admin.user.export.UserExcelExporter;
 import com.mtshop.admin.user.export.UserPDFExporter;
@@ -21,19 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
-/*
- * view -> controller -> service -> repository -> entity
- * - @Controller is a special case of @Component, use at presentation layer and only apply to class
- * - @GetMapping map to http get
- * - @PostMapping map to http post
- * - @PathVariable bound with uri
- * - Model is an object attached to each response.
- * -- contains the return information and the Template Engine will extract the information into html and send it to the user.
- * -- It can be understood as the Context of Thymeleaf and stores information as key-values.
- * addFlashAttribute() stores the attribute in the flashmap, persists internally in the user session, and is deleted
- * when a redirect is requested, Multiple object types can be stored inside
- */
 
 @Controller
 public class UserController {
@@ -73,7 +62,7 @@ public class UserController {
         model.addAttribute("reverseSortType", reverseSortType);
         model.addAttribute("keyword", keyword);
 
-        return "users";
+        return "users/users";
     }
 
     @GetMapping("/users/new")
@@ -88,7 +77,7 @@ public class UserController {
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("pageTitle", "Tạo người dùng mới");
 
-        return "user_form";
+        return "users/user_form";
     }
 
     @PostMapping("/users/save")
@@ -130,7 +119,7 @@ public class UserController {
             model.addAttribute("listRoles", listRoles);
             model.addAttribute("pageTitle", "Sửa người dùng (ID: " + id + ")");
 
-            return "user_form";
+            return "users/user_form";
         } catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
 
