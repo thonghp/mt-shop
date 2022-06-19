@@ -1,5 +1,7 @@
 package com.mtshop.common.entity;
 
+import org.hibernate.annotations.Nationalized;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +14,7 @@ public class Category {
     private Integer id;
 
     @Column(length = 128, nullable = false, unique = true)
+    @Nationalized
     private String name;
 
     @Column(length = 64, nullable = false, unique = true)
@@ -72,5 +75,10 @@ public class Category {
 
     public void setChildren(Set<Category> children) {
         this.children = children;
+    }
+
+    @Override
+    public String toString() {
+        return  name;
     }
 }
