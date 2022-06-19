@@ -23,7 +23,7 @@ public class CategoryService {
     private CategoryRepository categoryRepo;
 
     public List<Category> listAll() {
-        return (List<Category>) categoryRepo.findAll(Sort.by("id").ascending());
+        return (List<Category>) categoryRepo.findAll();
     }
 
     public List<Category> listCategoriesUsedInForm() {

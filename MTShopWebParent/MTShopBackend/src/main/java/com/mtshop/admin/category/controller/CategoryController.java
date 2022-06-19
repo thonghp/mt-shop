@@ -61,15 +61,15 @@ public class CategoryController {
 
     @GetMapping("/categories/new")
     public String newCategory(Model model) {
-        List<Category> listCategories = categoryService.listCategoriesUsedInForm();
         Category category = new Category();
         category.setEnabled(true);
+        List<Category> listCategories = categoryService.listCategoriesUsedInForm();
 
         model.addAttribute("category", category);
-        model.addAttribute("listCategories", listCategories);
         model.addAttribute("pageTitle", "Tạo thể loại mới");
+        model.addAttribute("listCategories", listCategories);
 
-        return "categories/category_form";
+        return "categories/category_form.html";
     }
 
     @PostMapping("/categories/save")
@@ -79,10 +79,7 @@ public class CategoryController {
 
         redirectAttributes.addFlashAttribute("message", "Thể loại đã được lưu thành công !");
 
-        String name = category.getName();
-
-//        return "redirect:/categories/page/1?sortField=id&sortType=asc&keyword=" + name;
-        return "redirect:/categories;
+        return "redirect:/categories";
     }
 
 //    @GetMapping("/users/edit/{id}")

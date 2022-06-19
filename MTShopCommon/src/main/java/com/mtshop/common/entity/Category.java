@@ -34,8 +34,8 @@ public class Category {
 
     public static Category copyIdAndName(Category category) {
         Category copyCategory = new Category();
-        copyCategory.setId(copyCategory.getId());
-        copyCategory.setName(copyCategory.getName());
+        copyCategory.setId(category.getId());
+        copyCategory.setName(category.getName());
 
         return copyCategory;
     }
