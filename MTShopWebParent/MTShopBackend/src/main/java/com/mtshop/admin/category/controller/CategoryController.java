@@ -1,8 +1,8 @@
 package com.mtshop.admin.category.controller;
 
+import com.mtshop.admin.category.CategoryNotFoundException;
 import com.mtshop.admin.category.CategoryService;
 import com.mtshop.admin.category.export.CategoryCSVExporter;
-import com.mtshop.admin.user.UserNotFoundException;
 import com.mtshop.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -91,23 +91,23 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-//    @GetMapping("/users/edit/{id}")
-//    public String editUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
-//        try {
-//            User user = categoryService.get(id);
-//            List<Role> listRoles = categoryService.listRoles();
-//
-//            model.addAttribute("user", user);
-//            model.addAttribute("listRoles", listRoles);
-//            model.addAttribute("pageTitle", "Sửa người dùng (ID: " + id + ")");
-//
-//            return "users/user_form";
-//        } catch (UserNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message", e.getMessage());
-//
-//            return "redirect:/users";
-//        }
-//    }
+    @GetMapping("/categories/edit/{id}")
+    public String editUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Category category = categoryService.get(id);
+            List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+
+            model.addAttribute("category", category);
+            model.addAttribute("listCategories", listCategories);
+            model.addAttribute("pageTitle", "Sửa thể loại (ID: " + id + ")");
+
+            return "categories/category_form";
+        } catch (CategoryNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+
+            return "redirect:/categories";
+        }
+    }
 
 //    @GetMapping("/users/delete/{id}")
 //    public String deleteUser(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
