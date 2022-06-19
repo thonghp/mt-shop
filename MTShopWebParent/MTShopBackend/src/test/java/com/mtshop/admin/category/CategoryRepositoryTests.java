@@ -101,13 +101,13 @@ public class CategoryRepositoryTests {
         assertThat(category).isNotNull();
     }
 
-//    @Test
-//    public void testGetUserById() {
-//        User user = categoryRepository.findById(1).get();
-//
-//        assertThat(user).isNotNull();
-//    }
-//
+    @Test
+    public void testListRootCategories() {
+        List<Category> rootCategories = categoryRepository.findByParentIsNull();
+
+        rootCategories.forEach(cat -> System.out.println(cat.getName()));
+    }
+
 //    @Test
 //    public void testUpdateUserDetails() {
 //        User user = categoryRepository.findById(1).get();

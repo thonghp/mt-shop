@@ -48,6 +48,23 @@ public class Category {
         return copyCategory;
     }
 
+    public static Category copyFull(Category category) {
+        Category copyCategory = new Category();
+        copyCategory.setId(category.getId());
+        copyCategory.setName(category.getName());
+        copyCategory.setAlias(category.getAlias());
+        copyCategory.setEnabled(category.isEnabled());
+
+        return copyCategory;
+    }
+
+    public static Category copyFull(Category category, String name) {
+        Category copyCategory = copyFull(category);
+        copyCategory.setName(name);
+
+        return copyCategory;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -98,6 +115,6 @@ public class Category {
 
     @Override
     public String toString() {
-        return  name;
+        return name;
     }
 }

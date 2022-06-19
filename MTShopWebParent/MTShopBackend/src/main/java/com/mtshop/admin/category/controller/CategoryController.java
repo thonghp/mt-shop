@@ -25,39 +25,48 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    public String listFirstPage(Model model) {
-        return listByPage(1, model, "id", "asc", null);
-    }
+    public String listAll(Model model) {
+        List<Category> categories = categoryService.listAll();
 
-    @GetMapping("/categories/page/{pageNumber}")
-    public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
-                             @RequestParam("sortField") String sortField, @RequestParam("sortType") String sortType,
-                             @RequestParam(value = "keyword", required = false) String keyword) {
-        Page<Category> page = categoryService.listByPage(pageNum, sortField, sortType, keyword);
-        List<Category> listCategories = page.getContent();
-
-        long startElementOfPage = (pageNum - 1) * categoryService.CATEGORY_PER_PAGE + 1;
-        long endElementOfPage = startElementOfPage + categoryService.CATEGORY_PER_PAGE - 1;
-
-        if (endElementOfPage > page.getTotalElements()) {
-            endElementOfPage = page.getTotalElements();
-        }
-
-        String reverseSortType = "desc".equals(sortType) ? "asc" : "desc";
-
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("startCount", startElementOfPage);
-        model.addAttribute("endCount", endElementOfPage);
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("listCategories", listCategories);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortType", sortType);
-        model.addAttribute("reverseSortType", reverseSortType);
-        model.addAttribute("keyword", keyword);
+        model.addAttribute("listCategories", categories);
 
         return "categories/categories";
     }
+
+//    @GetMapping("/categories")
+//    public String listFirstPage(Model model) {
+//        return listByPage(1, model, "id", "asc", null);
+//    }
+//
+//    @GetMapping("/categories/page/{pageNumber}")
+//    public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
+//                             @RequestParam("sortField") String sortField, @RequestParam("sortType") String sortType,
+//                             @RequestParam(value = "keyword", required = false) String keyword) {
+//        Page<Category> page = categoryService.listByPage(pageNum, sortField, sortType, keyword);
+//        List<Category> listCategories = page.getContent();
+//
+//        long startElementOfPage = (pageNum - 1) * categoryService.CATEGORY_PER_PAGE + 1;
+//        long endElementOfPage = startElementOfPage + categoryService.CATEGORY_PER_PAGE - 1;
+//
+//        if (endElementOfPage > page.getTotalElements()) {
+//            endElementOfPage = page.getTotalElements();
+//        }
+//
+//        String reverseSortType = "desc".equals(sortType) ? "asc" : "desc";
+//
+//        model.addAttribute("currentPage", pageNum);
+//        model.addAttribute("totalPages", page.getTotalPages());
+//        model.addAttribute("startCount", startElementOfPage);
+//        model.addAttribute("endCount", endElementOfPage);
+//        model.addAttribute("totalItems", page.getTotalElements());
+//        model.addAttribute("listCategories", listCategories);
+//        model.addAttribute("sortField", sortField);
+//        model.addAttribute("sortType", sortType);
+//        model.addAttribute("reverseSortType", reverseSortType);
+//        model.addAttribute("keyword", keyword);
+//
+//        return "categories/categories";
+//    }
 
     @GetMapping("/categories/new")
     public String newCategory(Model model) {
