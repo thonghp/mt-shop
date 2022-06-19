@@ -29,6 +29,25 @@ public class Category {
     @OneToMany(mappedBy = "parent")
     private Set<Category> children = new HashSet<>();
 
+    public Category() {
+    }
+
+    public static Category copyIdAndName(Category category) {
+        Category copyCategory = new Category();
+        copyCategory.setId(copyCategory.getId());
+        copyCategory.setName(copyCategory.getName());
+
+        return copyCategory;
+    }
+
+    public static Category copyIdAndName(Integer id, String name) {
+        Category copyCategory = new Category();
+        copyCategory.setId(id);
+        copyCategory.setName(name);
+
+        return copyCategory;
+    }
+
     public Integer getId() {
         return id;
     }

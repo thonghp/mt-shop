@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Quản lý thể loại - MTShop Admin')"/>
+
+<body>
+<div class="container-fluid">
+
+    <!-- navigation -->
+    <div th:replace="navigation::menu"></div>
+
+    <!-- user form -->
+    <div>
+        <!-- class="text-center mt-3 mb-3" -->
+        <h2>Quản Lý Thể loại</h2>
+        <a th:href="@{/categories/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
+        <a th:href="@{/categories/export/csv}" class="fas fa-file-csv fa-2x mr-2" style="color: #007c01"></a>
+    </div>
+    <!-- user form -->
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
+    <!-- search -->
+    <div>
+        <form th:action="@{/categories/page/1}" class="form-inline m-3">
+            <input type="hidden" name="sortField" th:value="${sortField}"/>
+            <input type="hidden" name="sortType" th:value="${sortType}"/>
+
+            Tìm Kiếm: &nbsp;
+            <input type="search" name="keyword" class="form-control" required placeholder="Search"/>
+            &nbsp;&nbsp;
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i>
+            </button>
+            &nbsp;&nbsp;
+            <button type="button" class="btn btn-secondary" onclick="clearFilter()" title="Xoá">
+                <i class="fas fa-eraser"></i>
+            </button>
+        </form>
+    </div>
+    <!-- search -->
+
+    <!-- table -->
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+            <tr>
+                <th class="hideable-column">
+                <th th:replace="fragments :: column_link('id', 'ID', 'tag', 'categories')"/>
+                </th>
+
+                <th class="hideable-column">
+                <th th:replace="fragments :: column_link('name', 'Tên', 'tag', 'categories')"/>
+                </th>
+
+                <th th:replace="fragments :: column_link('alias', 'Alias', 'none', 'categories')"/>
+
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <!-- load user list -->
+            <tbody>
+            <tr th:each="category: ${listCategories}">
+                <td class="hideable-column">[[${category.id}]]</td>
+                <td class="hideable-column">[[${category.name}]]</td>
+                <td>[[${category.alias}]]</td>
+
+                <td>
+                    <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Vô hiệu hoá user"></a>
+                    <a th:if="${category.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Kích hoạt user"></a>
+                </td>
+                <td>
+                    <a th:href="@{'/categories/edit/' + ${category.id}}" class="fas fa-edit fa-2x icon-green"
+                       title="Chỉnh sửa user"></a>
+                    <a th:href="@{'/categories/delete/' + ${category.id}}"
+                       class="fas fa-trash fa-2x icon-dark link-delete"
+                       th:categoryId="${category.id}" title="Xoá user"></a>
+                </td>
+            </tr>
+            </tbody>
+            <!-- load user list -->
+
+        </table>
+    </div>
+    <!-- table -->
+
+    <div class="less-details">
+        <div th:each="category: ${listCategories}" class="row m-1">
+            <div class="col-8">
+                <div>[[${category.name}]]</div>
+                <div>
+                    <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Vô hiệu hoá user"></a>
+                    <a th:if="${category.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Kích hoạt user"></a>
+                    <a th:href="@{'/categories/edit/' + ${category.id}}" class="fas fa-edit fa-2x icon-green"
+                       title="Chỉnh sửa user"></a>
+                    <a th:href="@{'/categories/delete/' + ${category.id}}"
+                       class="fas fa-trash fa-2x icon-dark link-delete"
+                       th:categoryId="${category.id}" title="Xoá user"></a>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </div>
+    </div>
+
+    <!-- pagination -->
+    <div class="text-center m-1" th:if="${totalItems>0}">
+        <span>#[[${startCount}]] đến #[[${endCount}]] của [[${totalItems}]] </span>
+    </div>
+
+    <div class="text-center m-1" th:unless="${totalItems>0}">
+        <span>Không tìm thấy Thể loại</span>
+    </div>
+
+    <div th:if="${totalPages > 1}">
+        <nav>
+            <ul class="pagination justify-content-center flex-wrap">
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                    <a th:replace="fragments :: page_link(1, 'First', 'categories')"></a>
+                </li>
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                    <a th:replace="fragments :: page_link(${currentPage - 1}, 'Previous', 'categories')"></a>
+                </li>
+                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+                    th:each="i : ${#numbers.sequence(1,totalPages)}">
+                    <a th:replace="fragments :: page_link(${i}, ${i}, 'categories')"></a>
+                </li>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                    <a th:replace="fragments :: page_link(${currentPage + 1}, 'Next', 'categories')"></a>
+                </li>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                    <a th:replace="fragments :: page_link(${totalPages}, 'Last', 'categories')"></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- confirm modal -->
+    <div class="modal fade text-center" id="confirmModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="confirmText"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <a class="btn btn-success" href="" id="yesButton">Yes</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    confirm modal -->
+
+    <!-- footer -->
+    <div th:replace="fragments :: footer"></div>
+
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".link-delete").on("click", function (e) {
+            e.preventDefault(); // Prevent a link from opening the URL
+
+            link = $(this); // object jquery, can call all jQuery methods and functions but not DOM methods.
+            categoryId = link.attr("categoryId"); //  Return the value of an attribute
+            categoryId = link.attr("categoryId"); //  Return the value of an attribute
+
+            $("#yesButton").attr("href", link.attr("href")); // set value of attribute
+            $("#confirmText").text("Bạn có muốn xoá thể loại " + userId + " không ?");
+            $("#confirmModal").modal();
+        });
+    });
+
+    function clearFilter() {
+        window.location = "[[@{/categories/}]]";
+    }
+</script>
+
+</body>
+</html>
