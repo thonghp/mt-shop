@@ -80,6 +80,7 @@ public class CategoryController {
         redirectAttributes.addFlashAttribute("message", "Thể loại đã được lưu thành công !");
 
         String name = category.getName();
+
         return "redirect:/categories/page/1?sortField=id&sortType=asc&keyword=" + name;
     }
 
