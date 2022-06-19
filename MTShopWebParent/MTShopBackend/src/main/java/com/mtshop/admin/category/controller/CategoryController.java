@@ -81,7 +81,8 @@ public class CategoryController {
 
         String name = category.getName();
 
-        return "redirect:/categories/page/1?sortField=id&sortType=asc&keyword=" + name;
+//        return "redirect:/categories/page/1?sortField=id&sortType=asc&keyword=" + name;
+        return "redirect:/categories;
     }
 
 //    @GetMapping("/users/edit/{id}")
