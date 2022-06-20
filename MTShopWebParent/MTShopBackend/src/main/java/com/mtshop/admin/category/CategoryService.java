@@ -2,17 +2,11 @@ package com.mtshop.admin.category;
 
 import com.mtshop.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -23,32 +17,42 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepo;
 
-    public List<Category> listAll() {
-        List<Category> rootCategories = categoryRepo.findByParentIsNull();
+    public List<Category> listAll(String sortDir) {
+        Sort sort = Sort.by("name");
 
-        return listHierarchicalCategories(rootCategories);
+        if (sortDir.equals("asc")) {
+            sort = sort.ascending();
+        } else {
+            sort = sort.descending();
+        }
+
+        List<Category> rootCategories = categoryRepo.findByParentIsNull(sort);
+
+        return listHierarchicalCategories(rootCategories, sortDir);
     }
 
-    private List<Category> listHierarchicalCategories(List<Category> rootCategories) {
+    private List<Category> listHierarchicalCategories(List<Category> rootCategories, String sortDir) {
         List<Category> hierarchicalCategories = new ArrayList<>();
 
         for (Category rootCategory : rootCategories) {
             hierarchicalCategories.add(Category.copyFull(rootCategory));
 
-            Set<Category> children = rootCategory.getChildren();
+            Set<Category> children = sortSubCategories(rootCategory.getChildren(), sortDir);
 
             for (Category subCategory : children) {
                 String name = "--" + subCategory.getName();
                 hierarchicalCategories.add(Category.copyFull(subCategory, name));
-                listSubHierachicalCategories(hierarchicalCategories, subCategory, 1);
+
+                listSubHierachicalCategories(hierarchicalCategories, subCategory, 1, sortDir);
             }
         }
 
         return hierarchicalCategories;
     }
 
-    private void listSubHierachicalCategories(List<Category> hierarchicalCategories, Category parent, int subLevel) {
-        Set<Category> children = parent.getChildren();
+    private void listSubHierachicalCategories(List<Category> hierarchicalCategories, Category parent, int subLevel,
+                                              String sortDir) {
+        Set<Category> children = sortSubCategories(parent.getChildren(), sortDir);
         int newSubLevel = subLevel + 1;
 
         for (Category subCategory : children) {
@@ -62,20 +66,20 @@ public class CategoryService {
 
             hierarchicalCategories.add(Category.copyFull(subCategory, name));
 
-            listSubCategoriesUsedInForm(hierarchicalCategories, subCategory, newSubLevel);
+            listSubHierachicalCategories(hierarchicalCategories, subCategory, newSubLevel, sortDir);
         }
     }
 
     public List<Category> listCategoriesUsedInForm() {
         List<Category> categoriesUsedInForm = new ArrayList<>();
 
-        Iterable<Category> categoriesInDB = categoryRepo.findAll();
+        Iterable<Category> categoriesInDB = categoryRepo.findByParentIsNull(Sort.by("name").ascending());
 
         for (Category category : categoriesInDB) {
             if (category.getParent() == null) {
                 categoriesUsedInForm.add(Category.copyIdAndName(category));
 
-                Set<Category> children = category.getChildren();
+                Set<Category> children = sortSubCategories(category.getChildren());
 
                 for (Category subCategory : children) {
                     String name = "--" + subCategory.getName();
@@ -91,7 +95,7 @@ public class CategoryService {
 
     private void listSubCategoriesUsedInForm(List<Category> categoriesUsedInForm, Category parent, int subLevel) {
         int newSubLevel = subLevel + 1;
-        Set<Category> children = parent.getChildren();
+        Set<Category> children = sortSubCategories(parent.getChildren());
 
         for (Category subCategory : children) {
             String name = "";
@@ -108,20 +112,16 @@ public class CategoryService {
         }
     }
 
-    public Page<Category> listByPage(int pageNum, String sortField, String sortType, String keyword) {
-        Sort sort = Sort.by(sortField);
-        sort = sortType.equals("desc") ? sort.descending() : sort.ascending();
-
-        Pageable pageable = PageRequest.of(pageNum - 1, CATEGORY_PER_PAGE, sort);
-
-        if (keyword != null)
-            return categoryRepo.findAll(keyword, pageable);
-
-        return categoryRepo.findAll(pageable);
-    }
-
     public Category save(Category category) {
         return categoryRepo.save(category);
+    }
+
+    public Category get(Integer id) throws CategoryNotFoundException {
+        try {
+            return categoryRepo.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw new CategoryNotFoundException("Could not find any category with ID " + id);
+        }
     }
 
     public String checkUnique(Integer id, String name, String alias) {
@@ -146,12 +146,25 @@ public class CategoryService {
         return "OK";
     }
 
-    public Category get(Integer id) throws CategoryNotFoundException {
-        try {
-            return categoryRepo.findById(id).get();
-        } catch (NoSuchElementException ex) {
-            throw new CategoryNotFoundException("Could not find any category with ID " + id);
-        }
+    private SortedSet<Category> sortSubCategories(Set<Category> children) {
+        return sortSubCategories(children, "asc");
+    }
+
+    private SortedSet<Category> sortSubCategories(Set<Category> children, String sortDir) {
+        SortedSet<Category> sortedSet = new TreeSet<>(new Comparator<Category>() {
+            @Override
+            public int compare(Category o1, Category o2) {
+                if (sortDir.equals("asc")) {
+                    return o1.getName().compareTo(o2.getName());
+                } else {
+                    return o2.getName().compareTo(o1.getName());
+                }
+            }
+        });
+
+        sortedSet.addAll(children);
+
+        return sortedSet;
     }
 
 //    public void delete(Integer id) throws CategoryNotFoundException {

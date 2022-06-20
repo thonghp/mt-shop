@@ -47,16 +47,12 @@
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
-                <th class="hideable-column">
-                <th th:replace="fragments :: column_link('id', 'ID', 'tag', 'categories')"/>
+                <th>Id</th>
+                <th>
+                    <a th:href="@{'/categories?sortDir=' + ${reverseSortDir}}" class="text-white">Tên</a>
+                    <span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
                 </th>
-
-                <th class="hideable-column">
-                <th th:replace="fragments :: column_link('name', 'Tên', 'tag', 'categories')"/>
-                </th>
-
-                <th th:replace="fragments :: column_link('alias', 'Alias', 'none', 'categories')"/>
-
+                <th>Alias</th>
                 <th>Trạng thái</th>
                 <th></th>
             </tr>

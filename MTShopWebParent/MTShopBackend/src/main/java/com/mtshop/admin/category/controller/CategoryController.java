@@ -25,10 +25,17 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    public String listAll(Model model) {
-        List<Category> categories = categoryService.listAll();
+    public String listAll(Model model, @RequestParam(value = "sortDir", required = false) String sortDir) {
+        if (sortDir == null || sortDir.isEmpty()) {
+            sortDir = "asc";
+        }
+
+        List<Category> categories = categoryService.listAll(sortDir);
+
+        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 
         model.addAttribute("listCategories", categories);
+        model.addAttribute("reverseSortDir", reverseSortDir);
 
         return "categories/categories";
     }
@@ -136,10 +143,10 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-    @GetMapping("/categories/export/csv")
-    public void exportToCSV(HttpServletResponse response) throws IOException {
-        List<Category> listCategories = categoryService.listAll();
-        CategoryCSVExporter exporter = new CategoryCSVExporter();
-        exporter.export(listCategories, response);
-    }
+//    @GetMapping("/categories/export/csv")
+//    public void exportToCSV(HttpServletResponse response) throws IOException {
+//        List<Category> listCategories = categoryService.listAll();
+//        CategoryCSVExporter exporter = new CategoryCSVExporter();
+//        exporter.export(listCategories, response);
+//    }
 }

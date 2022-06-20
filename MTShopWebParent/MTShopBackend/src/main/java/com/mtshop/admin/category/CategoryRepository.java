@@ -3,6 +3,7 @@ package com.mtshop.admin.category;
 import com.mtshop.common.entity.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -17,7 +18,7 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     @Modifying
     void updateEnabledStatus(Integer id, boolean enabled);
 
-    List<Category> findByParentIsNull();
+    List<Category> findByParentIsNull(Sort sort);
 
     Category findByName(String name);
 
