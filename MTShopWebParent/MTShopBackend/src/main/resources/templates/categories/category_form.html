@@ -13,7 +13,7 @@
     </div>
 
     <form th:action="@{/categories/save}" method="post" style="max-width: 700px; margin: 0 auto"
-          th:object="${category}">
+          onsubmit="return checkUnique(this);" th:object="${category}">
         <input type="hidden" th:field="*{id}"/>
 
         <div class="border border-secondary rounded p-3">
@@ -54,6 +54,8 @@
         </div>
     </form>
 
+    <div th:replace="modal_fragments :: modal_dialog"></div>
+
     <!-- footer -->
     <div th:replace="fragments :: footer"></div>
 
@@ -61,6 +63,34 @@
 
 <script type="text/javascript">
     moduleUrl = "[[@{/categories}]]";
+
+    function checkUnique(form) {
+        url = "[[@{/categories/check_unique}]]";
+
+        catAlias = $("#alias").val();
+        catName = $("#name").val();
+        catId = $("#id").val();
+
+        csrfValue = $("input[name='_csrf']").val();
+
+        params = {id: catId, name: catName, alias: catAlias, _csrf: csrfValue};
+
+        $.post(url, params, function (response) {
+            if (response == "OK") {
+                form.submit();
+            } else if (response == "DuplicateName") {
+                showWarningModal("Tên thể loại " + catName + " đã tồn tại !");
+            } else if (response == "DuplicateAlias") {
+                showWarningModal("Tên Alias " + catAlias + " đã tồn tại !");
+            } else {
+                showErrorModal("Unknown response from server");
+            }
+        }).fail(function () {
+            showErrorModal("Could not connect to the server");
+        });
+
+        return false;
+    }
 </script>
 <script th:src="@{/js/common_form.js}"></script>
 </body>

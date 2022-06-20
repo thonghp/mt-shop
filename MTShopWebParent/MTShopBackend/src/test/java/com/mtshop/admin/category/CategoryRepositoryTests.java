@@ -108,14 +108,14 @@ public class CategoryRepositoryTests {
         rootCategories.forEach(cat -> System.out.println(cat.getName()));
     }
 
-//    @Test
-//    public void testUpdateUserDetails() {
-//        User user = categoryRepository.findById(1).get();
-//        user.setEnabled(true);
-//
-//        categoryRepository.save(user);
-//    }
-//
+    @Test
+    public void testFindByName() {
+        String name = "Linh kiện";
+        Category category = categoryRepository.findByName(name);
+
+        assertThat(category).isNotNull();
+    }
+
 //    @Test
 //    public void testUpdateUserRoles() {
 //        User user = categoryRepository.findById(2).get();
