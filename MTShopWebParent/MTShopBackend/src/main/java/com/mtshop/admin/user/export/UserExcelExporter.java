@@ -1,5 +1,6 @@
 package com.mtshop.admin.user.export;
 
+import com.mtshop.admin.AbstractExporter;
 import com.mtshop.common.entity.User;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.*;
@@ -50,7 +51,7 @@ public class UserExcelExporter extends AbstractExporter {
     }
 
     public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
-        super.setReponseHeader(response, "application/octet-stream", ".xlsx");
+        super.setReponseHeader(response, "application/octet-stream", ".xlsx", "users_");
 
         writeHeaderLine();
         writeDataLines(listUsers);

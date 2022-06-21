@@ -1,5 +1,6 @@
 package com.mtshop.admin.user.export;
 
+import com.mtshop.admin.AbstractExporter;
 import com.mtshop.common.entity.User;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class UserCSVExporter extends AbstractExporter {
     public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
-        super.setReponseHeader(response, "text/csv", ".csv");
+        super.setReponseHeader(response, "text/csv", ".csv","users_");
 
         ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
 
