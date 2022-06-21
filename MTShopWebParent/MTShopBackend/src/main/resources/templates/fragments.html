@@ -18,6 +18,24 @@
 
 <body>
 
+<div th:fragment="search_form(url)">
+    <form th:action="@{${url}}" class="form-inline m-3">
+        <input type="hidden" name="sortField" th:value="${sortField}"/>
+        <input type="hidden" name="sortType" th:value="${sortType}"/>
+
+        Tìm Kiếm: &nbsp;
+        <input type="search" name="keyword" class="form-control" required placeholder="Search"/>
+        &nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+        </button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-secondary" onclick="clearFilter()" title="Xoá">
+            <i class="fas fa-eraser"></i>
+        </button>
+    </form>
+</div>
+
 <th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
     <a th:class="text-white" th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName}
     + '&sortType=' + ${sortField != fieldName ? sortType : reverseSortType} + '&keyword=' + ${keyword != null ? keyword : ''}}">
