@@ -1,5 +1,6 @@
 package com.mtshop.admin.category.export;
 
+import com.mtshop.admin.AbstractExporter;
 import com.mtshop.common.entity.Category;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
@@ -11,17 +12,18 @@ import java.util.List;
 
 public class CategoryCSVExporter extends AbstractExporter {
     public void export(List<Category> listCategories, HttpServletResponse response) throws IOException {
-        super.setReponseHeader(response, "text/csv", ".csv");
+        super.setReponseHeader(response, "text/csv", ".csv", "categories_");
 
         ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
 
-        String[] csvHeader = {"ID", "Email", "Tên", "Họ", "Vai trò", "Trạng thái"};
-        String[] fieldMapping = {"id", "email", "firstName", "lastName", "roles", "enabled"};
+        String[] csvHeader = {"ID", "Tên"};
+        String[] fieldMapping = {"id", "name"};
 
         csvBeanWriter.writeHeader(csvHeader);
 
-        for (Category user : listCategories) {
-            csvBeanWriter.write(user, fieldMapping);
+        for (Category category : listCategories) {
+            category.setName(category.getName().replace("--", "  "));
+            csvBeanWriter.write(category, fieldMapping);
         }
 
         csvBeanWriter.close();

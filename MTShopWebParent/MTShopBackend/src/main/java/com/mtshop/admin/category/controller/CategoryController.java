@@ -3,6 +3,7 @@ package com.mtshop.admin.category.controller;
 import com.mtshop.admin.category.CategoryNotFoundException;
 import com.mtshop.admin.category.CategoryPageInfo;
 import com.mtshop.admin.category.CategoryService;
+import com.mtshop.admin.category.export.CategoryCSVExporter;
 import com.mtshop.admin.user.UserService;
 import com.mtshop.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -131,10 +134,10 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-//    @GetMapping("/categories/export/csv")
-//    public void exportToCSV(HttpServletResponse response) throws IOException {
-//        List<Category> listCategories = categoryService.listAll();
-//        CategoryCSVExporter exporter = new CategoryCSVExporter();
-//        exporter.export(listCategories, response);
-//    }
+    @GetMapping("/categories/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+        CategoryCSVExporter exporter = new CategoryCSVExporter();
+        exporter.export(listCategories, response);
+    }
 }
