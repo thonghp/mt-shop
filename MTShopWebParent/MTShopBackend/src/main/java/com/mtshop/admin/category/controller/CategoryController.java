@@ -116,18 +116,19 @@ public class CategoryController {
         }
     }
 
-//    @GetMapping("/users/delete/{id}")
-//    public String deleteUser(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
-//        try {
-//            categoryService.delete(id);
-//
-//            redirectAttributes.addFlashAttribute("message", "User " + id + " xoá thành công !");
-//        } catch (UserNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message", e.getMessage());
-//        }
-//
-//        return "redirect:/categories";
-//    }
+    @GetMapping("/categories/delete/{id}")
+    public String deleteCategory(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            categoryService.delete(id);
+
+            redirectAttributes.addFlashAttribute("message", "Thể loại có id  " + id +
+                    " được xoá thành công !");
+        } catch (CategoryNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
+
+        return "redirect:/categories";
+    }
 
     @GetMapping("/categories/{id}/enabled/{status}")
     public String updateUserEnabledStatus(@PathVariable(name = "id") Integer id,
@@ -136,7 +137,7 @@ public class CategoryController {
         categoryService.updateCategoryEnabledStatus(id, enabled);
 
         String status = enabled ? "kích hoạt" : "vô hiệu hoá";
-        String message = "User " + id + " đã được " + status;
+        String message = "Thể loại có id là " + id + " đã được " + status;
 
         redirectAttributes.addFlashAttribute("message", message);
 
