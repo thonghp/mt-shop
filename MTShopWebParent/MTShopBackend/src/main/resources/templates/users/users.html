@@ -53,18 +53,18 @@
             <thead class="thead-dark">
             <tr>
                 <th class="hideable-column">
-                <th th:replace="fragments :: column_link('id', 'ID', 'tag', 'users')"/>
+                <th th:replace="fragments :: column_link('id', 'ID', 'tag')"/>
                 </th>
 
                 <th>Ảnh</th>
 
                 <th class="hideable-column">
-                <th th:replace="fragments :: column_link('email', 'Email', 'tag', 'users')"/>
+                <th th:replace="fragments :: column_link('email', 'Email', 'tag')"/>
                 </th>
 
-                <th th:replace="fragments :: column_link('firstName', 'Tên', 'none', 'users')"/>
+                <th th:replace="fragments :: column_link('firstName', 'Tên', 'none')"/>
 
-                <th th:replace="fragments :: column_link('lastName', 'Họ', 'none', 'users')"/>
+                <th th:replace="fragments :: column_link('lastName', 'Họ', 'none')"/>
 
                 <th>Vai trò</th>
                 <th>Trạng thái</th>
@@ -129,36 +129,7 @@
     </div>
 
     <!-- pagination -->
-    <div class="text-center m-1" th:if="${totalItems>0}">
-        <span>#[[${startCount}]] đến #[[${endCount}]] của [[${totalItems}]] </span>
-    </div>
-
-    <div class="text-center m-1" th:unless="${totalItems>0}">
-        <span>Không tìm thấy User</span>
-    </div>
-
-    <div th:if="${totalPages > 1}">
-        <nav>
-            <ul class="pagination justify-content-center flex-wrap">
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(1, 'First', 'users')"></a>
-                </li>
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage - 1}, 'Previous', 'users')"></a>
-                </li>
-                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
-                    th:each="i : ${#numbers.sequence(1,totalPages)}">
-                    <a th:replace="fragments :: page_link(${i}, ${i}, 'users')"></a>
-                </li>
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage + 1}, 'Next', 'users')"></a>
-                </li>
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${totalPages}, 'Last', 'users')"></a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+    <div th:replace="fragments :: pagination('/users', 'User')"></div>
 
     <!-- confirm modal -->
     <div th:replace="modal_fragments :: confirm_modal"></div>
