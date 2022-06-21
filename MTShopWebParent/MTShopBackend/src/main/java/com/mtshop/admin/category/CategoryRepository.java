@@ -19,6 +19,8 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
 
     Page<Category> findByParentIsNull(Pageable pageable);
 
+    Page<Category> findByName(Pageable pageable, String keyword);
+
     Category findByName(String name);
 
     Category findByAlias(String alias);

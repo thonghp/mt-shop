@@ -15,12 +15,12 @@ import java.util.*;
 @Transactional
 public class CategoryService {
 
-    private static final int ROOT_CATEGORIES_PER_PAGE = 3;
+    public static final int ROOT_CATEGORIES_PER_PAGE = 3;
 
     @Autowired
     private CategoryRepository categoryRepo;
 
-    public List<Category> listByPage(String sortType, int pageNum, CategoryPageInfo pageInfo) {
+    public List<Category> listByPage(String sortType, int pageNum, CategoryPageInfo pageInfo, String keyword) {
         Sort sort = Sort.by("name");
 
         if (sortType.equals("asc")) {
@@ -31,13 +31,28 @@ public class CategoryService {
 
         Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
 
-        Page<Category> pageCategories = categoryRepo.findByParentIsNull(pageable);
+        Page<Category> pageCategories = null;
+        if (keyword != null && !keyword.isEmpty()) {
+            pageCategories = categoryRepo.findByName(pageable, keyword);
+        } else {
+            pageCategories = categoryRepo.findByParentIsNull(pageable);
+        }
+
         List<Category> rootCategories = pageCategories.getContent();
 
         pageInfo.setTotalPages(pageCategories.getTotalPages());
         pageInfo.setTotalElements(pageCategories.getTotalElements());
 
-        return listHierarchicalCategories(rootCategories, sortType);
+        if (keyword != null && !keyword.isEmpty()) {
+            List<Category> searchResult = pageCategories.getContent();
+            for (Category category : searchResult) {
+                category.setHasChildren(category.getChildren().size() > 0);
+            }
+
+            return searchResult;
+        } else {
+            return listHierarchicalCategories(rootCategories, sortType);
+        }
     }
 
     private List<Category> listHierarchicalCategories(List<Category> rootCategories, String sortDir) {

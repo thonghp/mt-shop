@@ -3,6 +3,7 @@ package com.mtshop.admin.category.controller;
 import com.mtshop.admin.category.CategoryNotFoundException;
 import com.mtshop.admin.category.CategoryPageInfo;
 import com.mtshop.admin.category.CategoryService;
+import com.mtshop.admin.user.UserService;
 import com.mtshop.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,18 +25,26 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public String listFirstPage(@RequestParam(value = "sortType", required = false) String sortType, Model model) {
-        return listByPage(1, model, sortType);
+        return listByPage(1, model, sortType, null);
     }
 
     @GetMapping("/categories/page/{pageNumber}")
     public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
-                             @RequestParam(value = "sortType", required = false) String sortType) {
+                             @RequestParam(value = "sortType", required = false) String sortType,
+                             @RequestParam(value = "keyword", required = false) String keyword) {
         if (sortType == null || sortType.isEmpty()) {
             sortType = "asc";
         }
 
         CategoryPageInfo pageInfo = new CategoryPageInfo();
-        List<Category> listCategories = categoryService.listByPage(sortType, pageNum, pageInfo);
+        List<Category> listCategories = categoryService.listByPage(sortType, pageNum, pageInfo, keyword);
+
+        long startElementOfPage = (pageNum - 1) * CategoryService.ROOT_CATEGORIES_PER_PAGE + 1;
+        long endElementOfPage = startElementOfPage + CategoryService.ROOT_CATEGORIES_PER_PAGE - 1;
+
+        if (endElementOfPage > pageInfo.getTotalElements()) {
+            endElementOfPage = pageInfo.getTotalElements();
+        }
 
         String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
 
@@ -44,7 +53,9 @@ public class CategoryController {
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("sortField", "name");
         model.addAttribute("sortType", sortType);
-
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("startCount", startElementOfPage);
+        model.addAttribute("endCount", endElementOfPage);
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("reverseSortType", reverseSortType);
 
