@@ -1,8 +1,8 @@
 package com.mtshop.admin.category.controller;
 
 import com.mtshop.admin.category.CategoryNotFoundException;
+import com.mtshop.admin.category.CategoryPageInfo;
 import com.mtshop.admin.category.CategoryService;
-import com.mtshop.admin.category.export.CategoryCSVExporter;
 import com.mtshop.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -25,55 +23,33 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    public String listAll(Model model, @RequestParam(value = "sortDir", required = false) String sortDir) {
-        if (sortDir == null || sortDir.isEmpty()) {
-            sortDir = "asc";
+    public String listFirstPage(@RequestParam(value = "sortType", required = false) String sortType, Model model) {
+        return listByPage(1, model, sortType);
+    }
+
+    @GetMapping("/categories/page/{pageNumber}")
+    public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
+                             @RequestParam(value = "sortType", required = false) String sortType) {
+        if (sortType == null || sortType.isEmpty()) {
+            sortType = "asc";
         }
 
-        List<Category> categories = categoryService.listAll(sortDir);
+        CategoryPageInfo pageInfo = new CategoryPageInfo();
+        List<Category> listCategories = categoryService.listByPage(sortType, pageNum, pageInfo);
 
-        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+        String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
 
-        model.addAttribute("listCategories", categories);
-        model.addAttribute("reverseSortDir", reverseSortDir);
+        model.addAttribute("totalPages", pageInfo.getTotalPages());
+        model.addAttribute("totalItems", pageInfo.getTotalElements());
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("sortField", "name");
+        model.addAttribute("sortType", sortType);
+
+        model.addAttribute("listCategories", listCategories);
+        model.addAttribute("reverseSortType", reverseSortType);
 
         return "categories/categories";
     }
-
-//    @GetMapping("/categories")
-//    public String listFirstPage(Model model) {
-//        return listByPage(1, model, "id", "asc", null);
-//    }
-//
-//    @GetMapping("/categories/page/{pageNumber}")
-//    public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
-//                             @RequestParam("sortField") String sortField, @RequestParam("sortType") String sortType,
-//                             @RequestParam(value = "keyword", required = false) String keyword) {
-//        Page<Category> page = categoryService.listByPage(pageNum, sortField, sortType, keyword);
-//        List<Category> listCategories = page.getContent();
-//
-//        long startElementOfPage = (pageNum - 1) * categoryService.CATEGORY_PER_PAGE + 1;
-//        long endElementOfPage = startElementOfPage + categoryService.CATEGORY_PER_PAGE - 1;
-//
-//        if (endElementOfPage > page.getTotalElements()) {
-//            endElementOfPage = page.getTotalElements();
-//        }
-//
-//        String reverseSortType = "desc".equals(sortType) ? "asc" : "desc";
-//
-//        model.addAttribute("currentPage", pageNum);
-//        model.addAttribute("totalPages", page.getTotalPages());
-//        model.addAttribute("startCount", startElementOfPage);
-//        model.addAttribute("endCount", endElementOfPage);
-//        model.addAttribute("totalItems", page.getTotalElements());
-//        model.addAttribute("listCategories", listCategories);
-//        model.addAttribute("sortField", sortField);
-//        model.addAttribute("sortType", sortType);
-//        model.addAttribute("reverseSortType", reverseSortType);
-//        model.addAttribute("keyword", keyword);
-//
-//        return "categories/categories";
-//    }
 
     @GetMapping("/categories/new")
     public String newCategory(Model model) {

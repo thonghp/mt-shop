@@ -49,8 +49,9 @@
             <tr>
                 <th>Id</th>
                 <th>
-                    <a th:href="@{'/categories?sortDir=' + ${reverseSortDir}}" class="text-white">Tên</a>
-                    <span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                    <a th:href="@{'/categories/page/' + ${pageNumber} +'?sortType=' + ${reverseSortType}}"
+                       class="text-white">Tên</a>
+                    <span th:class="${reverseSortType == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
                 </th>
                 <th>Alias</th>
                 <th>Trạng thái</th>
@@ -67,13 +68,13 @@
 
                 <td>
                     <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Vô hiệu hoá user"></a>
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Vô hiệu hoá"></a>
                     <a th:if="${category.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Kích hoạt user"></a>
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Kích hoạt"></a>
                 </td>
                 <td>
                     <a th:href="@{'/categories/edit/' + ${category.id}}" class="fas fa-edit fa-2x icon-green"
-                       title="Chỉnh sửa user"></a>
+                       title="Chỉnh sửa thể loại"></a>
                     <th:block th:if="${category.hasChildren == false}">
                         <a th:href="@{'/categories/delete/' + ${category.id}}"
                            class="fas fa-trash fa-2x icon-dark link-delete"
@@ -94,14 +95,16 @@
                 <div>[[${category.name}]]</div>
                 <div>
                     <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Vô hiệu hoá user"></a>
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Vô hiệu hoá"></a>
                     <a th:if="${category.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Kích hoạt user"></a>
+                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Kích hoạt"></a>
                     <a th:href="@{'/categories/edit/' + ${category.id}}" class="fas fa-edit fa-2x icon-green"
-                       title="Chỉnh sửa user"></a>
-                    <a th:href="@{'/categories/delete/' + ${category.id}}"
-                       class="fas fa-trash fa-2x icon-dark link-delete"
-                       th:categoryId="${category.id}" title="Xoá user"></a>
+                       title="Chỉnh sửa thể loại"></a>
+                    <th:block th:if="${category.hasChildren == false}">
+                        <a th:href="@{'/categories/delete/' + ${category.id}}"
+                           class="fas fa-trash fa-2x icon-dark link-delete"
+                           th:entityId="${category.id}" title="Xoá"></a>
+                    </th:block>
                 </div>
             </div>
             <div>&nbsp;</div>
@@ -109,36 +112,7 @@
     </div>
 
     <!-- pagination -->
-    <div class="text-center m-1" th:if="${totalItems>0}">
-        <span>#[[${startCount}]] đến #[[${endCount}]] của [[${totalItems}]] </span>
-    </div>
-
-    <div class="text-center m-1" th:unless="${totalItems>0}">
-        <span>Không tìm thấy Thể loại</span>
-    </div>
-
-    <div th:if="${totalPages > 1}">
-        <nav>
-            <ul class="pagination justify-content-center flex-wrap">
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(1, 'First', 'categories')"></a>
-                </li>
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage - 1}, 'Previous', 'categories')"></a>
-                </li>
-                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
-                    th:each="i : ${#numbers.sequence(1,totalPages)}">
-                    <a th:replace="fragments :: page_link(${i}, ${i}, 'categories')"></a>
-                </li>
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage + 1}, 'Next', 'categories')"></a>
-                </li>
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${totalPages}, 'Last', 'categories')"></a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+    <div th:replace="fragments :: pagination('/categories', 'top-level thể loại')"></div>
 
     <!-- confirm modal -->
     <div th:replace="modal_fragments :: confirm_modal"></div>

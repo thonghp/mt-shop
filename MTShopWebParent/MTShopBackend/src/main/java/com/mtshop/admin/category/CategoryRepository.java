@@ -11,14 +11,13 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Integer> {
-    @Query("SELECT c FROM Category c WHERE CONCAT(c.id, ' ', c.name) LIKE %?1%")
-    Page<Category> findAll(String keyword, Pageable pageable);
-
     @Query("UPDATE Category c SET c.enabled = ?2 WHERE c.id = ?1")
     @Modifying
     void updateEnabledStatus(Integer id, boolean enabled);
 
     List<Category> findByParentIsNull(Sort sort);
+
+    Page<Category> findByParentIsNull(Pageable pageable);
 
     Category findByName(String name);
 

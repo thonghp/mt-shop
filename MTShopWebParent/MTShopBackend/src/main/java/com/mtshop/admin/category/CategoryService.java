@@ -2,6 +2,9 @@ package com.mtshop.admin.category;
 
 import com.mtshop.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,23 +15,29 @@ import java.util.*;
 @Transactional
 public class CategoryService {
 
-    public static final int CATEGORY_PER_PAGE = 5;
+    private static final int ROOT_CATEGORIES_PER_PAGE = 3;
 
     @Autowired
     private CategoryRepository categoryRepo;
 
-    public List<Category> listAll(String sortDir) {
+    public List<Category> listByPage(String sortType, int pageNum, CategoryPageInfo pageInfo) {
         Sort sort = Sort.by("name");
 
-        if (sortDir.equals("asc")) {
+        if (sortType.equals("asc")) {
             sort = sort.ascending();
         } else {
             sort = sort.descending();
         }
 
-        List<Category> rootCategories = categoryRepo.findByParentIsNull(sort);
+        Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
 
-        return listHierarchicalCategories(rootCategories, sortDir);
+        Page<Category> pageCategories = categoryRepo.findByParentIsNull(pageable);
+        List<Category> rootCategories = pageCategories.getContent();
+
+        pageInfo.setTotalPages(pageCategories.getTotalPages());
+        pageInfo.setTotalElements(pageCategories.getTotalElements());
+
+        return listHierarchicalCategories(rootCategories, sortType);
     }
 
     private List<Category> listHierarchicalCategories(List<Category> rootCategories, String sortDir) {
