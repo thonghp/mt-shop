@@ -18,7 +18,8 @@
 
 <body>
 
-<div th:fragment="search_form(url)">
+<!-- search -->
+<div th:fragment="search_form_and_message(url)">
     <form th:action="@{${url}}" class="form-inline m-3">
         <input type="hidden" name="sortField" th:value="${sortField}"/>
         <input type="hidden" name="sortType" th:value="${sortType}"/>
@@ -34,17 +35,42 @@
             <i class="fas fa-eraser"></i>
         </button>
     </form>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
 </div>
 
-<th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
-    <a th:class="text-white" th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName}
+<!-- sort column -->
+<th th:fragment="column_link(url, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+    <a th:class="text-white" th:href="@{${url} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName}
     + '&sortType=' + ${sortField != fieldName ? sortType : reverseSortType} + '&keyword=' + ${keyword != null ? keyword : ''}}">
         [[${columnLabel}]]
     </a>
-    <span th:if="${sortField == fieldName}"
-          th:class="${sortType == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}">
+    <span th:if="${sortField == fieldName}" th:class="${sortType == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}">
     </span>
 </th>
+
+<!-- enabled -->
+<div th:fragment="status(enabled, url)" th:remove="tag">
+    <a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+       th:href="@{${url}+ '/enabled/false'}" title="Vô hiệu hoá"></a>
+    <a th:if="${enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
+       th:href="@{${url}+ '/enabled/true'}" title="Kích hoạt"></a>
+</div>
+
+<!-- form edit -->
+<div th:fragment="edit(url, entityName)" th:remove="tag">
+    <a th:href="@{${url}}" class="fas fa-edit fa-2x icon-green" title="'Chỉnh sửa ' + ${entityName}"></a>
+</div>
+
+<!-- delete field -->
+<div th:fragment="delete(url, entityName, visible, entityId)" th:remove="tag">
+    <th:block th:if="${visible}">
+        <a th:href="@{${url}}" class="fas fa-trash fa-2x icon-dark link-delete"
+           th:entityId="${entityId}" title="'Xoá' + ${entityName}"></a>
+    </th:block>
+</div>
 
 <a th:fragment="page_link(url, currentPage, label)" class="page-link"
    th:href="@{${url} + '/page/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortType=' + ${sortType} +

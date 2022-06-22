@@ -16,14 +16,9 @@
         <a th:href="@{/categories/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
         <a th:href="@{/categories/export/csv}" class="fas fa-file-csv fa-2x mr-2" style="color: #007c01"></a>
     </div>
-    <!-- user form -->
-
-    <div th:if="${message != null}" class="alert alert-success text-center">
-        [[${message}]]
-    </div>
 
     <!-- search -->
-    <div th:replace="fragments :: search_form('/categories/page/1')"/>
+    <div th:replace="fragments :: search_form_and_message('/categories/page/1')"/>
 
     <!-- table -->
     <div class="full-details">
@@ -31,13 +26,8 @@
             <thead class="thead-dark">
             <tr>
                 <th>Id</th>
-                <th>
-                    <a th:href="@{'/categories/page/' + ${pageNumber} +'?sortType=' + ${reverseSortType} +
-                    ${keyword != null ? keyword : ''}}"
-                       class="text-white">Tên</a>
-                    <span th:class="${reverseSortType == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
-                </th>
-                <th>Alias</th>
+                <th th:replace="fragments :: column_link('/categories', 'name', 'Tên', 'none')"/>
+                <th class="hideable-column">Alias</th>
                 <th>Trạng thái</th>
                 <th></th>
             </tr>
@@ -46,24 +36,17 @@
             <!-- load user list -->
             <tbody>
             <tr th:each="category: ${listCategories}">
-                <td class="hideable-column">[[${category.id}]]</td>
-                <td class="hideable-column">[[${category.name}]]</td>
-                <td>[[${category.alias}]]</td>
-
+                <td>[[${category.id}]]</td>
+                <td>[[${category.name}]]</td>
+                <td class="hideable-column">[[${category.alias}]]</td>
                 <td>
-                    <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Vô hiệu hoá"></a>
-                    <a th:if="${category.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Kích hoạt"></a>
+                    <div th:replace="fragments :: status(${category.enabled}, '/categories/' + ${category.id})"/>
                 </td>
                 <td>
-                    <a th:href="@{'/categories/edit/' + ${category.id}}" class="fas fa-edit fa-2x icon-green"
-                       title="Chỉnh sửa thể loại"></a>
-                    <th:block th:if="${category.hasChildren == false}">
-                        <a th:href="@{'/categories/delete/' + ${category.id}}"
-                           class="fas fa-trash fa-2x icon-dark link-delete"
-                           th:entityId="${category.id}" title="Xoá"></a>
-                    </th:block>
+                    <div th:replace="fragments :: edit('/categories/edit/' + ${category.id}, 'thể loại')"/>
+                    &nbsp;
+                    <div th:replace="fragments :: delete('/categories/delete/' + ${category.id}, 'thể loại',
+                    ${!category.hasChildren}, ${category.id})"/>
                 </td>
             </tr>
             </tbody>
@@ -77,18 +60,13 @@
         <div th:each="category: ${listCategories}" class="row m-1">
             <div class="col-8">
                 <div>[[${category.name}]]</div>
-                <div>
-                    <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Vô hiệu hoá"></a>
-                    <a th:if="${category.enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Kích hoạt"></a>
-                    <a th:href="@{'/categories/edit/' + ${category.id}}" class="fas fa-edit fa-2x icon-green"
-                       title="Chỉnh sửa thể loại"></a>
-                    <th:block th:if="${category.hasChildren == false}">
-                        <a th:href="@{'/categories/delete/' + ${category.id}}"
-                           class="fas fa-trash fa-2x icon-dark link-delete"
-                           th:entityId="${category.id}" title="Xoá"></a>
-                    </th:block>
+                <div class="mt-2">
+                    <div th:replace="fragments :: status(${category.enabled}, '/categories/' + ${category.id})"/>
+                    &nbsp;
+                    <div th:replace="fragments :: edit('/categories/edit/' + ${category.id}, 'thể loại')"/>
+                    &nbsp;
+                    <div th:replace="fragments :: delete('/categories/delete/' + ${category.id}, 'thể loại',
+                    ${!category.hasChildren}, ${category.id})"/>
                 </div>
             </div>
             <div>&nbsp;</div>
