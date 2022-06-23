@@ -1,23 +1,16 @@
 package com.mtshop.admin.brand;
 
 import com.mtshop.common.entity.Brand;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface BrandRepository extends PagingAndSortingRepository<Brand, Integer> {
     Long countById(Integer id);
 
     Brand findByName(String name);
-//    @Query("UPDATE Category c SET c.enabled = ?2 WHERE c.id = ?1")
-//    @Modifying
-//    void updateEnabledStatus(Integer id, boolean enabled);
-//
-//    List<Category> findByParentIsNull(Sort sort);
-//
-//    Page<Category> findByParentIsNull(Pageable pageable);
-//
-//    Page<Category> findByName(Pageable pageable, String keyword);
-//
-//
-//    Category findByAlias(String alias);
-//
+
+    @Query("SELECT b FROM Brand b WHERE b.name LIKE %?1%")
+    Page<Brand> findAll(Pageable pageable, String keyword);
 }

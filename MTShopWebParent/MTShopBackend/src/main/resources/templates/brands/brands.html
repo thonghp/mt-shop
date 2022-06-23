@@ -25,9 +25,9 @@
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
-                <th>Id</th>
+                <th class="hideable-column">Id</th>
                 <th>Logo</th>
-                <th>Tên</th>
+                <th th:replace="fragments :: column_link('/brands', 'name', 'Tên', 'none')"/>
                 <th>Thể loại</th>
                 <th></th>
             </tr>
@@ -36,7 +36,7 @@
             <!-- load user list -->
             <tbody>
             <tr th:each="brand: ${listBrands}">
-                <td>[[${brand.id}]]</td>
+                <td class="hideable-column">[[${brand.id}]]</td>
                 <td>
                     <img th:src="@{${brand.logoPath}}" style="width: 100px" class="img-fluid"/>
                 </td>
@@ -61,7 +61,10 @@
 
     <div class="less-details">
         <div th:each="brand: ${listBrands}" class="row m-1">
-            <div class="col-8">
+            <div class="col-6">
+                <img th:src="@{${brand.logoPath}}" style="width: 100px" class="img-fluid"/>
+            </div>
+            <div class="col-6">
                 <div>[[${brand.name}]]</div>
                 <div class="mt-2">
                     <div th:replace="fragments :: edit('/brands/edit/' + ${brand.id}, 'nhãn hiệu')"/>
@@ -74,7 +77,7 @@
         </div>
     </div>
 
-    <div th:replace="fragments :: pagination('/brands', 'nhãn hiệu')"></div>
+    <div th:replace="fragments :: pagination('/brands', 'nhãn hiệu')"/>
 
     <!-- confirm modal -->
     <div th:replace="modal_fragments :: confirm_modal"></div>

@@ -15,47 +15,23 @@ import java.util.*;
 @Transactional
 public class BrandService {
 
-    public static final int ROOT_CATEGORIES_PER_PAGE = 3;
+    public static final int BRAND_PER_PAGE = 5;
 
     @Autowired
     private BrandRepository brandRepo;
 
 
-    public List<Brand> listByPage(String sortType, int pageNum, BrandPageInfo pageInfo, String keyword) {
-//        Sort sort = Sort.by("name");
-//
-//        if (sortType.equals("asc")) {
-//            sort = sort.ascending();
-//        } else {
-//            sort = sort.descending();
-//        }
-//
-//        Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
-//
-//        Page<Brand> pageCategories = null;
-//        if (keyword != null && !keyword.isEmpty()) {
-//            pageCategories = brandRepo.findByName(pageable, keyword);
-//        } else {
-//            pageCategories = brandRepo.findByParentIsNull(pageable);
-//        }
-//
-//        List<Brand> rootCategories = pageCategories.getContent();
-//
-//        pageInfo.setTotalPages(pageCategories.getTotalPages());
-//        pageInfo.setTotalElements(pageCategories.getTotalElements());
-//
-//        if (keyword != null && !keyword.isEmpty()) {
-//            List<Brand> searchResult = pageCategories.getContent();
-//            for (Brand category : searchResult) {
-//                category.setHasChildren(category.getChildren().size() > 0);
-//            }
-//
-//            return searchResult;
-//        } else {
-//            return listHierarchicalCategories(rootCategories, sortType);
-//        }
+    public Page<Brand> listByPage(int pageNum, String sortField, String sortType, String keyword) {
+        Sort sort = Sort.by(sortField);
 
-        return (List<Brand>) brandRepo.findAll();
+        sort = sortType.equals("asc") ? sort.ascending() : sort.descending();
+
+        Pageable pageable = PageRequest.of(pageNum - 1, BRAND_PER_PAGE, sort);
+
+        if (keyword != null)
+            return brandRepo.findAll(pageable, keyword);
+
+        return brandRepo.findAll(pageable, "");
     }
 
     public Brand save(Brand category) {

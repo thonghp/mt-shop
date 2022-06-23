@@ -8,7 +8,9 @@ import com.mtshop.admin.brand.export.BrandCSVExporter;
 import com.mtshop.admin.category.CategoryService;
 import com.mtshop.common.entity.Brand;
 import com.mtshop.common.entity.Category;
+import com.mtshop.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -33,47 +35,40 @@ public class BrandController {
     private CategoryService categoryService;
 
     @GetMapping("/brands")
-    public String listFirstPage(@RequestParam(value = "sortType", required = false) String sortType, Model model) {
-//        return listByPage(1, model, sortType, null);
-        List<Brand> listBrands = brandService.listByPage(sortType, 1, new BrandPageInfo(), null);
+    public String listFirstPage(Model model) {
+        return listByPage(1, model, "name", "asc", null);
+    }
+
+    @GetMapping("/brands/page/{pageNumber}")
+    public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
+                             @RequestParam(value = "sortField") String sortField,
+                             @RequestParam(value = "sortType") String sortType,
+                             @RequestParam(value = "keyword", required = false) String keyword) {
+        Page<Brand> page = brandService.listByPage(pageNum, sortField, sortType, keyword);
+        List<Brand> listBrands = page.getContent();
+
+        long startElementOfPage = (pageNum - 1) * BrandService.BRAND_PER_PAGE + 1;
+        long endElementOfPage = startElementOfPage + BrandService.BRAND_PER_PAGE - 1;
+
+        if (endElementOfPage > page.getTotalElements()) {
+            endElementOfPage = page.getTotalElements();
+        }
+
+        String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("startCount", startElementOfPage);
+        model.addAttribute("endCount", endElementOfPage);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortType", sortType);
+        model.addAttribute("reverseSortType", reverseSortType);
+        model.addAttribute("keyword", keyword);
         model.addAttribute("listBrands", listBrands);
 
         return "brands/brands";
     }
-
-//    @GetMapping("/brands/page/{pageNumber}")
-//    public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
-//                             @RequestParam(value = "sortType", required = false) String sortType,
-//                             @RequestParam(value = "keyword", required = false) String keyword) {
-//        if (sortType == null || sortType.isEmpty()) {
-//            sortType = "asc";
-//        }
-//
-//        BrandPageInfo pageInfo = new BrandPageInfo();
-//        List<Category> listBrands = brandService.listByPage(sortType, pageNum, pageInfo, keyword);
-//
-//        long startElementOfPage = (pageNum - 1) * BrandService.ROOT_CATEGORIES_PER_PAGE + 1;
-//        long endElementOfPage = startElementOfPage + BrandService.ROOT_CATEGORIES_PER_PAGE - 1;
-//
-//        if (endElementOfPage > pageInfo.getTotalElements()) {
-//            endElementOfPage = pageInfo.getTotalElements();
-//        }
-//
-//        String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
-//
-//        model.addAttribute("totalPages", pageInfo.getTotalPages());
-//        model.addAttribute("totalItems", pageInfo.getTotalElements());
-//        model.addAttribute("currentPage", pageNum);
-//        model.addAttribute("sortField", "name");
-//        model.addAttribute("sortType", sortType);
-//        model.addAttribute("keyword", keyword);
-//        model.addAttribute("startCount", startElementOfPage);
-//        model.addAttribute("endCount", endElementOfPage);
-//        model.addAttribute("listBrands", listBrands);
-//        model.addAttribute("reverseSortType", reverseSortType);
-//
-//        return "brands/brands";
-//    }
 
     @GetMapping("/brands/new")
     public String newBrand(Model model) {
@@ -90,7 +85,7 @@ public class BrandController {
 
     @PostMapping("/brands/save")
     public String saveBrand(Brand brand, RedirectAttributes redirectAttributes,
-                           @RequestParam(value = "fileImage", required = false) MultipartFile multipartFile) throws IOException {
+                            @RequestParam(value = "fileImage", required = false) MultipartFile multipartFile) throws IOException {
         if (!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             brand.setLogo(fileName);
