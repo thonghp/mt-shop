@@ -12,28 +12,20 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        User
-        String userDirName = "images/user-photos";
-        Path userPhotosDir = Paths.get(userDirName);
+        // User
+        exposeDirectory("images/user-photos", registry);
 
-        String userPhotosPath = userPhotosDir.toFile().getAbsolutePath();
+        // Category
+        exposeDirectory("images/category-images", registry);
 
-        registry.addResourceHandler("/" + userDirName + "/**").addResourceLocations("file:/" + userPhotosPath + "/");
+        // Brand
+        exposeDirectory("images/brand-images", registry);
+    }
 
-//        Category
-        String categoryDirName = "images/category-images";
-        Path categoryImageDir = Paths.get(categoryDirName);
+    private void exposeDirectory(String logicalPath, ResourceHandlerRegistry registry) {
+        Path path = Paths.get(logicalPath);
+        String absolutePath = path.toFile().getAbsolutePath();
 
-        String categoryImagePath = categoryImageDir.toFile().getAbsolutePath();
-
-        registry.addResourceHandler("/" + categoryDirName + "/**").addResourceLocations("file:/" + categoryImagePath + "/");
-
-//        brand
-        String brandDirName = "images/brand-images";
-        Path brandImageDir = Paths.get(brandDirName);
-
-        String brandImagePath = brandImageDir.toFile().getAbsolutePath();
-
-        registry.addResourceHandler("/" + brandDirName + "/**").addResourceLocations("file:/" + brandImagePath + "/");
+        registry.addResourceHandler("/" + logicalPath + "/**").addResourceLocations("file:/" + absolutePath + "/");
     }
 }
