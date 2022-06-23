@@ -1,19 +1,21 @@
 package com.mtshop.admin.category.controller;
 
+import com.mtshop.admin.FileUploadUtil;
 import com.mtshop.admin.category.CategoryNotFoundException;
 import com.mtshop.admin.category.CategoryPageInfo;
 import com.mtshop.admin.category.CategoryService;
 import com.mtshop.admin.category.export.CategoryCSVExporter;
-import com.mtshop.admin.user.UserService;
 import com.mtshop.common.entity.Category;
+import com.mtshop.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
@@ -79,17 +81,32 @@ public class CategoryController {
     }
 
     @PostMapping("/categories/save")
-    public String saveUser(Category category, RedirectAttributes redirectAttributes) {
+    public String saveUser(Category category, RedirectAttributes redirectAttributes,
+                           @RequestParam(value = "fileImage", required = false) MultipartFile multipartFile) throws IOException {
+        if (!multipartFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            category.setImage(fileName);
 
-        categoryService.save(category);
+            Category savedCategory = categoryService.save(category);
+
+            String uploadDir = "images/category-images/" + savedCategory.getId();
+
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        } else {
+            if (category.getImage().isEmpty())
+                category.setImage(null);
+            categoryService.save(category);
+        }
 
         redirectAttributes.addFlashAttribute("message", "Thể loại đã được lưu thành công !");
 
-        return "redirect:/categories";
+        String name = category.getName();
+        return "redirect:/categories/page/1?sortField=id&sortType=asc&keyword=" + name;
     }
 
     @GetMapping("/categories/edit/{id}")
-    public String editUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String editCategory(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
             Category category = categoryService.get(id);
             List<Category> listCategories = categoryService.listCategoriesUsedInForm();
@@ -121,9 +138,9 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/{id}/enabled/{status}")
-    public String updateUserEnabledStatus(@PathVariable(name = "id") Integer id,
-                                          @PathVariable(name = "status") boolean enabled,
-                                          RedirectAttributes redirectAttributes) {
+    public String updateCategoryEnabledStatus(@PathVariable(name = "id") Integer id,
+                                              @PathVariable(name = "status") boolean enabled,
+                                              RedirectAttributes redirectAttributes) {
         categoryService.updateCategoryEnabledStatus(id, enabled);
 
         String status = enabled ? "kích hoạt" : "vô hiệu hoá";
