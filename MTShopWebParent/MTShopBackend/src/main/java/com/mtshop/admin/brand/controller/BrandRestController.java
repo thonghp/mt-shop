@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class BrandRestController {
 
     @Autowired
-    private BrandService categoryService;
+    private BrandService brandService;
 
-//    @PostMapping("/brands/check_unique")
-//    public String checkUnique(@RequestParam(value = "id", required = false) Integer id,
-//                              @RequestParam("name") String name,
-//                              @RequestParam("alias") String alias) {
-//        return categoryService.checkUnique(id, name, alias);
-//    }
+    @PostMapping("/brands/check_unique")
+    public String checkUnique(@RequestParam(value = "id", required = false) Integer id,
+                              @RequestParam("name") String name) {
+        return brandService.checkUnique(id, name);
+    }
 }

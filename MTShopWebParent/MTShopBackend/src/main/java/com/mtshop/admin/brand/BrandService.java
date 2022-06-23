@@ -57,87 +57,6 @@ public class BrandService {
 
         return (List<Brand>) brandRepo.findAll();
     }
-//
-//    private List<Brand> listHierarchicalCategories(List<Brand> rootCategories, String sortDir) {
-//        List<Brand> hierarchicalCategories = new ArrayList<>();
-//
-//        for (Brand rootCategory : rootCategories) {
-//            hierarchicalCategories.add(Brand.copyFull(rootBrand));
-//
-//            Set<Brand> children = sortSubCategories(rootBrand.getChildren(), sortDir);
-//
-//            for (Brand subBrand : children) {
-//                String name = "--" + subBrand.getName();
-//                hierarchicalCategories.add(Brand.copyFull(subBrand, name));
-//
-//                listSubHierachicalCategories(hierarchicalCategories, subBrand, 1, sortDir);
-//            }
-//        }
-//
-//        return hierarchicalCategories;
-//    }
-//
-//    private void listSubHierachicalCategories(List<Brand> hierarchicalCategories, Brand parent, int subLevel,
-//                                              String sortDir) {
-//        Set<Brand> children = sortSubCategories(parent.getChildren(), sortDir);
-//        int newSubLevel = subLevel + 1;
-//
-//        for (Brand subBrand : children) {
-//            String name = "";
-//
-//            for (int i = 0; i < newSubLevel; i++) {
-//                name += "--";
-//            }
-//
-//            name += subBrand.getName();
-//
-//            hierarchicalCategories.add(Brand.copyFull(subBrand, name));
-//
-//            listSubHierachicalCategories(hierarchicalCategories, subBrand, newSubLevel, sortDir);
-//        }
-//    }
-//
-//    public List<Brand> listCategoriesUsedInForm() {
-//        List<Brand> categoriesUsedInForm = new ArrayList<>();
-//
-//        Iterable<Brand> categoriesInDB = brandRepo.findByParentIsNull(Sort.by("name").ascending());
-//
-//        for (Brand category : categoriesInDB) {
-//            if (category.getParent() == null) {
-//                categoriesUsedInForm.add(Brand.copyIdAndName(category));
-//
-//                Set<Brand> children = sortSubCategories(category.getChildren());
-//
-//                for (Brand subBrand : children) {
-//                    String name = "--" + subBrand.getName();
-//
-//                    categoriesUsedInForm.add(Brand.copyIdAndName(subBrand.getId(), name));
-//
-//                    listSubCategoriesUsedInForm(categoriesUsedInForm, subBrand, 1);
-//                }
-//            }
-//        }
-//        return categoriesUsedInForm;
-//    }
-//
-//    private void listSubCategoriesUsedInForm(List<Brand> categoriesUsedInForm, Brand parent, int subLevel) {
-//        int newSubLevel = subLevel + 1;
-//        Set<Brand> children = sortSubCategories(parent.getChildren());
-//
-//        for (Brand subBrand : children) {
-//            String name = "";
-//
-//            for (int i = 0; i < newSubLevel; i++) {
-//                name += "--";
-//            }
-//
-//            name += subBrand.getName();
-//
-//            categoriesUsedInForm.add(Brand.copyIdAndName(subBrand.getId(), name));
-//
-//            listSubCategoriesUsedInForm(categoriesUsedInForm, subBrand, newSubLevel);
-//        }
-//    }
 
     public Brand save(Brand category) {
         return brandRepo.save(category);
@@ -161,27 +80,21 @@ public class BrandService {
         brandRepo.deleteById(id);
     }
 
-//    public String checkUnique(Integer id, String name, String alias) {
-//        boolean isCreatingNew = (id == null || id == 0);
-//
-//        Brand categoryByName = brandRepo.findByName(name);
-//
-//        if (isCreatingNew) {
-//            if (categoryByName != null) {
-//                return "DuplicateName";
-//            } else {
-//                Brand categoryByAlias = brandRepo.findByAlias(alias);
-//                if (categoryByAlias != null) return "DuplicateAlias";
-//            }
-//        } else {
-//            if (categoryByName != null && categoryByName.getId() != id) return "DuplicateName";
-//
-//            Brand categoryByAlias = brandRepo.findByAlias(alias);
-//            if (categoryByAlias != null && categoryByAlias.getId() != id) return "DuplicateAlias";
-//        }
-//
-//        return "OK";
-//    }
+    public String checkUnique(Integer id, String name) {
+        boolean isCreatingNew = (id == null || id == 0);
+
+        Brand brandByName = brandRepo.findByName(name);
+
+        if (isCreatingNew) {
+            if (brandByName != null)
+                return "Duplicate";
+        } else {
+            if (brandByName != null && brandByName.getId() != id)
+                return "Duplicate";
+        }
+
+        return "OK";
+    }
 //
 //    private SortedSet<Brand> sortSubCategories(Set<Brand> children) {
 //        return sortSubCategories(children, "asc");
