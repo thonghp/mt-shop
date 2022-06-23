@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head(${pageTitle})"/>
+
+<body>
+<div class="container-fluid">
+
+    <!-- navigation -->
+    <div th:replace="navigation::menu"></div>
+
+    <div class="mb-5">
+        <h2>Quản lý nhãn hiệu | [[${pageTitle}]]</h2>
+    </div>
+
+    <form th:action="@{/brands/save}" method="post" style="max-width: 500px; margin: 0 auto" th:object="${brand}"
+          enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="border border-secondary rounded p-3">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Tên nhãn hiệu:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" required minlength="3" maxlength="45" th:field="*{name}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Logo:</label>
+                <div class="col-sm-8">
+                    <input type="hidden" th:field="*{logo}"/>
+                    <input type="file" id="fileImage" accept="image/png, image/jpeg" class="mb-2" name="fileImage"/>
+                    <div class="mt-2">
+                        <img id="thumbnail" alt="Image preview" class="img-fluid" th:src="@{${brand.logoPath}}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Chọn 1 hoặc nhiều thể loại:</label>
+                <div class="col-sm-8">
+                    <select th:field="*{categories}" class="form-control" multiple required
+                            style="resize: vertical; height: 200px">
+                        <th:block th:each="cat: ${listCategories}">
+                            <option th:value="${cat.id}">[[${cat.name}]]</option>
+                        </th:block>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Thể loại được chọn</label>
+                <div class="col-sm-8">
+
+                </div>
+            </div>
+            <div class="text-center">
+                <input type="submit" value="Save" class="btn btn-primary m-3"/>
+                <input type="button" value="Cancel" class="btn btn-secondary" id="btnCancel">
+            </div>
+        </div>
+    </form>
+
+    <div th:replace="modal_fragments :: modal_dialog"></div>
+
+    <!-- footer -->
+    <div th:replace="fragments :: footer"></div>
+
+</div>
+
+<script type="text/javascript">
+    moduleUrl = "[[@{/brands}]]";
+
+    function checkUnique(form) {
+        url = "[[@{/brands/check_unique}]]";
+
+        catAlias = $("#alias").val();
+        catName = $("#name").val();
+        catId = $("#id").val();
+
+        csrfValue = $("input[name='_csrf']").val();
+
+        params = {id: catId, name: catName, alias: catAlias, _csrf: csrfValue};
+
+        $.post(url, params, function (response) {
+            if (response == "OK") {
+                form.submit();
+            } else if (response == "DuplicateName") {
+                showWarningModal("Tên nhãn hiệu " + catName + " đã tồn tại !");
+            } else if (response == "DuplicateAlias") {
+                showWarningModal("Tên Alias " + catAlias + " đã tồn tại !");
+            } else {
+                showErrorModal("Unknown response from server");
+            }
+        }).fail(function () {
+            showErrorModal("Could not connect to the server");
+        });
+
+        return false;
+    }
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+</body>
+</html>
