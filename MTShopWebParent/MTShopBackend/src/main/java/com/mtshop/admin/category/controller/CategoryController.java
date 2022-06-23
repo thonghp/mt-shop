@@ -6,7 +6,6 @@ import com.mtshop.admin.category.CategoryPageInfo;
 import com.mtshop.admin.category.CategoryService;
 import com.mtshop.admin.category.export.CategoryCSVExporter;
 import com.mtshop.common.entity.Category;
-import com.mtshop.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -101,8 +100,7 @@ public class CategoryController {
 
         redirectAttributes.addFlashAttribute("message", "Thể loại đã được lưu thành công !");
 
-        String name = category.getName();
-        return "redirect:/categories/page/1?sortField=id&sortType=asc&keyword=" + name;
+        return "redirect:/categories";
     }
 
     @GetMapping("/categories/edit/{id}")
@@ -127,6 +125,8 @@ public class CategoryController {
     public String deleteCategory(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             categoryService.delete(id);
+            String categoryDir = "images/category-images/" + id;
+            FileUploadUtil.removeDir(categoryDir);
 
             redirectAttributes.addFlashAttribute("message", "Thể loại có id  " + id +
                     " được xoá thành công !");
