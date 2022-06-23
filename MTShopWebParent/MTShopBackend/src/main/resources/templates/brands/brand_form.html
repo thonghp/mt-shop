@@ -47,7 +47,7 @@
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Thể loại được chọn</label>
                 <div class="col-sm-8">
-
+                    <div id="chosenCategories"></div>
                 </div>
             </div>
             <div class="text-center">
@@ -67,32 +67,24 @@
 <script type="text/javascript">
     moduleUrl = "[[@{/brands}]]";
 
-    function checkUnique(form) {
-        url = "[[@{/brands/check_unique}]]";
+    $(document).ready(function () {
+        dropdownCategories = $("#categories");
+        divChosenCategories = $("#chosenCategories");
 
-        catAlias = $("#alias").val();
-        catName = $("#name").val();
-        catId = $("#id").val();
-
-        csrfValue = $("input[name='_csrf']").val();
-
-        params = {id: catId, name: catName, alias: catAlias, _csrf: csrfValue};
-
-        $.post(url, params, function (response) {
-            if (response == "OK") {
-                form.submit();
-            } else if (response == "DuplicateName") {
-                showWarningModal("Tên nhãn hiệu " + catName + " đã tồn tại !");
-            } else if (response == "DuplicateAlias") {
-                showWarningModal("Tên Alias " + catAlias + " đã tồn tại !");
-            } else {
-                showErrorModal("Unknown response from server");
-            }
-        }).fail(function () {
-            showErrorModal("Could not connect to the server");
+        dropdownCategories.change(function () {
+            divChosenCategories.empty();
+            showChosenCategories();
         });
+    });
 
-        return false;
+    function showChosenCategories() {
+        dropdownCategories.children("option:selected").each(function () {
+            selectedCategory = $(this);
+            catId = selectedCategory.val();
+            catName = selectedCategory.text().replace(/-/g, "");
+
+            divChosenCategories.append("<span class='badge badge-secondary m-1'>" + catName + "</span>");
+        });
     }
 </script>
 <script th:src="@{/js/common_form.js}"></script>
