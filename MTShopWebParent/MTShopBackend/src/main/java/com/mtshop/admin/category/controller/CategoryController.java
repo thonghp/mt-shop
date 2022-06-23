@@ -77,7 +77,7 @@ public class CategoryController {
         model.addAttribute("pageTitle", "Tạo thể loại mới");
         model.addAttribute("listCategories", listCategories);
 
-        return "categories/category_form.html";
+        return "categories/category_form";
     }
 
     @PostMapping("/categories/save")
