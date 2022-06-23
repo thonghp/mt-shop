@@ -12,6 +12,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 
 public interface BrandRepository extends PagingAndSortingRepository<Brand, Integer> {
+    Long countById(Integer id);
 //    @Query("UPDATE Category c SET c.enabled = ?2 WHERE c.id = ?1")
 //    @Modifying
 //    void updateEnabledStatus(Integer id, boolean enabled);
@@ -26,5 +27,4 @@ public interface BrandRepository extends PagingAndSortingRepository<Brand, Integ
 //
 //    Category findByAlias(String alias);
 //
-//    Long countById(Integer id);
 }

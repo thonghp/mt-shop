@@ -21,7 +21,6 @@ public class BrandService {
     private BrandRepository brandRepo;
 
 
-
     public List<Brand> listByPage(String sortType, int pageNum, BrandPageInfo pageInfo, String keyword) {
 //        Sort sort = Sort.by("name");
 //
@@ -139,19 +138,29 @@ public class BrandService {
 //            listSubCategoriesUsedInForm(categoriesUsedInForm, subBrand, newSubLevel);
 //        }
 //    }
-//
-//    public Brand save(Brand category) {
-//        return brandRepo.save(category);
-//    }
-//
-//    public Brand get(Integer id) throws BrandNotFoundException {
-//        try {
-//            return brandRepo.findById(id).get();
-//        } catch (NoSuchElementException ex) {
-//            throw new BrandNotFoundException("Could not find any category with ID " + id);
-//        }
-//    }
-//
+
+    public Brand save(Brand category) {
+        return brandRepo.save(category);
+    }
+
+    public Brand get(Integer id) throws BrandNotFoundException {
+        try {
+            return brandRepo.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw new BrandNotFoundException("Could not find any brand with ID " + id);
+        }
+    }
+
+    public void delete(Integer id) throws BrandNotFoundException {
+        Long countById = brandRepo.countById(id);
+
+        if (countById == null || countById == 0) {
+            throw new BrandNotFoundException("Could not find any brand with ID: " + id);
+        }
+
+        brandRepo.deleteById(id);
+    }
+
 //    public String checkUnique(Integer id, String name, String alias) {
 //        boolean isCreatingNew = (id == null || id == 0);
 //
@@ -194,16 +203,7 @@ public class BrandService {
 //
 //        return sortedSet;
 //    }
-//
-//    public void delete(Integer id) throws BrandNotFoundException {
-//        Long countById = brandRepo.countById(id);
-//
-//        if (countById == null || countById == 0) {
-//            throw new BrandNotFoundException("Could not find any category with ID: " + id);
-//        }
-//
-//        brandRepo.deleteById(id);
-//    }
+
 
 //    public void updateBrandEnabledStatus(Integer id, boolean enabled) {
 //        categoryRepo.updateEnabledStatus(id, enabled);

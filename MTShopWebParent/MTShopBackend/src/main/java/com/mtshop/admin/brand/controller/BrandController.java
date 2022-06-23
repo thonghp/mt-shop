@@ -88,62 +88,61 @@ public class BrandController {
         return "brands/brand_form";
     }
 
-//    @PostMapping("/brands/save")
-//    public String saveUser(Category category, RedirectAttributes redirectAttributes,
-//                           @RequestParam(value = "fileImage", required = false) MultipartFile multipartFile) throws IOException {
-//        if (!multipartFile.isEmpty()) {
-//            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-//            category.setImage(fileName);
-//
-//            Category savedCategory = brandService.save(category);
-//
-//            String uploadDir = "images/category-images/" + savedCategory.getId();
-//
-//            FileUploadUtil.cleanDir(uploadDir);
-//            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-//        } else {
-//            if (category.getImage().isEmpty())
-//                category.setImage(null);
-//            brandService.save(category);
-//        }
-//
-//        redirectAttributes.addFlashAttribute("message", "Thể loại đã được lưu thành công !");
-//
-//        String name = category.getName();
-//        return "redirect:/brands/page/1?sortField=id&sortType=asc&keyword=" + name;
-//    }
+    @PostMapping("/brands/save")
+    public String saveBrand(Brand brand, RedirectAttributes redirectAttributes,
+                           @RequestParam(value = "fileImage", required = false) MultipartFile multipartFile) throws IOException {
+        if (!multipartFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            brand.setLogo(fileName);
 
-//    @GetMapping("/brands/edit/{id}")
-//    public String editCategory(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
-//        try {
-//            Category category = brandService.get(id);
-//            List<Category> listBrands = brandService.listBrandsUsedInForm();
-//
-//            model.addAttribute("category", category);
-//            model.addAttribute("listBrands", listBrands);
-//            model.addAttribute("pageTitle", "Sửa thể loại (ID: " + id + ")");
-//
-//            return "brands/category_form";
-//        } catch (BrandNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message", e.getMessage());
-//
-//            return "redirect:/brands";
-//        }
-//    }
+            Brand savedBrand = brandService.save(brand);
 
-//    @GetMapping("/brands/delete/{id}")
-//    public String deleteCategory(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
-//        try {
-//            brandService.delete(id);
-//
-//            redirectAttributes.addFlashAttribute("message", "Thể loại có id  " + id +
-//                    " được xoá thành công !");
-//        } catch (BrandNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message", e.getMessage());
-//        }
-//
-//        return "redirect:/brands";
-//    }
+            String uploadDir = "images/brand-images/" + savedBrand.getId();
+
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        } else {
+            brandService.save(brand);
+        }
+
+        redirectAttributes.addFlashAttribute("message", "Nhãn hiệu đã được lưu thành công !");
+
+        return "redirect:/brands";
+    }
+
+    @GetMapping("/brands/edit/{id}")
+    public String editBrand(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Brand brand = brandService.get(id);
+            List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+
+            model.addAttribute("brand", brand);
+            model.addAttribute("listCategories", listCategories);
+            model.addAttribute("pageTitle", "Sửa nhãn hiệu (ID: " + id + ")");
+
+            return "brands/brand_form";
+        } catch (BrandNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+
+            return "redirect:/brands";
+        }
+    }
+
+    @GetMapping("/brands/delete/{id}")
+    public String deleteBrand(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            brandService.delete(id);
+            String brandDir = "images/brand-images/" + id;
+            FileUploadUtil.removeDir(brandDir);
+
+            redirectAttributes.addFlashAttribute("message", "Nhãn hiệu có id  " + id +
+                    " được xoá thành công !");
+        } catch (BrandNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
+
+        return "redirect:/brands";
+    }
 
 //    @GetMapping("/brands/{id}/enabled/{status}")
 //    public String updateCategoryEnabledStatus(@PathVariable(name = "id") Integer id,

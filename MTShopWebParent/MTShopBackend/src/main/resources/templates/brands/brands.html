@@ -38,8 +38,7 @@
             <tr th:each="brand: ${listBrands}">
                 <td>[[${brand.id}]]</td>
                 <td>
-                    <!--                    <span th:if="${brand.image == null}" class="fas fa-portrait fa-3x icon-silver"></span>-->
-                    <!--                    <img th:if="${brand.image != null}" th:src="@{${brand.imagePath}}" style="width: 100px"/>-->
+                    <img th:src="@{${brand.logoPath}}" style="width: 100px" class="img-fluid"/>
                 </td>
                 <td>[[${brand.name}]]</td>
                 <td>
