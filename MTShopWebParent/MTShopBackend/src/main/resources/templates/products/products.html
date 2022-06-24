@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Quản lý sản phẩm - MTShop Admin')"/>
+
+<body>
+<div class="container-fluid">
+
+    <!-- navigation -->
+    <div th:replace="navigation::menu"></div>
+
+    <!-- user form -->
+    <div>
+        <!-- class="text-center mt-3 mb-3" -->
+        <h2>Quản lý sản phẩm</h2>
+        <a th:href="@{/products/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
+        <a th:href="@{/products/export/csv}" class="fas fa-file-csv fa-2x mr-2" style="color: #007c01"></a>
+    </div>
+
+    <!-- search -->
+    <div th:replace="fragments :: search_form_and_message('/products/page/1')"/>
+
+    <!-- table -->
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Ảnh chính</th>
+                <th>Tên</th>
+                <th>Nhãn hiệu</th>
+                <th>Thể loại</th>
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <!-- load user list -->
+            <tbody>
+            <tr th:each="product: ${listProducts}">
+                <td>[[${product.id}]]</td>
+                <td></td>
+                <td>[[${product.name}]]</td>
+                <td>[[${product.brand.name}]]</td>
+                <td>[[${product.category.name}]]</td>
+                <td>
+                    <div th:replace="fragments :: status(${product.enabled}, '/products/' + ${product.id})"/>
+                </td>
+                <td>
+                    <a th:href="@{'/products/detail' + ${product.id}}" class="fas fa-file-alt fa-2x icon-green"></a>
+                    &nbsp;
+                    <div th:replace="fragments :: edit('/products/edit/' + ${product.id}, 'thể loại')"
+                         title="Xem chi tiết sản phẩm này"/>
+                    &nbsp;
+                    <div th:replace="fragments :: delete('/products/delete/' + ${product.id}, 'thể loại', true, ${product.id})"/>
+                </td>
+            </tr>
+            </tbody>
+            <!-- load user list -->
+
+        </table>
+    </div>
+    <!-- table -->
+
+    <div th:replace="fragments :: pagination('/products', 'sản phẩm')"/>
+
+    <!-- confirm modal -->
+    <div th:replace="modal_fragments :: confirm_modal"></div>
+
+    <!-- footer -->
+    <div th:replace="fragments :: footer"></div>
+
+</div>
+
+<script type="text/javascript">
+    moduleUrl = "[[@{/products/}]]";
+
+    $(document).ready(function () {
+        $(".link-delete").on("click", function (e) {
+            e.preventDefault();
+            showDeleteConfirmModal($(this), 'product');
+        });
+    });
+</script>
+<script th:src="@{/js/common_list.js}"></script>
+</body>
+</html>
