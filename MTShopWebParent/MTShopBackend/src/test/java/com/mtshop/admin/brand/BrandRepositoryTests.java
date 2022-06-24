@@ -83,4 +83,12 @@ public class BrandRepositoryTests {
 
         assertThat(result.isEmpty());
     }
+
+    @Test
+    public void testFindAll() {
+        Iterable<Brand> brands = brandRepo.findAll();
+        brands.forEach(System.out::println); // brand -> System.out.println(brand)
+
+        assertThat(brands).isNotEmpty();
+    }
 }

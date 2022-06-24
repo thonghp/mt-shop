@@ -29,6 +29,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private BrandService brandService;
+
     @GetMapping("/products")
     public String listFirstPage(Model model) {
         List<Product> listProducts = productService.listAll();
@@ -39,9 +42,6 @@ public class ProductController {
     }
 
 
-//    @Autowired
-//    private BrandService brandService;
-//
 //    @Autowired
 //    private CategoryService categoryService;
 //
@@ -80,23 +80,25 @@ public class ProductController {
 //
 //        return "brands/brands";
 //    }
-//
-//    @GetMapping("/brands/new")
-//    public String newBrand(Model model) {
-//        Category category = new Category();
-//        category.setEnabled(true);
-//        List<Category> listCategories = categoryService.listCategoriesUsedInForm();
-//
-//        model.addAttribute("brand", new Brand());
-//        model.addAttribute("pageTitle", "Tạo nhãn hiệu mới");
-//        model.addAttribute("listCategories", listCategories);
-//
-//        return "brands/brand_form";
-//    }
-//
-//    @PostMapping("/brands/save")
-//    public String saveBrand(Brand brand, RedirectAttributes redirectAttributes,
-//                            @RequestParam(value = "fileImage", required = false) MultipartFile multipartFile) throws IOException {
+
+    @GetMapping("/products/new")
+    public String newProduct(Model model) {
+        List<Brand> brands = brandService.listAll();
+
+        Product product = new Product();
+        product.setEnabled(true);
+        product.setInStock(true);
+
+        model.addAttribute("product", product);
+        model.addAttribute("listBrands", brands);
+        model.addAttribute("pageTitle", "Tạo sản phẩm mới");
+
+        return "products/product_form";
+    }
+
+    @PostMapping("/products/save")
+    public String saveProduct(Product product, RedirectAttributes redirectAttributes,
+                              @RequestParam(value = "fileImage", required = false) MultipartFile multipartFile) throws IOException {
 //        if (!multipartFile.isEmpty()) {
 //            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 //            brand.setLogo(fileName);
@@ -110,12 +112,12 @@ public class ProductController {
 //        } else {
 //            brandService.save(brand);
 //        }
-//
-//        redirectAttributes.addFlashAttribute("message", "Nhãn hiệu đã được lưu thành công !");
-//
-//        return "redirect:/brands";
-//    }
-//
+
+        redirectAttributes.addFlashAttribute("message", "Nhãn hiệu đã được lưu thành công !");
+
+        return "redirect:/products";
+    }
+
 //    @GetMapping("/brands/edit/{id}")
 //    public String editBrand(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
 //        try {
