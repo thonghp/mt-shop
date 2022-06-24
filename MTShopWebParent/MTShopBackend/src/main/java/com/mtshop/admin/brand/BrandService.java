@@ -1,6 +1,7 @@
 package com.mtshop.admin.brand;
 
 import com.mtshop.common.entity.Brand;
+import com.mtshop.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,9 @@ public class BrandService {
     @Autowired
     private BrandRepository brandRepo;
 
+    public List<Brand> listAll() {
+        return (List<Brand>) brandRepo.findAll();
+    }
 
     public Page<Brand> listByPage(int pageNum, String sortField, String sortType, String keyword) {
         Sort sort = Sort.by(sortField);
@@ -71,34 +75,4 @@ public class BrandService {
 
         return "OK";
     }
-//
-//    private SortedSet<Brand> sortSubCategories(Set<Brand> children) {
-//        return sortSubCategories(children, "asc");
-//    }
-//
-//    private SortedSet<Brand> sortSubCategories(Set<Brand> children, String sortDir) {
-//        SortedSet<Brand> sortedSet = new TreeSet<>(new Comparator<Brand>() {
-//            @Override
-//            public int compare(Brand o1, Brand o2) {
-//                if (sortDir.equals("asc")) {
-//                    return o1.getName().compareTo(o2.getName());
-//                } else {
-//                    return o2.getName().compareTo(o1.getName());
-//                }
-//            }
-//        });
-//
-//        sortedSet.addAll(children);
-//
-//        return sortedSet;
-//    }
-
-
-//    public void updateBrandEnabledStatus(Integer id, boolean enabled) {
-//        categoryRepo.updateEnabledStatus(id, enabled);
-//    }
-
-//    public Category getByEmail(String email) {
-//        return categoryRepo.findByEmail(email);
-//    }
 }

@@ -139,24 +139,11 @@ public class BrandController {
         return "redirect:/brands";
     }
 
-//    @GetMapping("/brands/{id}/enabled/{status}")
-//    public String updateCategoryEnabledStatus(@PathVariable(name = "id") Integer id,
-//                                              @PathVariable(name = "status") boolean enabled,
-//                                              RedirectAttributes redirectAttributes) {
-//        brandService.updateCategoryEnabledStatus(id, enabled);
-//
-//        String status = enabled ? "kích hoạt" : "vô hiệu hoá";
-//        String message = "Thể loại có id là " + id + " đã được " + status;
-//
-//        redirectAttributes.addFlashAttribute("message", message);
-//
-//        return "redirect:/brands";
-//    }
 
-//    @GetMapping("/brands/export/csv")
-//    public void exportToCSV(HttpServletResponse response) throws IOException {
-//        List<Category> listBrands = brandService.listBrandsUsedInForm();
-//        BrandCSVExporter exporter = new BrandCSVExporter();
-//        exporter.export(listBrands, response);
-//    }
+    @GetMapping("/brands/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Brand> listBrands = brandService.listAll();
+        BrandCSVExporter exporter = new BrandCSVExporter();
+        exporter.export(listBrands, response);
+    }
 }
