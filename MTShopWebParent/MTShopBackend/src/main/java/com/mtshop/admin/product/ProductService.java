@@ -80,21 +80,21 @@ public class ProductService {
 //        brandRepo.deleteById(id);
 //    }
 //
-//    public String checkUnique(Integer id, String name) {
-//        boolean isCreatingNew = (id == null || id == 0);
-//
-//        Brand brandByName = brandRepo.findByName(name);
-//
-//        if (isCreatingNew) {
-//            if (brandByName != null)
-//                return "Duplicate";
-//        } else {
-//            if (brandByName != null && brandByName.getId() != id)
-//                return "Duplicate";
-//        }
-//
-//        return "OK";
-//    }
+    public String checkUnique(Integer id, String name) {
+        boolean isCreatingNew = (id == null || id == 0);
+
+        Product productByName = productRepo.findByName(name);
+
+        if (isCreatingNew) {
+            if (productByName != null)
+                return "Duplicate";
+        } else {
+            if (productByName != null && productByName.getId() != id)
+                return "Duplicate";
+        }
+
+        return "OK";
+    }
 //
 //    private SortedSet<Brand> sortSubCategories(Set<Brand> children) {
 //        return sortSubCategories(children, "asc");

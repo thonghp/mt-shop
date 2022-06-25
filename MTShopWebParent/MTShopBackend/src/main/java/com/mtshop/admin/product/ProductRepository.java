@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface ProductRepository extends PagingAndSortingRepository<Product, Integer> {
+
+    Product findByName(String name);
 //    Long countById(Integer id);
 
-//    Brand findByName(String name);
 //
 //    @Query("SELECT b FROM Brand b WHERE b.name LIKE %?1%")
 //    Page<Brand> findAll(Pageable pageable, String keyword);

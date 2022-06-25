@@ -16,7 +16,7 @@
         <h2>Quản lý sản phẩm | [[${pageTitle}]]</h2>
     </div>
 
-    <form th:action="@{/products/save}" method="post" th:object="${product}">
+    <form th:action="@{/products/save}" method="post" th:object="${product}" onsubmit="return checkUnique(this);">
         <input type="hidden" th:field="*{id}"/>
         <div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -93,6 +93,31 @@
                 $("<option>").val(category.id).text(category.name).appendTo(dropdownCategories);
             });
         });
+    }
+
+    function checkUnique(form) {
+        url = "[[@{/products/check_unique}]]";
+
+        productId = $("#id").val();
+        productName = $("#name").val();
+
+        csrfValue = $("input[name='_csrf']").val();
+
+        params = {id: productId, name: productName, _csrf: csrfValue};
+
+        $.post(url, params, function (response) {
+            if (response == "OK") {
+                form.submit();
+            } else if (response == "Duplicate") {
+                showWarningModal("Sản phẩm " + productName + " đã tồn tại !");
+            } else {
+                showErrorModal("Unknown response from server");
+            }
+        }).fail(function () {
+            showErrorModal("Could not connect to the server"); // this line runs when the above url is wrong
+        });
+
+        return false;
     }
 
 </script>
