@@ -150,4 +150,18 @@ public class ProductController {
 //
 //        return "redirect:/brands";
 //    }
+
+    @GetMapping("/products/{id}/enabled/{status}")
+    public String updateProductEnabledStatus(@PathVariable(name = "id") Integer id,
+                                              @PathVariable(name = "status") boolean enabled,
+                                              RedirectAttributes redirectAttributes) {
+        productService.updateProductEnabledStatus(id, enabled);
+
+        String status = enabled ? "kích hoạt" : "vô hiệu hoá";
+        String message = "Sản phẩm có id là " + id + " đã được " + status;
+
+        redirectAttributes.addFlashAttribute("message", message);
+
+        return "redirect:/products";
+    }
 }

@@ -118,9 +118,9 @@ public class ProductService {
 //    }
 
 
-//    public void updateBrandEnabledStatus(Integer id, boolean enabled) {
-//        categoryRepo.updateEnabledStatus(id, enabled);
-//    }
+    public void updateProductEnabledStatus(Integer id, boolean enabled) {
+        productRepo.updateEnabledStatus(id, enabled);
+    }
 
 //    public Category getByEmail(String email) {
 //        return categoryRepo.findByEmail(email);
