@@ -69,17 +69,17 @@ public class ProductService {
 //            throw new BrandNotFoundException("Could not find any brand with ID " + id);
 //        }
 //    }
-//
-//    public void delete(Integer id) throws BrandNotFoundException {
-//        Long countById = brandRepo.countById(id);
-//
-//        if (countById == null || countById == 0) {
-//            throw new BrandNotFoundException("Could not find any brand with ID: " + id);
-//        }
-//
-//        brandRepo.deleteById(id);
-//    }
-//
+
+    public void delete(Integer id) throws ProductNotFoundException {
+        Long countById = productRepo.countById(id);
+
+        if (countById == null || countById == 0) {
+            throw new ProductNotFoundException("Could not find any product with ID: " + id);
+        }
+
+        productRepo.deleteById(id);
+    }
+
     public String checkUnique(Integer id, String name) {
         boolean isCreatingNew = (id == null || id == 0);
 

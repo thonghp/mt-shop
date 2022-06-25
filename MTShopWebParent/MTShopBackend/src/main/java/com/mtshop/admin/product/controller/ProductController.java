@@ -4,6 +4,7 @@ import com.mtshop.admin.FileUploadUtil;
 import com.mtshop.admin.brand.BrandNotFoundException;
 import com.mtshop.admin.brand.BrandService;
 import com.mtshop.admin.category.CategoryService;
+import com.mtshop.admin.product.ProductNotFoundException;
 import com.mtshop.admin.product.ProductService;
 import com.mtshop.common.entity.Brand;
 import com.mtshop.common.entity.Category;
@@ -134,22 +135,22 @@ public class ProductController {
 //            return "redirect:/brands";
 //        }
 //    }
-//
-//    @GetMapping("/brands/delete/{id}")
-//    public String deleteBrand(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
-//        try {
-//            brandService.delete(id);
+
+    @GetMapping("/products/delete/{id}")
+    public String deleteProduct(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            productService.delete(id);
 //            String brandDir = "images/brand-images/" + id;
 //            FileUploadUtil.removeDir(brandDir);
-//
-//            redirectAttributes.addFlashAttribute("message", "Nhãn hiệu có id  " + id +
-//                    " được xoá thành công !");
-//        } catch (BrandNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message", e.getMessage());
-//        }
-//
-//        return "redirect:/brands";
-//    }
+
+            redirectAttributes.addFlashAttribute("message", "Nhãn hiệu có id  " + id +
+                    " được xoá thành công !");
+        } catch (ProductNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
+
+        return "redirect:/products";
+    }
 
     @GetMapping("/products/{id}/enabled/{status}")
     public String updateProductEnabledStatus(@PathVariable(name = "id") Integer id,

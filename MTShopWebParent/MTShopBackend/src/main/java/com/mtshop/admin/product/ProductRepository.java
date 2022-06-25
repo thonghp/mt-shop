@@ -14,7 +14,8 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
     @Query("UPDATE Product p SET p.enabled = ?2 WHERE p.id = ?1")
     @Modifying
     void updateEnabledStatus(Integer id, boolean enabled);
-//    Long countById(Integer id);
+
+    Long countById(Integer id);
 
 //
 //    @Query("SELECT b FROM Brand b WHERE b.name LIKE %?1%")

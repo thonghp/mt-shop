@@ -49,10 +49,10 @@
                 <td>
                     <a th:href="@{'/products/detail' + ${product.id}}" class="fas fa-file-alt fa-2x icon-green"></a>
                     &nbsp;
-                    <div th:replace="fragments :: edit('/products/edit/' + ${product.id}, 'thể loại')"
+                    <div th:replace="fragments :: edit('/products/edit/' + ${product.id}, 'sản phẩm')"
                          title="Xem chi tiết sản phẩm này"/>
                     &nbsp;
-                    <div th:replace="fragments :: delete('/products/delete/' + ${product.id}, 'thể loại', true, ${product.id})"/>
+                    <div th:replace="fragments :: delete('/products/delete/' + ${product.id}, 'sản phẩm', true, ${product.id})"/>
                 </td>
             </tr>
             </tbody>
@@ -78,7 +78,7 @@
     $(document).ready(function () {
         $(".link-delete").on("click", function (e) {
             e.preventDefault();
-            showDeleteConfirmModal($(this), 'product');
+            showDeleteConfirmModal($(this), 'sản phẩm');
         });
     });
 </script>
