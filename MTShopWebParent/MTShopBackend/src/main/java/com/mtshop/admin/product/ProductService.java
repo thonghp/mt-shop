@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -44,11 +45,23 @@ public class ProductService {
 //
 //        return brandRepo.findAll(pageable, "");
 //    }
-//
-//    public Brand save(Brand category) {
-//        return brandRepo.save(category);
-//    }
-//
+
+    public Product save(Product product) {
+        if (product.getId() == null)
+            product.setCreatedTime(new Date());
+
+        if (product.getAlias() == null || product.getAlias().isEmpty()) {
+            String defaultAlias = product.getName().replaceAll(" ", "-");
+            product.setAlias(defaultAlias);
+        } else {
+            product.setAlias(product.getAlias().replaceAll(" ", "-"));
+        }
+
+        product.setUpdatedTime(new Date());
+
+        return productRepo.save(product);
+    }
+
 //    public Brand get(Integer id) throws BrandNotFoundException {
 //        try {
 //            return brandRepo.findById(id).get();

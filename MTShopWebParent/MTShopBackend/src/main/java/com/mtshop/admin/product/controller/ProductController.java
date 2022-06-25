@@ -97,13 +97,12 @@ public class ProductController {
     }
 
     @PostMapping("/products/save")
-    public String saveProduct(Product product, RedirectAttributes redirectAttributes,
-                              @RequestParam(value = "fileImage", required = false) MultipartFile multipartFile) throws IOException {
+    public String saveProduct(Product product, RedirectAttributes redirectAttributes) {
 //        if (!multipartFile.isEmpty()) {
 //            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 //            brand.setLogo(fileName);
 //
-//            Brand savedBrand = brandService.save(brand);
+        Product savedProduct = productService.save(product);
 //
 //            String uploadDir = "images/brand-images/" + savedBrand.getId();
 //
@@ -113,7 +112,7 @@ public class ProductController {
 //            brandService.save(brand);
 //        }
 
-        redirectAttributes.addFlashAttribute("message", "Nhãn hiệu đã được lưu thành công !");
+        redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được lưu thành công !");
 
         return "redirect:/products";
     }
