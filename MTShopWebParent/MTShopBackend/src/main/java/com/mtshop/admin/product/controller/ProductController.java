@@ -100,9 +100,12 @@ public class ProductController {
     @PostMapping("/products/save")
     public String saveProduct(Product product, RedirectAttributes redirectAttributes,
                               @RequestParam(value = "fileImage", required = false) MultipartFile mainImageMultipart,
-                              @RequestParam(value = "extraImage", required = false) MultipartFile[] extraImageMultiparts) throws IOException {
+                              @RequestParam(value = "extraImage", required = false) MultipartFile[] extraImageMultiparts,
+                              @RequestParam(value = "detailNames", required = false) String[] detailNames,
+                              @RequestParam(value = "detailValues", required = false) String[] detailValues) throws IOException {
         setMainImageName(product, mainImageMultipart);
         setExtraImageName(product, extraImageMultiparts);
+        setProductDetails(detailNames, detailValues, product);
 
         Product savedProduct = productService.save(product);
 
@@ -111,6 +114,19 @@ public class ProductController {
         redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được lưu thành công !");
 
         return "redirect:/products";
+    }
+
+    private void setProductDetails(String[] detailNames, String[] detailValues, Product product) {
+        if (detailNames == null || detailNames.length == 0) return;
+
+        for (int count = 0; count < detailNames.length; count++) {
+            String name = detailNames[count];
+            String value = detailValues[count];
+
+            if (!name.isEmpty() && !value.isEmpty()) {
+                product.addDetail(name, value);
+            }
+        }
     }
 
     private void saveUploadedImages(MultipartFile mainImageMultipart, MultipartFile[] extraImageMultiparts,
