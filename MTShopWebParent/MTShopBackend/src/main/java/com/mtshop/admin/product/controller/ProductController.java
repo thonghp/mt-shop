@@ -98,50 +98,88 @@ public class ProductController {
     }
 
     @PostMapping("/products/save")
-    public String saveProduct(Product product, RedirectAttributes redirectAttributes) {
-//        if (!multipartFile.isEmpty()) {
-//            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-//            brand.setLogo(fileName);
-//
+    public String saveProduct(Product product, RedirectAttributes redirectAttributes,
+                              @RequestParam(value = "fileImage", required = false) MultipartFile mainImageMultipart,
+                              @RequestParam(value = "extraImage", required = false) MultipartFile[] extraImageMultiparts) throws IOException {
+        setMainImageName(product, mainImageMultipart);
+        setExtraImageName(product, extraImageMultiparts);
+
         Product savedProduct = productService.save(product);
-//
-//            String uploadDir = "images/brand-images/" + savedBrand.getId();
-//
-//            FileUploadUtil.cleanDir(uploadDir);
-//            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-//        } else {
-//            brandService.save(brand);
-//        }
+
+        saveUploadedImages(mainImageMultipart, extraImageMultiparts, savedProduct);
 
         redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được lưu thành công !");
 
         return "redirect:/products";
     }
 
-//    @GetMapping("/brands/edit/{id}")
-//    public String editBrand(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
-//        try {
-//            Brand brand = brandService.get(id);
-//            List<Category> listCategories = categoryService.listCategoriesUsedInForm();
-//
-//            model.addAttribute("brand", brand);
-//            model.addAttribute("listCategories", listCategories);
-//            model.addAttribute("pageTitle", "Sửa nhãn hiệu (ID: " + id + ")");
-//
-//            return "brands/brand_form";
-//        } catch (BrandNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message", e.getMessage());
-//
-//            return "redirect:/brands";
-//        }
-//    }
+    private void saveUploadedImages(MultipartFile mainImageMultipart, MultipartFile[] extraImageMultiparts,
+                                    Product savedProduct) throws IOException {
+        if (!mainImageMultipart.isEmpty()) {
+            String fileName = StringUtils.cleanPath(mainImageMultipart.getOriginalFilename());
+            String uploadDir = "images/product-images/" + savedProduct.getId();
+
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, mainImageMultipart);
+        }
+
+        if (extraImageMultiparts.length > 0) {
+            String uploadDir = "images/product-images/" + savedProduct.getId() + "/extras";
+
+            for (MultipartFile multipartFile : extraImageMultiparts) {
+                if (multipartFile.isEmpty()) continue;
+
+                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            }
+        }
+    }
+
+    private void setExtraImageName(Product product, MultipartFile[] extraImageMultiparts) {
+        if (extraImageMultiparts.length > 0) {
+            for (MultipartFile multipartFile : extraImageMultiparts) {
+                if (!multipartFile.isEmpty()) {
+                    String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                    product.addExtraImage(fileName);
+                }
+            }
+        }
+    }
+
+    private void setMainImageName(Product product, MultipartFile mainImageMultipart) {
+        if (!mainImageMultipart.isEmpty()) {
+            String fileName = StringUtils.cleanPath(mainImageMultipart.getOriginalFilename());
+            product.setMainImage(fileName);
+        }
+    }
+
+    @GetMapping("/products/edit/{id}")
+    public String editProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Product product = productService.get(id);
+            List<Product> listProducts = productService.listAll();
+
+            model.addAttribute("brand", product);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("pageTitle", "Sửa nhãn hiệu (ID: " + id + ")");
+
+            return "products/product_form";
+        } catch (ProductNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+
+            return "redirect:/products";
+        }
+    }
 
     @GetMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             productService.delete(id);
-//            String brandDir = "images/brand-images/" + id;
-//            FileUploadUtil.removeDir(brandDir);
+
+            String producImagesDir = "images/product-images/" + id;
+            String productExtraImagesDir = "images/product-images/" + id + "/extras";
+            FileUploadUtil.removeDir(productExtraImagesDir);
+            FileUploadUtil.removeDir(producImagesDir);
 
             redirectAttributes.addFlashAttribute("message", "Nhãn hiệu có id  " + id +
                     " được xoá thành công !");
@@ -154,8 +192,8 @@ public class ProductController {
 
     @GetMapping("/products/{id}/enabled/{status}")
     public String updateProductEnabledStatus(@PathVariable(name = "id") Integer id,
-                                              @PathVariable(name = "status") boolean enabled,
-                                              RedirectAttributes redirectAttributes) {
+                                             @PathVariable(name = "status") boolean enabled,
+                                             RedirectAttributes redirectAttributes) {
         productService.updateProductEnabledStatus(id, enabled);
 
         String status = enabled ? "kích hoạt" : "vô hiệu hoá";

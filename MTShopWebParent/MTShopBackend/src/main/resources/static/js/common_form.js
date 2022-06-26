@@ -6,16 +6,11 @@ $(document).ready(function () {
 
     // check image file size
     $("#fileImage").change(function () { // is executed every time the event is fired
-        fileSize = this.files[0].size; // returns the selected file and can get the name or size
-        var mb = 1024 * 1024; // 1mb = 1024 x 1024 kb
-
-        if (fileSize > mb) {
-            this.setCustomValidity("Bạn phải chọn ảnh nhỏ hơn 1MB !"); // Show message as required of input
-            this.reportValidity();
-        } else {
-            this.setCustomValidity("");
-            showImageThumbnail(this);
+        if (!checkFileSize(this)) {
+            return;
         }
+
+        showImageThumbnail(this);
     });
 });
 
@@ -28,6 +23,22 @@ function showImageThumbnail(fileInput) {
     };
 
     reader.readAsDataURL(file);
+}
+
+function checkFileSize(fileInput) {
+    fileSize = fileInput.files[0].size; // returns the selected file and can get the name or size
+    var mb = 1024 * 1024; // 1mb = 1024 x 1024 kb
+
+    if (fileSize > mb) {
+        fileInput.setCustomValidity("Bạn phải chọn ảnh nhỏ hơn 1MB !"); // Show message as required of input
+        fileInput.reportValidity();
+
+        return false;
+    } else {
+        fileInput.setCustomValidity("");
+
+        return true;
+    }
 }
 
 function showModalDialog(title, message) {

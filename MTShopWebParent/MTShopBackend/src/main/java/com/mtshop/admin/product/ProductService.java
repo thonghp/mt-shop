@@ -1,8 +1,5 @@
 package com.mtshop.admin.product;
 
-import com.mtshop.admin.brand.BrandNotFoundException;
-import com.mtshop.admin.brand.BrandRepository;
-import com.mtshop.common.entity.Brand;
 import com.mtshop.common.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,13 +59,13 @@ public class ProductService {
         return productRepo.save(product);
     }
 
-//    public Brand get(Integer id) throws BrandNotFoundException {
-//        try {
-//            return brandRepo.findById(id).get();
-//        } catch (NoSuchElementException ex) {
-//            throw new BrandNotFoundException("Could not find any brand with ID " + id);
-//        }
-//    }
+    public Product get(Integer id) throws ProductNotFoundException {
+        try {
+            return productRepo.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw new ProductNotFoundException("Could not find any product with ID " + id);
+        }
+    }
 
     public void delete(Integer id) throws ProductNotFoundException {
         Long countById = productRepo.countById(id);
