@@ -25,6 +25,9 @@ public class Category {
 
     private boolean enabled;
 
+    @Column(name = "all_parent_ids")
+    private String allParentIDs;
+
     @OneToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
@@ -116,6 +119,14 @@ public class Category {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getAllParentIDs() {
+        return allParentIDs;
+    }
+
+    public void setAllParentIDs(String allParentIDs) {
+        this.allParentIDs = allParentIDs;
     }
 
     public Set<Category> getChildren() {
