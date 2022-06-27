@@ -17,7 +17,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
 
     Long countById(Integer id);
 
-//
-//    @Query("SELECT b FROM Brand b WHERE b.name LIKE %?1%")
-//    Page<Brand> findAll(Pageable pageable, String keyword);
+    @Query("SELECT p FROM Product p WHERE p.name LIKE %?1% OR p.shortDescription LIKE %?1% " +
+            "OR p.fullDescription LIKE %?1% OR p.brand.name LIKE %?1% OR p.category.name LIKE %?1%")
+    Page<Product> findAll(String keyword, Pageable pageable);
 }

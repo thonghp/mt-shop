@@ -11,7 +11,6 @@
 
     <!-- user form -->
     <div>
-        <!-- class="text-center mt-3 mb-3" -->
         <h2>Quản lý sản phẩm</h2>
         <a th:href="@{/products/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
         <a th:href="@{/products/export/csv}" class="fas fa-file-csv fa-2x mr-2" style="color: #007c01"></a>
@@ -25,11 +24,11 @@
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
-                <th>Id</th>
+                <th th:replace="fragments :: column_link('/products', 'id', 'ID', 'none')"/>
                 <th>Ảnh chính</th>
-                <th>Tên</th>
-                <th>Nhãn hiệu</th>
-                <th>Thể loại</th>
+                <th th:replace="fragments :: column_link('/products', 'name', 'Tên', 'none')"/>
+                <th th:replace="fragments :: column_link('/products', 'brand', 'Nhãn hiệu', 'none')"/>
+                <th th:replace="fragments :: column_link('/products', 'category', 'Thể loại', 'none')"/>
                 <th>Trạng thái</th>
                 <th></th>
             </tr>
@@ -42,14 +41,19 @@
                 <td>
                     <img th:src="@{${product.mainImagePath}}" style="width: 100px" class="img-fluid"/>
                 </td>
-                <td>[[${product.name}]]</td>
+                <td>
+                    <a class="link-detail" th:href="@{'/products/detail/' + ${product.id}}" th:title="${product.name}">
+                        [[${product.shortName}]]
+                    </a>
+                </td>
                 <td>[[${product.brand.name}]]</td>
                 <td>[[${product.category.name}]]</td>
                 <td>
                     <div th:replace="fragments :: status(${product.enabled}, '/products/' + ${product.id})"/>
                 </td>
                 <td>
-                    <a th:href="@{'/products/detail' + ${product.id}}" class="fas fa-file-alt fa-2x icon-green"></a>
+                    <a th:href="@{'/products/detail/' + ${product.id}}"
+                       class="fas fa-file-alt fa-2x icon-green link-detail"></a>
                     &nbsp;
                     <div th:replace="fragments :: edit('/products/edit/' + ${product.id}, 'sản phẩm')"
                          title="Xem chi tiết sản phẩm này"/>
@@ -58,7 +62,6 @@
                 </td>
             </tr>
             </tbody>
-            <!-- load user list -->
 
         </table>
     </div>
@@ -68,6 +71,12 @@
 
     <!-- confirm modal -->
     <div th:replace="modal_fragments :: confirm_modal"></div>
+
+    <div class="modal fade" id="detailModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
 
     <!-- footer -->
     <div th:replace="fragments :: footer"></div>
@@ -82,8 +91,16 @@
             e.preventDefault();
             showDeleteConfirmModal($(this), 'sản phẩm');
         });
+        $(".link-detail").on("click", function (e) {
+            e.preventDefault();
+            linkDetailUrl = $(this).attr("href");
+            $("#detailModal").modal("show").find(".modal-content").load(linkDetailUrl);
+        });
     });
 </script>
 <script th:src="@{/js/common_list.js}"></script>
+<script th:src="@{/js/product_form_overview.js}"></script>
+<script th:src="@{/js/product_form_images.js}"></script>
+<script th:src="@{/js/product_form_detail.js}"></script>
 </body>
 </html>

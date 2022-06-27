@@ -24,9 +24,9 @@ function showExtraImageThumbnail(fileInput, index) {
 
     fileName = file.name;
 
-    imageHiddenField = $("#imageName" + index);
-    if (imageHiddenField.length) {
-        imageHiddenField.val(fileName);
+    imageNameHiddenField = $("#imageName" + index);
+    if (imageNameHiddenField.length) {
+        imageNameHiddenField.val(fileName);
     }
 
     var reader = new FileReader();

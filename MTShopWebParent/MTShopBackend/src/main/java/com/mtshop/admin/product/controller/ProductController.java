@@ -10,6 +10,7 @@ import com.mtshop.common.entity.ProductImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -41,52 +42,39 @@ public class ProductController {
 
     @GetMapping("/products")
     public String listFirstPage(Model model) {
-        List<Product> listProducts = productService.listAll();
-        model.addAttribute("listProducts", listProducts);
-
-//        return listByPage(1, model, "name", "asc", null);
-        return "products/products";
+        return listByPage(1, model, "name", "asc", null);
     }
 
+    @GetMapping("/products/page/{pageNumber}")
+    public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
+                             @RequestParam(value = "sortField") String sortField,
+                             @RequestParam(value = "sortType") String sortType,
+                             @RequestParam(value = "keyword", required = false) String keyword) {
+        Page<Product> page = productService.listByPage(pageNum, sortField, sortType, keyword);
+        List<Product> listProducts = page.getContent();
 
-//    @Autowired
-//    private CategoryService categoryService;
-//
-//    @GetMapping("/brands")
-//    public String listFirstPage(Model model) {
-//        return listByPage(1, model, "name", "asc", null);
-//    }
-//
-//    @GetMapping("/brands/page/{pageNumber}")
-//    public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
-//                             @RequestParam(value = "sortField") String sortField,
-//                             @RequestParam(value = "sortType") String sortType,
-//                             @RequestParam(value = "keyword", required = false) String keyword) {
-//        Page<Brand> page = brandService.listByPage(pageNum, sortField, sortType, keyword);
-//        List<Brand> listBrands = page.getContent();
-//
-//        long startElementOfPage = (pageNum - 1) * BrandService.BRAND_PER_PAGE + 1;
-//        long endElementOfPage = startElementOfPage + BrandService.BRAND_PER_PAGE - 1;
-//
-//        if (endElementOfPage > page.getTotalElements()) {
-//            endElementOfPage = page.getTotalElements();
-//        }
-//
-//        String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
-//
-//        model.addAttribute("currentPage", pageNum);
-//        model.addAttribute("totalPages", page.getTotalPages());
-//        model.addAttribute("totalItems", page.getTotalElements());
-//        model.addAttribute("startCount", startElementOfPage);
-//        model.addAttribute("endCount", endElementOfPage);
-//        model.addAttribute("sortField", sortField);
-//        model.addAttribute("sortType", sortType);
-//        model.addAttribute("reverseSortType", reverseSortType);
-//        model.addAttribute("keyword", keyword);
-//        model.addAttribute("listBrands", listBrands);
-//
-//        return "brands/brands";
-//    }
+        long startElementOfPage = (pageNum - 1) * ProductService.PRODUCTS_PER_PAGE + 1;
+        long endElementOfPage = startElementOfPage + ProductService.PRODUCTS_PER_PAGE - 1;
+
+        if (endElementOfPage > page.getTotalElements()) {
+            endElementOfPage = page.getTotalElements();
+        }
+
+        String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("startCount", startElementOfPage);
+        model.addAttribute("endCount", endElementOfPage);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortType", sortType);
+        model.addAttribute("reverseSortType", reverseSortType);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("listProducts", listProducts);
+
+        return "products/products";
+    }
 
     @GetMapping("/products/new")
     public String newProduct(Model model) {
@@ -112,9 +100,9 @@ public class ProductController {
                               @RequestParam(value = "detailValues", required = false) String[] detailValues,
                               @RequestParam(value = "imageIDs", required = false) String[] imageIDs,
                               @RequestParam(value = "imageNames", required = false) String[] imageNames) throws IOException {
-        setMainImageName(product, mainImageMultipart);
-        setNewExtraImageName(product, extraImageMultiparts);
+        setMainImageName(mainImageMultipart, product);
         setExistingExtraImageNames(imageIDs, imageNames, product);
+        setNewExtraImageName(extraImageMultiparts, product);
         setProductDetails(detailIDs, detailNames, detailValues, product);
 
         Product savedProduct = productService.save(product);
@@ -158,6 +146,7 @@ public class ProductController {
         for (int count = 0; count < imageIDs.length; count++) {
             Integer id = Integer.parseInt(imageIDs[count]);
             String name = imageNames[count];
+
             images.add(new ProductImage(id, name, product));
         }
 
@@ -202,7 +191,7 @@ public class ProductController {
         }
     }
 
-    private void setNewExtraImageName(Product product, MultipartFile[] extraImageMultiparts) {
+    private void setNewExtraImageName(MultipartFile[] extraImageMultiparts, Product product) {
         if (extraImageMultiparts.length > 0) {
             for (MultipartFile multipartFile : extraImageMultiparts) {
                 if (!multipartFile.isEmpty()) {
@@ -216,7 +205,7 @@ public class ProductController {
         }
     }
 
-    private void setMainImageName(Product product, MultipartFile mainImageMultipart) {
+    private void setMainImageName(MultipartFile mainImageMultipart, Product product) {
         if (!mainImageMultipart.isEmpty()) {
             String fileName = StringUtils.cleanPath(mainImageMultipart.getOriginalFilename());
             product.setMainImage(fileName);
@@ -236,6 +225,21 @@ public class ProductController {
             model.addAttribute("numberOfExistingExtraImages", numberOfExistingExtraImages);
 
             return "products/product_form";
+        } catch (ProductNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+
+            return "redirect:/products";
+        }
+    }
+
+    @GetMapping("/products/detail/{id}")
+    public String viewProductDetail(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Product product = productService.get(id);
+
+            model.addAttribute("product", product);
+
+            return "products/product_detail_modal";
         } catch (ProductNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
 

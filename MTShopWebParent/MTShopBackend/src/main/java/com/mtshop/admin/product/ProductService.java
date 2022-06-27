@@ -17,10 +17,7 @@ import java.util.NoSuchElementException;
 @Transactional
 public class ProductService {
 
-//    public static final int BRAND_PER_PAGE = 5;
-//
-//    @Autowired
-//    private BrandRepository brandRepo;
+    public static final int PRODUCTS_PER_PAGE = 5;
 
     @Autowired
     private ProductRepository productRepo;
@@ -29,19 +26,18 @@ public class ProductService {
         return (List<Product>) productRepo.findAll();
     }
 
+    public Page<Product> listByPage(int pageNum, String sortField, String sortType, String keyword) {
+        Sort sort = Sort.by(sortField);
 
-//    public Page<Brand> listByPage(int pageNum, String sortField, String sortType, String keyword) {
-//        Sort sort = Sort.by(sortField);
-//
-//        sort = sortType.equals("asc") ? sort.ascending() : sort.descending();
-//
-//        Pageable pageable = PageRequest.of(pageNum - 1, BRAND_PER_PAGE, sort);
-//
-//        if (keyword != null)
-//            return brandRepo.findAll(pageable, keyword);
-//
-//        return brandRepo.findAll(pageable, "");
-//    }
+        sort = sortType.equals("asc") ? sort.ascending() : sort.descending();
+
+        Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
+
+        if (keyword != null)
+            return productRepo.findAll(keyword, pageable);
+
+        return productRepo.findAll(pageable);
+    }
 
     public Product save(Product product) {
         if (product.getId() == null)

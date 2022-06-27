@@ -241,6 +241,17 @@ public class Product {
         this.details.add(new ProductDetail(id, name, value, this));
     }
 
+    public boolean containsImageName(String imageName) {
+        Iterator<ProductImage> iterator = images.iterator();
+
+        while (iterator.hasNext()) {
+            ProductImage image = iterator.next();
+            if (image.getName().equals(imageName))
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Product{" + "id=" + id + ", name='" + name + '\'' + '}';
@@ -253,14 +264,12 @@ public class Product {
         return "/images/product-images/" + this.id + "/" + this.mainImage;
     }
 
-    public boolean containsImageName(String imageName) {
-        Iterator<ProductImage> iterator = images.iterator();
 
-        while (iterator.hasNext()) {
-            ProductImage image = iterator.next();
-            if (image.getName().equals(imageName))
-                return true;
+    @Transient
+    public String getShortName() {
+        if (name.length() > 70) {
+            return name.substring(0, 70).concat("...");
         }
-        return false;
+        return name;
     }
 }
