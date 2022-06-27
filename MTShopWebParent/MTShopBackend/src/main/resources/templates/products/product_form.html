@@ -44,21 +44,49 @@
                 <div class="tab-pane active p-3" id="overview" role="tabpanel">
                     <div th:replace="products/product_overview :: content"/>
                 </div>
+
+                <!-- description -->
                 <div class="tab-pane" id="description" role="tabpanel">
-                    <div th:replace="products/product_description :: content"/>
+                    <th:block sec:authorize="hasAuthority('Salesperson')">
+                        <div th:replace="products/product_description_read_only :: content"/>
+                    </th:block>
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                        <div th:replace="products/product_description :: content"/>
+                    </th:block>
                 </div>
+
+                <!-- image -->
                 <div class="tab-pane" id="images" role="tabpanel">
-                    <div th:replace="products/product_image :: content"/>
+                    <th:block sec:authorize="hasAuthority('Salesperson')">
+                        <div th:replace="products/product_image_read_only :: content"/>
+                    </th:block>
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                        <div th:replace="products/product_image :: content"/>
+                    </th:block>
                 </div>
+
+                <!-- detail -->
                 <div class="tab-pane p-3" id="details" role="tabpanel">
-                    <div th:replace="products/product_detail :: content"/>
-                    <div>
-                        <input type="button" class="btn btn-secondary" value="Thêm chi tiết"
-                               onclick="addNextDetailSection()">
-                    </div>
+                    <th:block sec:authorize="hasAuthority('Salesperson')">
+                        <div th:replace="products/product_detail_read_only :: content"/>
+                    </th:block>
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                        <div th:replace="products/product_detail :: content"/>
+                        <div>
+                            <input type="button" class="btn btn-secondary" value="Thêm chi tiết"
+                                   onclick="addNextDetailSection()">
+                        </div>
+                    </th:block>
                 </div>
+
+                <!-- shipping -->
                 <div class="tab-pane p-3" id="shipping" role="tabpanel">
-                    <div th:replace="products/product_shipping :: content"/>
+                    <th:block sec:authorize="hasAuthority('Salesperson')">
+                        <div th:replace="products/product_shipping_read_only :: content"/>
+                    </th:block>
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                        <div th:replace="products/product_shipping :: content"/>
+                    </th:block>
                 </div>
             </div>
         </div>

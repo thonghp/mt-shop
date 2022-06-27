@@ -44,8 +44,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/users/**", "/setting/**").hasAuthority("Admin")
-                .antMatchers("/categories/**", "/brands/**", "/articles/**", "/menus/**").hasAnyAuthority("Admin", "Editor")
-                .antMatchers("/products/**").hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
+                .antMatchers("/categories/**", "/brands/**", "/articles/**", "/menus/**")
+                .hasAnyAuthority("Admin", "Editor")
+
+                /* authorization for product */
+                .antMatchers("/products/new", "/products/delete/**").hasAnyAuthority("Admin", "Editor")
+
+                .antMatchers("/products/edit/**", "/products/save", "/products/check_unique")
+                .hasAnyAuthority("Admin", "Editor", "Salesperson")
+
+                .antMatchers("/products", "/products/", "/products/detail/**", "/products/page/**")
+                .hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
+
+                .antMatchers("/products/**").hasAnyAuthority("Admin", "Editor")
+                /* authorization for product */
+
                 .antMatchers("/questions/**", "/reviews/**").hasAnyAuthority("Admin", "Assistant")
                 .antMatchers("/customers/**", "/shippings/**", "/reports/**").hasAnyAuthority("Admin", "Salesperson")
                 .antMatchers("/orders/**").hasAnyAuthority("Admin", "Salesperson", "Shipper")

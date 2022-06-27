@@ -4,6 +4,7 @@ import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Entity
@@ -33,25 +34,6 @@ public class User {
 
     private boolean enabled;
 
-    /*
-     * the default is usually Lazy for many-to-many and one-to-many relationships and Eager for one-to-one and many-to-one.
-     *
-     * FetchType.Eager -> when you find, select User object from database, all related Role objects will be retrieved
-     * and saved into roles when the transaction ends, it is still stored in roles
-     * FetchType.Lazy -> when you find, select User object from the database, it will not get related Role objects but
-     * still have Role data inside roles but when the transaction ends, roles will no longer have data of Role
-     *
-     * Lazy
-     * Advantage: save time and memory when selecting
-     * Cons: causes LazyInitializationException error, when you want to get related objects, you have to open the
-     * transaction again to query
-     *
-     * Eager
-     * Advantages: can always get related objects, simple and convenient handling
-     * Cons: takes a lot of time and memory when selecting, the data retrieved is redundant and unnecessary.
-     */
-
-    //    @ManyToMany(fetch = FetchType.EAGER)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
@@ -153,5 +135,17 @@ public class User {
     @Transient
     public String getFullName() {
         return lastName + " " + firstName;
+    }
+
+    public boolean hasRole(String roleName) {
+        Iterator<Role> iterator = roles.iterator();
+
+        while (iterator.hasNext()) {
+            Role role = iterator.next();
+            if (role.getName().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

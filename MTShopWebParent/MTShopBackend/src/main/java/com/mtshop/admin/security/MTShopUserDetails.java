@@ -73,4 +73,8 @@ public class MTShopUserDetails implements UserDetails {
     public void setLastName(String lastName) {
         this.user.setLastName(lastName);
     }
+
+    public boolean hasRole(String roleName) {
+        return user.hasRole(roleName);
+    }
 }

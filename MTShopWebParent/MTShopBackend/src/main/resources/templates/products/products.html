@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head th:replace="fragments :: page_head('Quản lý sản phẩm - MTShop Admin', 'none')"/>
 
@@ -12,8 +13,11 @@
     <!-- user form -->
     <div>
         <h2>Quản lý sản phẩm</h2>
-        <a th:href="@{/products/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
-        <a th:href="@{/products/export/csv}" class="fas fa-file-csv fa-2x mr-2" style="color: #007c01"></a>
+
+        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+            <a th:href="@{/products/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
+            <a th:href="@{/products/export/csv}" class="fas fa-file-csv fa-2x mr-2" style="color: #007c01"></a>
+        </th:block>
     </div>
 
     <!-- search -->
@@ -57,7 +61,11 @@
                 <th th:replace="fragments :: column_link('/products', 'name', 'Tên', 'none')"/>
                 <th th:replace="fragments :: column_link('/products', 'brand', 'Nhãn hiệu', 'none')"/>
                 <th th:replace="fragments :: column_link('/products', 'category', 'Thể loại', 'none')"/>
-                <th>Trạng thái</th>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                    <th>Trạng thái</th>
+                </th:block>
+
                 <th></th>
             </tr>
             </thead>
@@ -76,17 +84,27 @@
                 </td>
                 <td>[[${product.brand.name}]]</td>
                 <td>[[${product.category.name}]]</td>
-                <td>
-                    <div th:replace="fragments :: status(${product.enabled}, '/products/' + ${product.id})"/>
-                </td>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                    <td>
+                        <div th:replace="fragments :: status(${product.enabled}, '/products/' + ${product.id})"/>
+                    </td>
+                </th:block>
+
                 <td>
                     <a th:href="@{'/products/detail/' + ${product.id}}"
                        class="fas fa-file-alt fa-2x icon-green link-detail"></a>
-                    &nbsp;
-                    <div th:replace="fragments :: edit('/products/edit/' + ${product.id}, 'sản phẩm')"
-                         title="Xem chi tiết sản phẩm này"/>
-                    &nbsp;
-                    <div th:replace="fragments :: delete('/products/delete/' + ${product.id}, 'sản phẩm', true, ${product.id})"/>
+
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')">
+                        &nbsp;
+                        <div th:replace="fragments :: edit('/products/edit/' + ${product.id}, 'sản phẩm')"
+                             title="Xem chi tiết sản phẩm này"/>
+                    </th:block>
+
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                        &nbsp;
+                        <div th:replace="fragments :: delete('/products/delete/' + ${product.id}, 'sản phẩm', true, ${product.id})"/>
+                    </th:block>
                 </td>
             </tr>
             </tbody>
