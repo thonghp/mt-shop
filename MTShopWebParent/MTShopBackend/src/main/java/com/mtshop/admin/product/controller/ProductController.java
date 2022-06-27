@@ -2,9 +2,11 @@ package com.mtshop.admin.product.controller;
 
 import com.mtshop.admin.FileUploadUtil;
 import com.mtshop.admin.brand.BrandService;
+import com.mtshop.admin.category.CategoryService;
 import com.mtshop.admin.product.ProductNotFoundException;
 import com.mtshop.admin.product.ProductService;
 import com.mtshop.common.entity.Brand;
+import com.mtshop.common.entity.Category;
 import com.mtshop.common.entity.Product;
 import com.mtshop.common.entity.ProductImage;
 import org.slf4j.Logger;
@@ -40,18 +42,25 @@ public class ProductController {
     @Autowired
     private BrandService brandService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @GetMapping("/products")
     public String listFirstPage(Model model) {
-        return listByPage(1, model, "name", "asc", null);
+        return listByPage(1, model, "name", "asc", null, 0);
     }
 
     @GetMapping("/products/page/{pageNumber}")
     public String listByPage(@PathVariable(name = "pageNumber") int pageNum, Model model,
                              @RequestParam(value = "sortField") String sortField,
                              @RequestParam(value = "sortType") String sortType,
-                             @RequestParam(value = "keyword", required = false) String keyword) {
-        Page<Product> page = productService.listByPage(pageNum, sortField, sortType, keyword);
+                             @RequestParam(value = "keyword", required = false) String keyword,
+                             @RequestParam(value = "categoryId", required = false) Integer categoryId) {
+
+        Page<Product> page = productService.listByPage(pageNum, sortField, sortType, keyword, categoryId);
         List<Product> listProducts = page.getContent();
+
+        List<Category> listCategories = categoryService.listCategoriesUsedInForm();
 
         long startElementOfPage = (pageNum - 1) * ProductService.PRODUCTS_PER_PAGE + 1;
         long endElementOfPage = startElementOfPage + ProductService.PRODUCTS_PER_PAGE - 1;
@@ -61,6 +70,8 @@ public class ProductController {
         }
 
         String reverseSortType = sortType.equals("asc") ? "desc" : "asc";
+
+        if (categoryId != null) model.addAttribute("categoryId", categoryId);
 
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -72,6 +83,7 @@ public class ProductController {
         model.addAttribute("reverseSortType", reverseSortType);
         model.addAttribute("keyword", keyword);
         model.addAttribute("listProducts", listProducts);
+        model.addAttribute("listCategories", listCategories);
 
         return "products/products";
     }
@@ -213,7 +225,8 @@ public class ProductController {
     }
 
     @GetMapping("/products/edit/{id}")
-    public String editProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String editProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes
+            redirectAttributes) {
         try {
             Product product = productService.get(id);
             List<Brand> listBrands = brandService.listAll();
@@ -233,7 +246,8 @@ public class ProductController {
     }
 
     @GetMapping("/products/detail/{id}")
-    public String viewProductDetail(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String viewProductDetail(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes
+            redirectAttributes) {
         try {
             Product product = productService.get(id);
 

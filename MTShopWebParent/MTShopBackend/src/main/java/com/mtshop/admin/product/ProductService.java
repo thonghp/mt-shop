@@ -26,15 +26,26 @@ public class ProductService {
         return (List<Product>) productRepo.findAll();
     }
 
-    public Page<Product> listByPage(int pageNum, String sortField, String sortType, String keyword) {
+    public Page<Product> listByPage(int pageNum, String sortField, String sortType, String keyword, Integer categoryId) {
         Sort sort = Sort.by(sortField);
 
         sort = sortType.equals("asc") ? sort.ascending() : sort.descending();
 
         Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
 
-        if (keyword != null)
+        if (keyword != null && !keyword.isEmpty()) {
+            if (categoryId != null && categoryId > 0) {
+                String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
+                return productRepo.searchInCategory(categoryId, categoryIdMatch, keyword, pageable);
+            }
+
             return productRepo.findAll(keyword, pageable);
+        }
+
+        if (categoryId != null && categoryId > 0) {
+            String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
+            return productRepo.findAllInCategory(categoryId, categoryIdMatch, pageable);
+        }
 
         return productRepo.findAll(pageable);
     }
