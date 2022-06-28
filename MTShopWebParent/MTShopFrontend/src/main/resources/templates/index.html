@@ -6,7 +6,32 @@
 
     <!-- navigation -->
     <div th:replace="navigation :: header_menu"></div>
-    Trang chủ
+    <div>
+        <h1>Shopping by categories</h1>
+    </div>
+    <div class="row">
+        <div class="col" th:each="cat : ${listCategories}">
+            <div>
+                <img th:src="@{${cat.imagePath}}" width="80"/>
+            </div>
+            <div>
+                <a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <th:block th:each="product : ${listProducts}">
+            <div class="col">
+                <div>
+                    <img th:src="@{${product.mainImagePath}}"/>
+                    <br>
+                    <b>[[${product.name}]]</b>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
     <div th:replace="navigation :: footer_menu"></div>
 
 </div>
