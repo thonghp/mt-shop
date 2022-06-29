@@ -11,7 +11,7 @@
 
     <!-- navigation -->
     <div th:replace="navigation :: header_menu"/>
-
+    <div th:replace="navigation :: search_nav"/>
     <div th:replace="breadcrumb :: content"/>
 
     <div class="row">
@@ -34,9 +34,6 @@
         <div class="col-sm">
             <div>
                 <h2>[[${product.name}]]</h2>
-            </div>
-            <div>
-                <h2>Nhãn hiệu: [[${product.brand.name}]]</h2>
             </div>
             <div>
                 <br>

@@ -7,10 +7,12 @@ import com.mtshop.common.exception.CategoryNotFoundException;
 import com.mtshop.common.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -79,5 +81,35 @@ public class ProductController {
         } catch (ProductNotFoundException e) {
             return "error/404";
         }
+    }
+
+    @GetMapping("/search")
+    public String searchFirstPage(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+        return searchByPage(keyword, 1, model);
+    }
+
+    @GetMapping("/search/page/{pageNumber}")
+    public String searchByPage(@RequestParam(value = "keyword", required = false) String keyword,
+                               @PathVariable("pageNumber") int pageNum, Model model) {
+        Page<Product> pageProducts = productService.search(keyword, pageNum);
+        List<Product> listResult = pageProducts.getContent();
+
+        long startElementOfPage = (pageNum - 1) * ProductService.PRODUCTS_PER_PAGE + 1;
+        long endElementOfPage = startElementOfPage + ProductService.PRODUCTS_PER_PAGE - 1;
+
+        if (endElementOfPage > pageProducts.getTotalElements()) {
+            endElementOfPage = pageProducts.getTotalElements();
+        }
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", pageProducts.getTotalPages());
+        model.addAttribute("totalItems", pageProducts.getTotalElements());
+        model.addAttribute("startCount", startElementOfPage);
+        model.addAttribute("endCount", endElementOfPage);
+        model.addAttribute("pageTitle", keyword + " - Kết quả tìm kiếm");
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("listResult", listResult);
+
+        return "products/search_result";
     }
 }
