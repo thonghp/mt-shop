@@ -1,6 +1,7 @@
 package com.mtshop.category;
 
 import com.mtshop.common.entity.Category;
+import com.mtshop.common.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,12 @@ public class CategoryService {
         return listNoChildrenCategories;
     }
 
-    public Category getCategory(String alias) {
-        return categoryRepo.findAllByAliasAndEnabledTrue(alias);
+    public Category getCategory(String alias) throws CategoryNotFoundException {
+        Category category = categoryRepo.findAllByAliasAndEnabledTrue(alias);
+        if (category == null)
+            throw new CategoryNotFoundException("Could not find any product with alias " + alias);
+
+        return category;
     }
 
     // breadcum

@@ -1,6 +1,7 @@
 package com.mtshop.admin.category;
 
 import com.mtshop.common.entity.Category;
+import com.mtshop.common.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package com.mtshop.admin.category;
+package com.mtshop.common.exception;
 
 public class CategoryNotFoundException extends Throwable {
 

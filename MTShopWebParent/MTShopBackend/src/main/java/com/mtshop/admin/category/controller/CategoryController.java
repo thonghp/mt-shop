@@ -1,7 +1,7 @@
 package com.mtshop.admin.category.controller;
 
 import com.mtshop.admin.FileUploadUtil;
-import com.mtshop.admin.category.CategoryNotFoundException;
+import com.mtshop.common.exception.CategoryNotFoundException;
 import com.mtshop.admin.category.CategoryPageInfo;
 import com.mtshop.admin.category.CategoryService;
 import com.mtshop.admin.category.export.CategoryCSVExporter;

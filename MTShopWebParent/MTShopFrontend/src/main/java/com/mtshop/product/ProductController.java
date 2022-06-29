@@ -3,6 +3,8 @@ package com.mtshop.product;
 import com.mtshop.category.CategoryService;
 import com.mtshop.common.entity.Category;
 import com.mtshop.common.entity.Product;
+import com.mtshop.common.exception.CategoryNotFoundException;
+import com.mtshop.common.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -29,31 +31,53 @@ public class ProductController {
     @GetMapping("/c/{category_alias}/page/{pageNumber}")
     public String viewCategoryByPage(@PathVariable("category_alias") String alias, @PathVariable("pageNumber") int pageNum,
                                      Model model) {
-        Category category = categoryService.getCategory(alias);
+        try {
+            Category category = categoryService.getCategory(alias);
 
-        if (category == null)
+            if (category == null)
+                return "error/404";
+
+            List<Category> listCategoryParents = categoryService.getCategoryParents(category);
+            Page<Product> pageProducts = productService.listByCategory(pageNum, category.getId());
+            List<Product> listProducts = pageProducts.getContent();
+
+            long startElementOfPage = (pageNum - 1) * ProductService.PRODUCTS_PER_PAGE + 1;
+            long endElementOfPage = startElementOfPage + ProductService.PRODUCTS_PER_PAGE - 1;
+
+            if (endElementOfPage > pageProducts.getTotalElements()) {
+                endElementOfPage = pageProducts.getTotalElements();
+            }
+
+            model.addAttribute("currentPage", pageNum);
+            model.addAttribute("totalPages", pageProducts.getTotalPages());
+            model.addAttribute("totalItems", pageProducts.getTotalElements());
+            model.addAttribute("startCount", startElementOfPage);
+            model.addAttribute("endCount", endElementOfPage);
+            model.addAttribute("listProducts", listProducts);
+            model.addAttribute("pageTitle", category.getName());
+            model.addAttribute("listCategoryParents", listCategoryParents);
+            model.addAttribute("category", category);
+
+            return "products/products_by_category";
+        } catch (CategoryNotFoundException e) {
             return "error/404";
-
-        List<Category> listCategoryParents = categoryService.getCategoryParents(category);
-        Page<Product> pageProducts = productService.listByCategory(pageNum, category.getId());
-        List<Product> listProducts = pageProducts.getContent();
-
-        long startElementOfPage = (pageNum - 1) * ProductService.PRODUCTS_PER_PAGE + 1;
-        long endElementOfPage = startElementOfPage + ProductService.PRODUCTS_PER_PAGE - 1;
-
-        if (endElementOfPage > pageProducts.getTotalElements()) {
-            endElementOfPage = pageProducts.getTotalElements();
         }
+    }
 
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", pageProducts.getTotalPages());
-        model.addAttribute("totalItems", pageProducts.getTotalElements());
-        model.addAttribute("startCount", startElementOfPage);
-        model.addAttribute("endCount", endElementOfPage);
-        model.addAttribute("listProducts", listProducts);
-        model.addAttribute("pageTitle", category.getName());
-        model.addAttribute("listCategoryParents", listCategoryParents);
+    @GetMapping("/p/{product_alias}")
+    public String viewProductDetail(@PathVariable("product_alias") String alias,
+                                    Model model) {
+        try {
+            Product product = productService.getProduct(alias);
+            List<Category> listCategoryParents = categoryService.getCategoryParents(product.getCategory());
 
-        return "products_by_category";
+            model.addAttribute("product", product);
+            model.addAttribute("listCategoryParents", listCategoryParents);
+            model.addAttribute("pageTitle", product.getShortName());
+
+            return "products/product_detail";
+        } catch (ProductNotFoundException e) {
+            return "error/404";
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.mtshop.admin.product;
+package com.mtshop.common.exception;
 
 public class ProductNotFoundException extends Exception {
 

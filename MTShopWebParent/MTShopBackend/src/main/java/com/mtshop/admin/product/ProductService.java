@@ -1,6 +1,7 @@
 package com.mtshop.admin.product;
 
 import com.mtshop.common.entity.Product;
+import com.mtshop.common.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
