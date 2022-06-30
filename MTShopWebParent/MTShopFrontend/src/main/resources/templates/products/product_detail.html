@@ -35,18 +35,22 @@
             <div>
                 <h2>[[${product.name}]]</h2>
             </div>
-            <div>
-                <br>
-                <span th:if="${product.discountPercent <=0}"
-                      style="font-size: 20px;color: blue;font-weight: bold">[[${product.price}]] đ</span>
-                <del th:if="${product.discountPercent >0}">
-                    <span>[[${product.price}]] đ</span>
-                </del>
-            </div>
             <div th:if="${product.discountPercent >0}">
-                Giá
-                <span style="font-size: larger; color: darkred">[[${product.discountPercent}]] đ</span>
-                ([[${product.discountPrice}]] % off)
+                <br>
+                <span style="font-size: x-large; color: blue">
+                    <div th:replace="products/product_fragment :: price_fragment(${product.discountPercent})"/>
+                </span>
+            </div>
+            <div>
+                <span th:if="${product.discountPercent <=0}" style="font-size: 20px;color: blue;font-weight: bold">
+                    <div th:replace="products/product_fragment :: price_fragment(${product.price})"/>
+                </span>
+                <span th:if="${product.discountPercent >0}">
+                    <del>
+                        <span><div th:replace="products/product_fragment :: price_fragment(${product.price})"/></span>
+                    </del>
+                    &nbsp;(-[[${product.discountPrice}]]%)
+                </span>
             </div>
             <div>&nbsp;</div>
             <div th:utext="${product.shortDescription}"></div>

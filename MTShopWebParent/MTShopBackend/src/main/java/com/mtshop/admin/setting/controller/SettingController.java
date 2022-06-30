@@ -64,7 +64,7 @@ public class SettingController {
     private void saveSiteLogo(MultipartFile multipartFile, GeneralSettingBag generalSettings) throws IOException {
         if (!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            String value = "/site-logo/" + fileName;
+            String value = "images/site-logo/" + fileName;
             generalSettings.updateSiteLogo(value);
 
             String uploadDir = "images/site-logo/";
