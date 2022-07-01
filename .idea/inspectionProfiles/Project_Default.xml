@@ -9,6 +9,7 @@
     <inspection_tool class="JpaAttributeTypeInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="JpaQlInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="SingleElementAnnotation" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="SpringJavaInjectionPointsAutowiringInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="ThymeleafVariablesResolveInspection" enabled="false" level="ERROR" enabled_by_default="false" />
   </profile>
 </component>
