@@ -19,4 +19,18 @@ $(document).ready(function () {
     });
 
     customizeDropDownMenu();
+    customizeTabs();
 });
+
+function customizeTabs() {
+    var url = document.location.toString();
+    // enable link to tab
+    if (url.match('#')) {
+        $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+    }
+
+    // change has for page-reload
+    $('.nav-tabs a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash;
+    })
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- modal -->
+<div th:fragment="content" th:remove="tag">
+    <div>
+        <p>Quốc gia</p>
+    </div>
+    <div>
+        <input type="button" value="Tải danh sách quốc gia" class="btn btn-primary" id="buttonLoadCountries">
+    </div>
+    <div>
+        <select class="form-control m-2" style="height: 300px" size="3" id="dropDownCountries">
+        </select>
+    </div>
+    <div class="form-group row ml-2">
+        <label class="col-form-label mt-2" id="labelCountryName">Tên quốc gia</label>
+        <div class="col-md">
+            <input type="text" class="form-control mt-2" id="fieldCountryName"/>
+        </div>
+        <label class="col-form-label mt-2">Code</label>
+        <div class="col-md">
+            <input type="text" class="form-control mt-2" id="fieldCountryCode"/>
+        </div>
+        <div class="col-lg-4 mt-2">
+            <input type="button" value="Tạo mới" class="btn btn-secondary mr-2" id="buttonAddCountry"/>
+            <input type="button" value="Cập nhật" class="btn btn-secondary mr-2" disabled="disabled"
+                   id="buttonUpdateCountry"/>
+            <input type="button" value="Xoá" class="btn btn-secondary mr-2" disabled="disabled"
+                   id="buttonDeleteCountry"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

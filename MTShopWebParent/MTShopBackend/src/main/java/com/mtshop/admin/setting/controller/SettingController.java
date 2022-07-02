@@ -4,7 +4,6 @@ import com.mtshop.admin.FileUploadUtil;
 import com.mtshop.admin.setting.CurrencyRepository;
 import com.mtshop.admin.setting.GeneralSettingBag;
 import com.mtshop.admin.setting.SettingService;
-import com.mtshop.common.entity.Brand;
 import com.mtshop.common.entity.Currency;
 import com.mtshop.common.entity.Setting;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,6 @@ public class SettingController {
         saveSiteLogo(multipartFile, generalSettings);
         saveCurrencySymbol(request, generalSettings);
         updateSettingValueFromForm(request, generalSettings.list());
-//            brandService.save(brand);
 
         redirectAttributes.addFlashAttribute("message", "Cài đặt chung đã được lưu thành công !");
 
