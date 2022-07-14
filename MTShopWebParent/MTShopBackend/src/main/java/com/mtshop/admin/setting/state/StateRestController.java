@@ -1,5 +1,6 @@
 package com.mtshop.admin.setting.state;
 
+import com.mtshop.common.dto.StateDTO;
 import com.mtshop.common.entity.Country;
 import com.mtshop.common.entity.State;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class StateRestController {
         List<StateDTO> result = new ArrayList<>();
 
         for (State state : listStates) {
-            result.add(new StateDTO(state.getId(),state.getName()));
+            result.add(new StateDTO(state.getId(), state.getName()));
         }
 
         return result;

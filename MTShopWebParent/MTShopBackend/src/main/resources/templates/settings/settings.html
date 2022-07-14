@@ -8,12 +8,9 @@
 
 <body>
 <div class="container-fluid">
-
-    <!-- navigation -->
-    <div th:replace="navigation::menu"/>
-
+    <div th:replace="navigation :: menu"></div>
     <div>
-        <h2>Cài Đặt Trang Web</h2>
+        <h2>Site Settings</h2>
     </div>
 
     <div th:if="${message != null}" class="alert alert-success text-center">
@@ -29,54 +26,42 @@
                 <a class="nav-link" data-toggle="tab" href="#countries" role="tab">Quốc gia</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#states" role="tab">States</a>
+                <a class="nav-link" data-toggle="tab" href="#states" role="tab">Thành phố</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#mailServer" role="tab">Mail server</a>
+                <a class="nav-link" data-toggle="tab" href="#mailServer" role="tab">Mail Server</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#mailTemplates" role="tab">Mail Templates</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#payment" role="tab">Payment</a>
+                <a class="nav-link" data-toggle="tab" href="#payment" role="tab">Thanh toán</a>
             </li>
         </ul>
 
-        <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane active p-3" id="general" role="tabpanel">
                 <div th:replace="settings/general :: content"/>
             </div>
-
-            <!-- description -->
             <div class="tab-pane p-3" id="countries" role="tabpanel">
                 <div th:replace="settings/countries :: content"/>
             </div>
-
-            <!-- image -->
             <div class="tab-pane p-3" id="states" role="tabpanel">
                 <div th:replace="settings/states :: content"/>
             </div>
-
-            <!-- detail -->
             <div class="tab-pane p-3" id="mailServer" role="tabpanel">
-                <h2>Mail server</h2>
+                <h2>Mail Server</h2>
             </div>
-
-            <!-- shipping -->
             <div class="tab-pane p-3" id="mailTemplates" role="tabpanel">
                 <h2>Mail Templates</h2>
             </div>
-
-            <!-- payment -->
             <div class="tab-pane p-3" id="payment" role="tabpanel">
-                <h2>Payment</h2>
+                <h2>Thanh toán</h2>
             </div>
         </div>
     </div>
 
-    <div class="toast justify-content-center d-flex" role="alert" aria-live="polite" aria-atomic="true"
-         data-delay="3000">
+    <div class="toast justify-content-center d-flex" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000">
         <div role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-body">
                 <span id="toastMessage"></span>
@@ -84,7 +69,6 @@
         </div>
     </div>
 
-    <!-- footer -->
     <div th:replace="fragments :: footer"></div>
 
 </div>
