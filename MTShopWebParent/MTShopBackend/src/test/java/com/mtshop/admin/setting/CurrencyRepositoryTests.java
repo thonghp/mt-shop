@@ -1,8 +1,6 @@
 package com.mtshop.admin.setting;
 
 import com.mtshop.common.entity.Currency;
-import com.mtshop.common.entity.Setting;
-import com.mtshop.common.entity.SettingCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

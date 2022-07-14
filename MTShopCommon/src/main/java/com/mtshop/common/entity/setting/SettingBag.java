@@ -1,4 +1,4 @@
-package com.mtshop.common.entity;
+package com.mtshop.common.entity.setting;
 
 import java.util.List;
 

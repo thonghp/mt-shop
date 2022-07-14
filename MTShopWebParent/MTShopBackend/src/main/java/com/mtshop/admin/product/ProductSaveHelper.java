@@ -2,8 +2,8 @@ package com.mtshop.admin.product;
 
 import com.mtshop.admin.FileUploadUtil;
 import com.mtshop.admin.product.controller.ProductController;
-import com.mtshop.common.entity.Product;
-import com.mtshop.common.entity.ProductImage;
+import com.mtshop.common.entity.product.Product;
+import com.mtshop.common.entity.product.ProductImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;

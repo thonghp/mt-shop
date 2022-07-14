@@ -8,7 +8,7 @@ import com.mtshop.admin.product.ProductService;
 import com.mtshop.admin.security.MTShopUserDetails;
 import com.mtshop.common.entity.Brand;
 import com.mtshop.common.entity.Category;
-import com.mtshop.common.entity.Product;
+import com.mtshop.common.entity.product.Product;
 import com.mtshop.common.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package com.mtshop.common.entity;
+package com.mtshop.common.entity.setting;
 
 import javax.persistence.*;
 import java.util.Objects;

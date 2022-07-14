@@ -1,13 +1,11 @@
 package com.mtshop.admin.setting;
 
-import com.mtshop.admin.product.ProductRepository;
-import com.mtshop.common.entity.Setting;
-import com.mtshop.common.entity.SettingCategory;
+import com.mtshop.common.entity.setting.Setting;
+import com.mtshop.common.entity.setting.SettingCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;

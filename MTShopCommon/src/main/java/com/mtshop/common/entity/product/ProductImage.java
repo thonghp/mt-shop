@@ -1,10 +1,11 @@
-package com.mtshop.common.entity;
+package com.mtshop.common.entity.product;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_details")
-public class ProductDetail {
+@Table(name = "product_images")
+public class ProductImage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -12,26 +13,21 @@ public class ProductDetail {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String value;
-
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public ProductDetail() {
+    public ProductImage() {
     }
 
-    public ProductDetail(String name, String value, Product product) {
+    public ProductImage(String name, Product product) {
         this.name = name;
-        this.value = value;
         this.product = product;
     }
 
-    public ProductDetail(Integer id, String name, String value, Product product) {
+    public ProductImage(Integer id, String name, Product product) {
         this.id = id;
         this.name = name;
-        this.value = value;
         this.product = product;
     }
 
@@ -51,14 +47,6 @@ public class ProductDetail {
         this.name = name;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public Product getProduct() {
         return product;
     }
@@ -67,13 +55,8 @@ public class ProductDetail {
         this.product = product;
     }
 
-    @Override
-    public String toString() {
-        return "ProductDetail{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", value='" + value + '\'' +
-                ", product=" + product +
-                '}';
+    @Transient
+    public String getImagePath() {
+        return "/images/product-images/" + product.getId() + "/extras/" + this.name;
     }
 }

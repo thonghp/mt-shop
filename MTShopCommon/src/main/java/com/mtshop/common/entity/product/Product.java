@@ -1,4 +1,7 @@
-package com.mtshop.common.entity;
+package com.mtshop.common.entity.product;
+
+import com.mtshop.common.entity.Brand;
+import com.mtshop.common.entity.Category;
 
 import javax.persistence.*;
 import java.util.*;
