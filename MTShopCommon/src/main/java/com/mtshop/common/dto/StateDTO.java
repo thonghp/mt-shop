@@ -1,4 +1,4 @@
-package com.mtshop.admin.setting.state;
+package com.mtshop.common.dto;
 
 public class StateDTO {
     private Integer id;
