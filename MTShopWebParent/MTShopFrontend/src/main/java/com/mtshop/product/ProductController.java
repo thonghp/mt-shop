@@ -2,12 +2,11 @@ package com.mtshop.product;
 
 import com.mtshop.category.CategoryService;
 import com.mtshop.common.entity.Category;
-import com.mtshop.common.entity.Product;
+import com.mtshop.common.entity.product.Product;
 import com.mtshop.common.exception.CategoryNotFoundException;
 import com.mtshop.common.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

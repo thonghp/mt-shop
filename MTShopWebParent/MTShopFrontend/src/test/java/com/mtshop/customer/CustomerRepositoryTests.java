@@ -2,8 +2,6 @@ package com.mtshop.customer;
 
 import com.mtshop.common.entity.Country;
 import com.mtshop.common.entity.Customer;
-import com.mtshop.common.entity.Product;
-import com.mtshop.product.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

@@ -1,7 +1,7 @@
 package com.mtshop.admin.setting;
 
-import com.mtshop.common.entity.Setting;
-import com.mtshop.common.entity.SettingCategory;
+import com.mtshop.common.entity.setting.Setting;
+import com.mtshop.common.entity.setting.SettingCategory;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

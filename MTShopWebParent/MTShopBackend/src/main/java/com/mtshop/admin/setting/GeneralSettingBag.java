@@ -1,7 +1,7 @@
 package com.mtshop.admin.setting;
 
-import com.mtshop.common.entity.Setting;
-import com.mtshop.common.entity.SettingBag;
+import com.mtshop.common.entity.setting.Setting;
+import com.mtshop.common.entity.setting.SettingBag;
 
 import java.util.List;
 

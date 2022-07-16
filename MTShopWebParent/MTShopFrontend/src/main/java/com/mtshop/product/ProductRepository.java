@@ -1,6 +1,6 @@
 package com.mtshop.product;
 
-import com.mtshop.common.entity.Product;
+import com.mtshop.common.entity.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

@@ -59,12 +59,20 @@ public class Setting {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Setting setting = (Setting) o;
-        return key.equals(setting.key);
+        if (key == null) {
+            if (setting.key != null)
+                return false;
+        } else if (!key.equals(setting.key))
+            return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(key);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((key == null) ? 0 : key.hashCode());
+        return result;
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.mtshop.admin.setting.CurrencyRepository;
 import com.mtshop.admin.setting.GeneralSettingBag;
 import com.mtshop.admin.setting.SettingService;
 import com.mtshop.common.entity.Currency;
-import com.mtshop.common.entity.Setting;
+import com.mtshop.common.entity.setting.Setting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,11 +48,11 @@ public class SettingController {
     @PostMapping("/settings/save_general")
     public String saveGeneralSetting(@RequestParam("fileImage") MultipartFile multipartFile, HttpServletRequest request,
                                      RedirectAttributes redirectAttributes) throws IOException {
-        GeneralSettingBag generalSettings = service.getGeneralSettings();
+        GeneralSettingBag settingBag = service.getGeneralSettings();
 
-        saveSiteLogo(multipartFile, generalSettings);
-        saveCurrencySymbol(request, generalSettings);
-        updateSettingValueFromForm(request, generalSettings.list());
+        saveSiteLogo(multipartFile, settingBag);
+        saveCurrencySymbol(request, settingBag);
+        updateSettingValuesFromForm(request, settingBag.list());
 
         redirectAttributes.addFlashAttribute("message", "Cài đặt chung đã được lưu thành công !");
 
@@ -81,7 +81,7 @@ public class SettingController {
         }
     }
 
-    private void updateSettingValueFromForm(HttpServletRequest request, List<Setting> listSettings) {
+    private void updateSettingValuesFromForm(HttpServletRequest request, List<Setting> listSettings) {
         for (Setting setting : listSettings) {
             String value = request.getParameter(setting.getKey());
             if (value != null)
@@ -90,4 +90,34 @@ public class SettingController {
 
         service.saveAll(listSettings);
     }
+
+    @PostMapping("/settings/save_mail_server")
+    public String saveMailServerSetttings(HttpServletRequest request, RedirectAttributes ra) {
+        List<Setting> mailServerSettings = service.getMailServerSettings();
+        updateSettingValuesFromForm(request, mailServerSettings);
+
+        ra.addFlashAttribute("message", "Mail server đã được lưu");
+
+        return "redirect:/settings#mailServer";
+    }
+
+    @PostMapping("/settings/save_mail_templates")
+    public String saveMailTemplateSetttings(HttpServletRequest request, RedirectAttributes ra) {
+        List<Setting> mailTemplateSettings = service.getMailTemplateSettings();
+        updateSettingValuesFromForm(request, mailTemplateSettings);
+
+        ra.addFlashAttribute("message", "Mail template đã được lưu");
+
+        return "redirect:/settings#mailTemplates";
+    }
+
+//    @PostMapping("/settings/save_payment")
+//    public String savePaymentSetttings(HttpServletRequest request, RedirectAttributes ra) {
+//        List<Setting> paymentSettings = service.getPaymentSettings();
+//        updateSettingValuesFromForm(request, paymentSettings);
+//
+//        ra.addFlashAttribute("message", "Payment settings have been saved");
+//
+//        return "redirect:/settings#payment";
+//    }
 }
