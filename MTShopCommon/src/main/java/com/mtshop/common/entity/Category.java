@@ -8,10 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "categories")
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Category extends IdBasedEntity {
 
     @Column(length = 128, nullable = false, unique = true)
     @Nationalized
@@ -37,6 +34,10 @@ public class Category {
     private Set<Category> children = new HashSet<>();
 
     public Category() {
+    }
+
+    public Category(Integer id) {
+        this.id = id;
     }
 
     public static Category copyIdAndName(Category category) {
@@ -74,12 +75,22 @@ public class Category {
         return copyCategory;
     }
 
-    public Integer getId() {
-        return id;
+    public Category(String name) {
+        this.name = name;
+        this.alias = name;
+        this.image = "default.png";
     }
 
-    public void setId(Integer id) {
+    public Category(String name, Category parent) {
+        this(name);
+        this.parent = parent;
+    }
+
+    public Category(Integer id, String name, String alias) {
+        super();
         this.id = id;
+        this.name = name;
+        this.alias = alias;
     }
 
     public String getName() {

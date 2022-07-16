@@ -3,15 +3,9 @@ package com.mtshop.common.entity;
 import javax.persistence.*;
 import java.util.Objects;
 
-/* map to table */
 @Entity
 @Table(name = "role")
-/* map to table */
-public class Role {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Role extends IdBasedEntity {
 
     @Column(length = 40, nullable = false, unique = true) // varchar 40, not null
     private String name;
@@ -23,7 +17,6 @@ public class Role {
     public Role() {
     }
 
-    // find by id
     public Role(Integer id) {
         this.id = id;
     }
@@ -32,15 +25,7 @@ public class Role {
         this.name = name;
     }
 
-    // insert
     public Role(String name, String description) {
-        this.description = description;
-        this.name = name;
-    }
-
-    // update
-    public Role(Integer id, String description, String name) {
-        this.id = id;
         this.description = description;
         this.name = name;
     }

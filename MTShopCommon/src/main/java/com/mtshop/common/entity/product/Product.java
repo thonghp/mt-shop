@@ -2,16 +2,14 @@ package com.mtshop.common.entity.product;
 
 import com.mtshop.common.entity.Brand;
 import com.mtshop.common.entity.Category;
+import com.mtshop.common.entity.IdBasedEntity;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Table(name = "products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Product extends IdBasedEntity {
 
     @Column(unique = true, length = 256, nullable = false)
     private String name;
@@ -64,12 +62,23 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductDetail> details = new ArrayList<>();
 
-    public Integer getId() {
-        return id;
+    private int reviewCount;
+    private float averageRating;
+
+    @Transient
+    private boolean customerCanReview;
+    @Transient
+    private boolean reviewedByCustomer;
+
+    public Product(Integer id) {
+        this.id = id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Product() {
+    }
+
+    public Product(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -276,11 +285,48 @@ public class Product {
     }
 
     @Transient
-    public int getDiscountPrice() {
+    public float getDiscountPrice() {
         if (discountPercent > 0) {
-            return (int) (((price - discountPercent) / price) * 100);
+            return ((price - discountPercent) / price) * 100;
         }
 
-        return (int) this.price;
+        return this.price;
+    }
+
+    public int getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(int reviewCount) {
+        this.reviewCount = reviewCount;
+    }
+
+    public float getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(float averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    @Transient
+    public String getURI() {
+        return "/p/" + this.alias + "/";
+    }
+
+    public boolean isCustomerCanReview() {
+        return customerCanReview;
+    }
+
+    public void setCustomerCanReview(boolean customerCanReview) {
+        this.customerCanReview = customerCanReview;
+    }
+
+    public boolean isReviewedByCustomer() {
+        return reviewedByCustomer;
+    }
+
+    public void setReviewedByCustomer(boolean reviewedByCustomer) {
+        this.reviewedByCustomer = reviewedByCustomer;
     }
 }

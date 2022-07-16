@@ -6,10 +6,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "brands")
-public class Brand {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Brand extends IdBasedEntity {
 
     @Column(length = 45, nullable = false, unique = true)
     private String name;
