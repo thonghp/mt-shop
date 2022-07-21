@@ -30,9 +30,6 @@
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
-                <!--                <th class="hideable-column">-->
-                <!--                <th th:replace="fragments :: column_link('id', 'ID', 'tag')"/>-->
-                <!--                </th>-->
                 <th class="hideable-column">
                 <th th:replace="fragments :: column_link('/users', 'id', 'ID', 'tag')"/>
                 </th>
@@ -44,15 +41,7 @@
                 </th>
 
                 <th th:replace="fragments :: column_link('/users', 'firstName', 'Tên', 'none')"/>
-
                 <th th:replace="fragments :: column_link('/users', 'lastName', 'Họ', 'none')"/>
-
-                <!--                <th class="hideable-column">-->
-                <!--                <th th:replace="fragments :: column_link('email', 'Email', 'tag')"/>-->
-                <!--                </th>-->
-
-                <!--                <th th:replace="fragments :: column_link('firstName', 'Tên', 'none')"/>-->
-                <!--                <th th:replace="fragments :: column_link('lastName', 'Họ', 'none')"/>-->
                 <th>Vai trò</th>
                 <th>Trạng thái</th>
                 <th></th>
