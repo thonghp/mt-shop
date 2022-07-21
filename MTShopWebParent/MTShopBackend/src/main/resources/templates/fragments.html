@@ -18,27 +18,9 @@
 
 <body>
 
-<!-- search -->
-<div th:fragment="search_form_and_message(url)">
-    <form th:action="@{${url}}" class="form-inline m-3">
-        <input type="hidden" name="sortField" th:value="${sortField}"/>
-        <input type="hidden" name="sortType" th:value="${sortType}"/>
-
-        Tìm Kiếm: &nbsp;
-        <input type="search" name="keyword" class="form-control" required placeholder="Search"/>
-        &nbsp;&nbsp;
-        <button type="submit" class="btn btn-primary">
-            <i class="fas fa-search"></i>
-        </button>
-        &nbsp;&nbsp;
-        <button type="button" class="btn btn-secondary" onclick="clearFilter()" title="Xoá">
-            <i class="fas fa-eraser"></i>
-        </button>
-    </form>
-
-    <div th:if="${message != null}" class="alert alert-success text-center">
-        [[${message}]]
-    </div>
+<!-- footer -->
+<div th:fragment="footer" class="text-center m-3">
+    <p>MTShop Control Panel - Copyright &copy; MT</p>
 </div>
 
 <!-- sort column -->
@@ -52,32 +34,44 @@
     </span>
 </th>
 
-<!-- enabled -->
-<div th:fragment="status(enabled, url)" th:remove="tag">
-    <a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-       th:href="@{${url}+ '/enabled/false'}" title="Vô hiệu hoá"></a>
-    <a th:if="${enabled == false}" class="fas fa-check-circle fa-2x icon-dark"
-       th:href="@{${url}+ '/enabled/true'}" title="Kích hoạt"></a>
-</div>
-
-<!-- form edit -->
-<div th:fragment="edit(url, entityName)" th:remove="tag">
-    <a th:href="@{${url}}" class="fas fa-edit fa-2x icon-green" title="'Chỉnh sửa ' + ${entityName}"></a>
-</div>
-
-<!-- delete field -->
-<div th:fragment="delete(url, entityName, visible, entityId)" th:remove="tag">
-    <th:block th:if="${visible}">
-        <a th:href="@{${url}}" class="fas fa-trash fa-2x icon-dark link-delete"
-           th:entityId="${entityId}" title="'Xoá' + ${entityName}"></a>
-    </th:block>
-</div>
-
+<!-- load page -->
 <a th:fragment="page_link(url, currentPage, label)" class="page-link"
    th:href="@{${url} + '/page/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortType=' + ${sortType} +
    ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">
     [[${label}]]
 </a>
+
+<!-- load photo image path -->
+<div th:fragment="user_photos" th:remove="tag">
+    <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
+    <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" style="width: 100px"/>
+</div>
+
+<!-- update status -->
+<div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
+    <a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+       th:href="@{${entityURL} + '/enabled/false'}"
+       th:title="'Vô hiệu hoá ' + ${entityName}"></a>
+
+    <a th:if="${enabled == false}" class="fas fa-circle fa-2x icon-dark"
+       th:href="@{${entityURL} + '/enabled/true'}"
+       th:title="'Kích hoạt ' + ${entityName}"
+    ></a>
+</div>
+
+<!-- edit -->
+<div th:fragment="edit(entityName, editURL)" th:remove="tag">
+    <a class="fas fa-edit fa-2x icon-green" th:href="@{${editURL}}"
+       th:title="'Chỉnh sửa ' + ${entityName}"></a>
+</div>
+
+<!-- delete -->
+<div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
+    <th:block th:if="${visible}">
+        <a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{${deleteURL}}" th:entityId="${entityId}"
+           th:title="'Xoá ' + ${entityName}"></a>
+    </th:block>
+</div>
 
 <!-- pagination -->
 <div th:fragment="pagination(url, entityName)" th:remove="tag">
@@ -113,8 +107,45 @@
     </div>
 </div>
 
-<div th:fragment="footer" class="text-center m-3">
-    <p>MTShop Control Panel - Copyright &copy; MT</p>
+<!-- search -->
+<div th:fragment="search_form_and_message(url)">
+    <form th:action="@{${url}}" class="form-inline m-3">
+        <input type="hidden" name="sortField" th:value="${sortField}"/>
+        <input type="hidden" name="sortType" th:value="${sortType}"/>
+
+        Tìm Kiếm: &nbsp;
+        <input type="search" name="keyword" class="form-control" required placeholder="Search"/>
+        &nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+        </button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-secondary" onclick="clearFilter()" title="Xoá">
+            <i class="fas fa-eraser"></i>
+        </button>
+    </form>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+</div>
+
+<!-- format -->
+<div th:fragment="format_currency(amount)" th:remove="tag">
+    <span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+    [[${#numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]
+    <span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+</div>
+
+<div th:fragment="format_time(dateTime)" th:remove="tag">
+    <span th:text="${#dates.format(dateTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+</div>
+
+<div th:fragment="currency_input(amount)" th:remove="tag">
+    <input type="text" readonly class="form-control"
+           th:value="${(CURRENCY_SYMBOL_POSITION == 'Before price' ? CURRENCY_SYMBOL : '') +
+           #numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE) +
+           (CURRENCY_SYMBOL_POSITION == 'After price' ? CURRENCY_SYMBOL : '')}">
 </div>
 
 </body>

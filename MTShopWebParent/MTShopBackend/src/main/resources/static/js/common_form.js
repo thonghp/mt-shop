@@ -1,7 +1,7 @@
 $(document).ready(function () {
     // navigate when pressing cancel button
     $("#btnCancel").on("click", function () {
-        window.location = moduleUrl;
+        window.location = moduleURL;
     });
 
     // check image file size

@@ -30,7 +30,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users") // http://localhost:8080/MTShopAdmin/users
+    @GetMapping("/users")
     public String listFirstPage(Model model) {
         return listByPage(1, model, "id", "asc", null);
     }
@@ -72,7 +72,6 @@ public class UserController {
 
         user.setEnabled(true);
 
-//      User(null,...,true,...)
         model.addAttribute("user", user);
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("pageTitle", "Tạo người dùng mới");

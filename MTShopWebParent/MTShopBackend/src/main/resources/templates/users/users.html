@@ -30,6 +30,9 @@
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
+                <!--                <th class="hideable-column">-->
+                <!--                <th th:replace="fragments :: column_link('id', 'ID', 'tag')"/>-->
+                <!--                </th>-->
                 <th class="hideable-column">
                 <th th:replace="fragments :: column_link('/users', 'id', 'ID', 'tag')"/>
                 </th>
@@ -44,6 +47,12 @@
 
                 <th th:replace="fragments :: column_link('/users', 'lastName', 'Họ', 'none')"/>
 
+                <!--                <th class="hideable-column">-->
+                <!--                <th th:replace="fragments :: column_link('email', 'Email', 'tag')"/>-->
+                <!--                </th>-->
+
+                <!--                <th th:replace="fragments :: column_link('firstName', 'Tên', 'none')"/>-->
+                <!--                <th th:replace="fragments :: column_link('lastName', 'Họ', 'none')"/>-->
                 <th>Vai trò</th>
                 <th>Trạng thái</th>
                 <th></th>
@@ -55,20 +64,19 @@
             <tr th:each="user: ${listUsers}">
                 <td class="hideable-column">[[${user.id}]]</td>
                 <td>
-                    <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
-                    <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" style="width: 100px"/>
+                    <div th:replace="fragments :: user_photos"/>
                 </td>
                 <td class="hideable-column">[[${user.email}]]</td>
                 <td>[[${user.firstName}]]</td>
                 <td>[[${user.lastName}]]</td>
                 <td>[[${user.roles}]]</td>
                 <td>
-                    <div th:replace="fragments :: status(${user.enabled}, '/users/' + ${user.id})"/>
+                    <div th:replace="fragments :: status(${user.enabled}, 'Người dùng', '/users/' + ${user.id})"/>
                 </td>
                 <td>
-                    <div th:replace="fragments :: edit('/users/edit/' + ${user.id}, 'người dùng')"/>
+                    <div th:replace="fragments :: edit('người dùng', '/users/edit/' + ${user.id})"/>
                     &nbsp;
-                    <div th:replace="fragments :: delete('/users/delete/' + ${user.id}, 'người dùng', true, ${user.id})"/>
+                    <div th:replace="fragments :: delete('người dùng', ${user.id}, '/users/delete/' + ${user.id}, true)"/>
                 </td>
             </tr>
             </tbody>
@@ -81,18 +89,17 @@
     <div class="less-details">
         <div th:each="user: ${listUsers}" class="row m-1">
             <div class="col-4">
-                <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
-                <img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" style="width: 100px"/>
+                <div th:replace="fragments :: user_photos"/>
             </div>
             <div class="col-8">
                 <div>[[${user.fullName}]]</div>
                 <div>[[${user.roles}]]</div>
                 <div>
-                    <div th:replace="fragments :: status(${user.enabled}, '/users/' + ${user.id})"/>
+                    <div th:replace="fragments :: status(${user.enabled}, 'Người dùng', '/users/' + ${user.id})"/>
                     &nbsp;
-                    <div th:replace="fragments :: edit('/users/edit/' + ${user.id}, 'người dùng')"/>
+                    <div th:replace="fragments :: edit('người dùng', '/users/edit/' + ${user.id})"/>
                     &nbsp;
-                    <div th:replace="fragments :: delete('/users/delete/' + ${user.id}, 'người dùng', true, ${user.id})"/>
+                    <div th:replace="fragments :: delete('người dùng', ${user.id}, '/users/delete/' + ${user.id}, true)"/>
                 </div>
             </div>
             <div>&nbsp;</div>
@@ -100,6 +107,7 @@
     </div>
 
     <!-- pagination -->
+    <!--    <div th:replace="fragments :: pagination('Người dùng')"></div>-->
     <div th:replace="fragments :: pagination('/users', 'người dùng')"></div>
 
     <!-- confirm modal -->
@@ -111,7 +119,7 @@
 </div>
 
 <script type="text/javascript">
-    moduleUrl = "[[@{/users/}]]";
+    moduleURL = "[[@{/users/}]]";
 
     $(document).ready(function () {
         $(".link-delete").on("click", function (e) {

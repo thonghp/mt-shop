@@ -1,10 +1,15 @@
 package com.mtshop.common.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "role")
+@Getter
+@Setter
 public class Role extends IdBasedEntity {
 
     @Column(length = 40, nullable = false, unique = true) // varchar 40, not null
@@ -12,7 +17,6 @@ public class Role extends IdBasedEntity {
 
     @Column(length = 150, nullable = false)
     private String description;
-
 
     public Role() {
     }
@@ -27,22 +31,6 @@ public class Role extends IdBasedEntity {
 
     public Role(String name, String description) {
         this.description = description;
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 
