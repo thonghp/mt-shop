@@ -47,9 +47,9 @@
                     </th:block>
                 </td>
                 <td>
-                    <div th:replace="fragments :: edit('/brands/edit/' + ${brand.id}, 'nhãn hiệu')"/>
+                    <div th:replace="fragments :: edit('nhãn hiệu', '/brands/edit/' + ${brand.id})"/>
                     &nbsp;
-                    <div th:replace="fragments :: delete('/brands/delete/' + ${brand.id}, 'nhãn hiệu', true, ${brand.id})"/>
+                    <div th:replace="fragments :: delete('nhãn hiệu', ${brand.id}, '/brands/delete/' + ${brand.id},  true)"/>
                 </td>
             </tr>
             </tbody>
@@ -67,10 +67,9 @@
             <div class="col-6">
                 <div>[[${brand.name}]]</div>
                 <div class="mt-2">
-                    <div th:replace="fragments :: edit('/brands/edit/' + ${brand.id}, 'nhãn hiệu')"/>
+                    <div th:replace="fragments :: edit('nhãn hiệu', '/brands/edit/' + ${brand.id})"/>
                     &nbsp;
-                    <div th:replace="fragments :: delete('/brands/delete/' + ${brand.id}, 'nhãn hiệu',
-                    true, ${brand.id})"/>
+                    <div th:replace="fragments :: delete('nhãn hiệu', ${brand.id}, '/brands/delete/' + ${brand.id},  true)"/>
                 </div>
             </div>
             <div>&nbsp;</div>
@@ -88,7 +87,7 @@
 </div>
 
 <script type="text/javascript">
-    moduleUrl = "[[@{/brands/}]]";
+    moduleURL = "[[@{/brands/}]]";
 
     $(document).ready(function () {
         $(".link-delete").on("click", function (e) {
