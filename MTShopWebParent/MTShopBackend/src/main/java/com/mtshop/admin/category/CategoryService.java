@@ -220,8 +220,4 @@ public class CategoryService {
     public void updateCategoryEnabledStatus(Integer id, boolean enabled) {
         categoryRepo.updateEnabledStatus(id, enabled);
     }
-
-//    public Category getByEmail(String email) {
-//        return categoryRepo.findByEmail(email);
-//    }
 }
