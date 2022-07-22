@@ -1,10 +1,14 @@
 package com.mtshop.common.entity.setting;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "settings")
+@Getter
+@Setter
 public class Setting {
     @Id
     @Column(name = "`key`", nullable = false, length = 128)
@@ -27,30 +31,6 @@ public class Setting {
     public Setting(String key, String value, SettingCategory category) {
         this.key = key;
         this.value = value;
-        this.category = category;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public SettingCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(SettingCategory category) {
         this.category = category;
     }
 
