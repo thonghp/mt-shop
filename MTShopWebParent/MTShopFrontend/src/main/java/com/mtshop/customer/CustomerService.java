@@ -3,11 +3,13 @@ package com.mtshop.customer;
 import com.mtshop.common.entity.Country;
 import com.mtshop.common.entity.Customer;
 import com.mtshop.setting.CountryRepository;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,18 +30,19 @@ public class CustomerService {
         return customer == null;
     }
 
-//    public void registerCustomer(Customer customer) {
-//        encodePassword(customer);
-//        customer.setEnabled(false);
-//        customer.setCreatedTime(new Date());
+    public void registerCustomer(Customer customer) {
+        encodePassword(customer);
+        customer.setEnabled(false);
+        customer.setCreatedTime(new Date());
 //        customer.setAuthenticationType(AuthenticationType.DATABASE);
-//
-//        String randomCode = RandomString.make(64);
-//        customer.setVerificationCode(randomCode);
-//
+
+        // generate 1 random string of specified length
+        String randomCode = RandomString.make(64);
+        customer.setVerificationCode(randomCode);
+
 //        customerRepo.save(customer);
-//
-//    }
+
+    }
 
     public Customer getCustomerByEmail(String email) {
         return customerRepo.findByEmail(email);
