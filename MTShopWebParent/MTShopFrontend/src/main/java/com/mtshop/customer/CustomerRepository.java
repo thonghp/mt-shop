@@ -11,7 +11,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Integer> {
 
     Customer findByVerificationCode(String verificationCode);
 
-    @Query("update Customer c set c.enabled = true where c.id = ?1")
+    @Query("update Customer c set c.enabled = true, c.verificationCode = null where c.id = ?1")
     @Modifying
     void enable(Integer id);
 }

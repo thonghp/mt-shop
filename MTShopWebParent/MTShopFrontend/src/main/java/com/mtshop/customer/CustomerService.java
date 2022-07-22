@@ -40,8 +40,7 @@ public class CustomerService {
         String randomCode = RandomString.make(64);
         customer.setVerificationCode(randomCode);
 
-//        customerRepo.save(customer);
-
+        customerRepo.save(customer);
     }
 
     public Customer getCustomerByEmail(String email) {
@@ -90,19 +89,19 @@ public class CustomerService {
 //        customerRepo.save(customer);
 //    }
 
-    private void setName(String name, Customer customer) {
-        String[] nameArray = name.split(" ");
-        if (nameArray.length < 2) {
-            customer.setFirstName(name);
-            customer.setLastName("");
-        } else {
-            String firstName = nameArray[0];
-            customer.setFirstName(firstName);
-
-            String lastName = name.replaceFirst(firstName + " ", "");
-            customer.setLastName(lastName);
-        }
-    }
+//    private void setName(String name, Customer customer) {
+//        String[] nameArray = name.split(" ");
+//        if (nameArray.length < 2) {
+//            customer.setFirstName(name);
+//            customer.setLastName("");
+//        } else {
+//            String firstName = nameArray[0];
+//            customer.setFirstName(firstName);
+//
+//            String lastName = name.replaceFirst(firstName + " ", "");
+//            customer.setLastName(lastName);
+//        }
+//    }
 
 //    public void update(Customer customerInForm) {
 //        Customer customerInDB = customerRepo.findById(customerInForm.getId()).get();
