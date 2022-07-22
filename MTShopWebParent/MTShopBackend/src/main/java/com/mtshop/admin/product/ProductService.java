@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -22,10 +21,6 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepo;
-
-    public List<Product> listAll() {
-        return (List<Product>) productRepo.findAll();
-    }
 
     public Page<Product> listByPage(int pageNum, String sortField, String sortType, String keyword, Integer categoryId) {
         Sort sort = Sort.by(sortField);
@@ -109,34 +104,8 @@ public class ProductService {
 
         return "OK";
     }
-//
-//    private SortedSet<Brand> sortSubCategories(Set<Brand> children) {
-//        return sortSubCategories(children, "asc");
-//    }
-//
-//    private SortedSet<Brand> sortSubCategories(Set<Brand> children, String sortDir) {
-//        SortedSet<Brand> sortedSet = new TreeSet<>(new Comparator<Brand>() {
-//            @Override
-//            public int compare(Brand o1, Brand o2) {
-//                if (sortDir.equals("asc")) {
-//                    return o1.getName().compareTo(o2.getName());
-//                } else {
-//                    return o2.getName().compareTo(o1.getName());
-//                }
-//            }
-//        });
-//
-//        sortedSet.addAll(children);
-//
-//        return sortedSet;
-//    }
-
 
     public void updateProductEnabledStatus(Integer id, boolean enabled) {
         productRepo.updateEnabledStatus(id, enabled);
     }
-
-//    public Category getByEmail(String email) {
-//        return categoryRepo.findByEmail(email);
-//    }
 }

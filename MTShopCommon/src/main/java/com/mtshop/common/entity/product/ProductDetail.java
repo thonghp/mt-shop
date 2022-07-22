@@ -1,11 +1,15 @@
 package com.mtshop.common.entity.product;
 
 import com.mtshop.common.entity.IdBasedEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "product_details")
+@Getter
+@Setter
 public class ProductDetail extends IdBasedEntity {
 
     @Column(nullable = false)
@@ -34,37 +38,8 @@ public class ProductDetail extends IdBasedEntity {
         this.product = product;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     @Override
     public String toString() {
-        return "ProductDetail{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", value='" + value + '\'' +
-                ", product=" + product +
-                '}';
+        return "ProductDetail{" + "id=" + id + ", name='" + name + '\'' + ", value='" + value + '\'' + ", product=" + product + '}';
     }
 }

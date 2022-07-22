@@ -96,7 +96,7 @@
 
                 <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
                     <td>
-                        <div th:replace="fragments :: status(${product.enabled}, '/products/' + ${product.id})"/>
+                        <div th:replace="fragments :: status(${product.enabled}, 'Sản phẩm', '/products/' + ${product.id})"/>
                     </td>
                 </th:block>
 
@@ -106,13 +106,14 @@
 
                     <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')">
                         &nbsp;
-                        <div th:replace="fragments :: edit('/products/edit/' + ${product.id}, 'sản phẩm')"
+                        <div th:replace="fragments :: edit('Sản phẩm', '/products/edit/' + ${product.id})"
                              title="Xem chi tiết sản phẩm này"/>
                     </th:block>
 
                     <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
                         &nbsp;
-                        <div th:replace="fragments :: delete('/products/delete/' + ${product.id}, 'sản phẩm', true, ${product.id})"/>
+                        <div th:replace="fragments :: delete('Sản phẩm', ${product.id},
+                        '/products/delete/' + ${product.id},  true)"/>
                     </th:block>
                 </td>
             </tr>
@@ -138,19 +139,19 @@
 
                     <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')">
                         &nbsp;
-                        <div th:replace="fragments :: edit('/products/edit/' + ${product.id}, 'sản phẩm')"/>
+                        <div th:replace="fragments :: edit('Sản phẩm', '/products/edit/' + ${product.id})"
+                             title="Xem chi tiết sản phẩm này"/>
                     </th:block>
 
                     <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
                         &nbsp;
-                        <div th:replace="fragments :: delete('/products/delete/' + ${product.id}, 'sản phẩm', true, ${product.id})"/>
+                        <div th:replace="fragments :: delete('Sản phẩm', ${product.id},
+                        '/products/delete/' + ${product.id},  true)"/>
                     </th:block>
                 </div>
             </div>
         </div>
     </div>
-
-    <div th:replace="fragments :: pagination('/products', 'sản phẩm')"/>
 
     <!-- confirm modal -->
     <div th:replace="modal_fragments :: confirm_modal"></div>
@@ -161,13 +162,16 @@
         </div>
     </div>
 
+    <!-- pagination -->
+    <div th:replace="fragments :: pagination('/products', 'sản phẩm')"/>
+
     <!-- footer -->
     <div th:replace="fragments :: footer"></div>
 
 </div>
 
 <script type="text/javascript">
-    moduleUrl = "[[@{/products/}]]";
+    moduleURL = "[[@{/products/}]]";
 
     $(document).ready(function () {
         $(".link-delete").on("click", function (e) {
@@ -187,8 +191,5 @@
     });
 </script>
 <script th:src="@{/js/common_list.js}"></script>
-<script th:src="@{/js/product_form_overview.js}"></script>
-<script th:src="@{/js/product_form_images.js}"></script>
-<script th:src="@{/js/product_form_detail.js}"></script>
 </body>
 </html>

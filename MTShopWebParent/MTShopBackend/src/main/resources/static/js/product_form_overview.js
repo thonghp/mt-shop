@@ -29,7 +29,7 @@ function getCategoriesForNewForm() {
 
 function getCategories() {
     brandId = dropdownBrands.val();
-    url = brandModuleUrl + "/" + brandId + "/categories";
+    url = brandModuleURL + "/" + brandId + "/categories";
 
     $.get(url, function (responseJson) {
         $.each(responseJson, function (index, category) {

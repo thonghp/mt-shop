@@ -1,11 +1,15 @@
 package com.mtshop.common.entity.product;
 
 import com.mtshop.common.entity.IdBasedEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "product_images")
+@Getter
+@Setter
 public class ProductImage extends IdBasedEntity {
 
     @Column(nullable = false)
@@ -26,22 +30,6 @@ public class ProductImage extends IdBasedEntity {
     public ProductImage(Integer id, String name, Product product) {
         this.id = id;
         this.name = name;
-        this.product = product;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
         this.product = product;
     }
 

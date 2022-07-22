@@ -3,12 +3,16 @@ package com.mtshop.common.entity.product;
 import com.mtshop.common.entity.Brand;
 import com.mtshop.common.entity.Category;
 import com.mtshop.common.entity.IdBasedEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Table(name = "products")
+@Getter
+@Setter
 public class Product extends IdBasedEntity {
 
     @Column(unique = true, length = 256, nullable = false)
@@ -81,168 +85,8 @@ public class Product extends IdBasedEntity {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-    }
-
-    public String getFullDescription() {
-        return fullDescription;
-    }
-
-    public void setFullDescription(String fullDescription) {
-        this.fullDescription = fullDescription;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getUpdatedTime() {
-        return updatedTime;
-    }
-
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isInStock() {
-        return inStock;
-    }
-
-    public void setInStock(boolean inStock) {
-        this.inStock = inStock;
-    }
-
-    public float getCost() {
-        return cost;
-    }
-
-    public void setCost(float cost) {
-        this.cost = cost;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public float getDiscountPercent() {
-        return discountPercent;
-    }
-
-    public void setDiscountPercent(float discountPercent) {
-        this.discountPercent = discountPercent;
-    }
-
-    public float getLength() {
-        return length;
-    }
-
-    public void setLength(float length) {
-        this.length = length;
-    }
-
-    public float getWeight() {
-        return weight;
-    }
-
-    public void setWeight(float weight) {
-        this.weight = weight;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public void setHeight(float height) {
-        this.height = height;
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    public void setWidth(float width) {
-        this.width = width;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Brand getBrand() {
-        return brand;
-    }
-
-    public void setBrand(Brand brand) {
-        this.brand = brand;
-    }
-
-    public String getMainImage() {
-        return mainImage;
-    }
-
-    public void setMainImage(String mainImage) {
-        this.mainImage = mainImage;
-    }
-
-    public Set<ProductImage> getImages() {
-        return images;
-    }
-
-    public void setImages(Set<ProductImage> images) {
-        this.images = images;
-    }
-
     public void addExtraImage(String imageName) {
         this.images.add(new ProductImage(imageName, this));
-    }
-
-    public List<ProductDetail> getDetails() {
-        return details;
-    }
-
-    public void setDetails(List<ProductDetail> details) {
-        this.details = details;
     }
 
     public void addDetail(String name, String value) {
@@ -293,40 +137,8 @@ public class Product extends IdBasedEntity {
         return this.price;
     }
 
-    public int getReviewCount() {
-        return reviewCount;
-    }
-
-    public void setReviewCount(int reviewCount) {
-        this.reviewCount = reviewCount;
-    }
-
-    public float getAverageRating() {
-        return averageRating;
-    }
-
-    public void setAverageRating(float averageRating) {
-        this.averageRating = averageRating;
-    }
-
     @Transient
     public String getURI() {
         return "/p/" + this.alias + "/";
-    }
-
-    public boolean isCustomerCanReview() {
-        return customerCanReview;
-    }
-
-    public void setCustomerCanReview(boolean customerCanReview) {
-        this.customerCanReview = customerCanReview;
-    }
-
-    public boolean isReviewedByCustomer() {
-        return reviewedByCustomer;
-    }
-
-    public void setReviewedByCustomer(boolean reviewedByCustomer) {
-        this.reviewedByCustomer = reviewedByCustomer;
     }
 }
