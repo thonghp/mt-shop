@@ -1,4 +1,4 @@
-package com.mtshop.admin.brand;
+package com.mtshop.common.exception;
 
 public class BrandNotFoundException extends Throwable {
 

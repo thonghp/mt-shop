@@ -1,4 +1,4 @@
-package com.mtshop.admin.category.dto;
+package com.mtshop.common.dto;
 
 public class CategoryDTO {
     private Integer id;

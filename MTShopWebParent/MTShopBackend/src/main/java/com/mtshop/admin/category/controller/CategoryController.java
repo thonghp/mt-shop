@@ -1,11 +1,11 @@
 package com.mtshop.admin.category.controller;
 
 import com.mtshop.admin.FileUploadUtil;
-import com.mtshop.common.exception.CategoryNotFoundException;
 import com.mtshop.admin.category.CategoryPageInfo;
 import com.mtshop.admin.category.CategoryService;
 import com.mtshop.admin.category.export.CategoryCSVExporter;
 import com.mtshop.common.entity.Category;
+import com.mtshop.common.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,6 +62,7 @@ public class CategoryController {
         model.addAttribute("endCount", endElementOfPage);
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("reverseSortType", reverseSortType);
+        model.addAttribute("moduleURL", "/categories");
 
         return "categories/categories";
     }

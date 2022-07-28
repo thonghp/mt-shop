@@ -1,14 +1,12 @@
 package com.mtshop.admin.brand.controller;
 
 import com.mtshop.admin.FileUploadUtil;
-import com.mtshop.admin.brand.BrandNotFoundException;
-import com.mtshop.admin.brand.BrandPageInfo;
 import com.mtshop.admin.brand.BrandService;
 import com.mtshop.admin.brand.export.BrandCSVExporter;
 import com.mtshop.admin.category.CategoryService;
 import com.mtshop.common.entity.Brand;
 import com.mtshop.common.entity.Category;
-import com.mtshop.common.entity.User;
+import com.mtshop.common.exception.BrandNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -66,6 +64,7 @@ public class BrandController {
         model.addAttribute("reverseSortType", reverseSortType);
         model.addAttribute("keyword", keyword);
         model.addAttribute("listBrands", listBrands);
+        model.addAttribute("moduleURL", "/brands");
 
         return "brands/brands";
     }

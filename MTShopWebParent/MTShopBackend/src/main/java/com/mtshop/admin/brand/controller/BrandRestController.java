@@ -1,9 +1,9 @@
 package com.mtshop.admin.brand.controller;
 
-import com.mtshop.admin.brand.BrandNotFoundException;
+import com.mtshop.common.exception.BrandNotFoundException;
 import com.mtshop.admin.brand.BrandNotFoundRestException;
 import com.mtshop.admin.brand.BrandService;
-import com.mtshop.admin.category.dto.CategoryDTO;
+import com.mtshop.common.dto.CategoryDTO;
 import com.mtshop.common.entity.Brand;
 import com.mtshop.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;

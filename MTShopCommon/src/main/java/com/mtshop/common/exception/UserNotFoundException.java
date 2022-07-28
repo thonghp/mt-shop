@@ -1,4 +1,4 @@
-package com.mtshop.admin.user;
+package com.mtshop.common.exception;
 
 public class UserNotFoundException extends Exception {
     public UserNotFoundException(String message) {

@@ -2,6 +2,7 @@ package com.mtshop.admin.user;
 
 import com.mtshop.common.entity.Role;
 import com.mtshop.common.entity.User;
+import com.mtshop.common.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

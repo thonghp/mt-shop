@@ -1,7 +1,7 @@
 package com.mtshop.admin.brand;
 
 import com.mtshop.common.entity.Brand;
-import com.mtshop.common.entity.User;
+import com.mtshop.common.exception.BrandNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

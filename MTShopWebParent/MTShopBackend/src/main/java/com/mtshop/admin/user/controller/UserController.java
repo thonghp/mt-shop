@@ -1,7 +1,7 @@
 package com.mtshop.admin.user.controller;
 
 import com.mtshop.admin.FileUploadUtil;
-import com.mtshop.admin.user.UserNotFoundException;
+import com.mtshop.common.exception.UserNotFoundException;
 import com.mtshop.admin.user.UserService;
 import com.mtshop.admin.user.export.UserCSVExporter;
 import com.mtshop.admin.user.export.UserExcelExporter;
@@ -61,6 +61,7 @@ public class UserController {
         model.addAttribute("sortType", sortType);
         model.addAttribute("reverseSortType", reverseSortType);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("moduleURL", "/users");
 
         return "users/users";
     }
