@@ -9,25 +9,26 @@
     <!-- navigation -->
     <div th:replace="navigation::menu"></div>
 
-    <!-- user form -->
     <div>
-        <!-- class="text-center mt-3 mb-3" -->
-        <h2>Quản Lý nhãn hiệu</h2>
+        <h2>Quản Lý Nhãn Hiệu</h2>
         <a th:href="@{/brands/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
         <a th:href="@{/brands/export/csv}" class="fas fa-file-csv fa-2x mr-2" style="color: #007c01"></a>
     </div>
 
     <!-- search -->
-    <div th:replace="fragments :: search_form_and_message('/brands/page/1')"/>
+    <div th:replace="fragments :: search_form_and_message()"/>
 
     <!-- table -->
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
-                <th class="hideable-column">Id</th>
+                <th class="hideable-column">
+                <th th:replace="fragments :: column_link('id', 'ID', 'tag')"/>
+                </th>
+
                 <th>Logo</th>
-                <th th:replace="fragments :: column_link('/brands', 'name', 'Tên', 'none')"/>
+                <th th:replace="fragments :: column_link('name', 'Tên', 'none')"/>
                 <th>Thể loại</th>
                 <th></th>
             </tr>
@@ -53,12 +54,10 @@
                 </td>
             </tr>
             </tbody>
-            <!-- load user list -->
-
         </table>
     </div>
-    <!-- table -->
 
+    <!-- responsive -->
     <div class="less-details">
         <div th:each="brand: ${listBrands}" class="row m-1">
             <div class="col-6">
@@ -76,13 +75,13 @@
         </div>
     </div>
 
-    <div th:replace="fragments :: pagination('/brands', 'nhãn hiệu')"/>
+    <div th:replace="fragments :: pagination('nhãn hiệu')"/>
 
     <!-- confirm modal -->
-    <div th:replace="modal_fragments :: confirm_modal"></div>
+    <div th:replace="modal_fragments :: confirm_modal"/>
 
     <!-- footer -->
-    <div th:replace="fragments :: footer"></div>
+    <div th:replace="fragments :: footer"/>
 
 </div>
 
@@ -92,7 +91,7 @@
     $(document).ready(function () {
         $(".link-delete").on("click", function (e) {
             e.preventDefault();
-            showDeleteConfirmModal($(this), 'brand');
+            showDeleteConfirmModal($(this), 'nhãn hiệu');
         });
     });
 </script>

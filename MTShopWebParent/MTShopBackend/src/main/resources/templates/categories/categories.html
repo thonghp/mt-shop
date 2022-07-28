@@ -9,16 +9,14 @@
     <!-- navigation -->
     <div th:replace="navigation::menu"></div>
 
-    <!-- user form -->
     <div>
-        <!-- class="text-center mt-3 mb-3" -->
-        <h2>Quản Lý Thể loại</h2>
+        <h2>Quản Lý Thể Loại</h2>
         <a th:href="@{/categories/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
         <a th:href="@{/categories/export/csv}" class="fas fa-file-csv fa-2x mr-2" style="color: #007c01"></a>
     </div>
 
     <!-- search -->
-    <div th:replace="fragments :: search_form_and_message('/categories/page/1')"/>
+    <div th:replace="fragments :: search_form_and_message()"/>
 
     <!-- table -->
     <div class="full-details">
@@ -27,7 +25,7 @@
             <tr>
                 <th>Id</th>
                 <th>Image</th>
-                <th th:replace="fragments :: column_link('/categories', 'name', 'Tên', 'none')"/>
+                <th th:replace="fragments :: column_link('name', 'Tên', 'none')"/>
                 <th class="hideable-column">Alias</th>
                 <th>Trạng thái</th>
                 <th></th>
@@ -54,12 +52,10 @@
                 </td>
             </tr>
             </tbody>
-            <!-- load user list -->
-
         </table>
     </div>
-    <!-- table -->
 
+    <!-- responsive -->
     <div class="less-details">
         <div th:each="category: ${listCategories}" class="row m-1">
             <div class="col-4">
@@ -82,18 +78,18 @@
 
     <div th:if="${keyword != null}" class="text-center">
         <span>Kết quả tìm kiếm không hiển thị các danh mục ở dạng phân cấp</span>
-        <div th:replace="fragments :: pagination('/categories', 'thể loại')"></div>
+        <div th:replace="fragments :: pagination('thể loại')"/>
     </div>
 
     <th:block th:unless="${keyword != null}">
-        <div th:replace="fragments :: pagination('/categories', 'top-level thể loại')"></div>
+        <div th:replace="fragments :: pagination('top-level thể loại')"/>
     </th:block>
 
     <!-- confirm modal -->
-    <div th:replace="modal_fragments :: confirm_modal"></div>
+    <div th:replace="modal_fragments :: confirm_modal"/>
 
     <!-- footer -->
-    <div th:replace="fragments :: footer"></div>
+    <div th:replace="fragments :: footer"/>
 
 </div>
 
@@ -103,7 +99,7 @@
     $(document).ready(function () {
         $(".link-delete").on("click", function (e) {
             e.preventDefault();
-            showDeleteConfirmModal($(this), 'category');
+            showDeleteConfirmModal($(this), 'thể loại');
         });
     });
 </script>

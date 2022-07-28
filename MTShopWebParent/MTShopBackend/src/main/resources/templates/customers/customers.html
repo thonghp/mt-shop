@@ -4,32 +4,33 @@
 <body>
 <div class="container-fluid">
     <div th:replace="navigation :: menu"></div>
+
     <div>
-        <h2 class="text-center mt-4">Quản Lý Khách Hàng</h2>
+        <h2>Quản Lý Khách Hàng</h2>
     </div>
 
-    <div th:replace="fragments :: search_form_and_message('/customers/page/1')"/>
+    <div th:replace="fragments :: search_form_and_message()"/>
 
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
-                <th th:replace="fragments :: column_link('/customers', 'id', 'ID', 'none')"/>
-                <th th:replace="fragments :: column_link('/customers', 'firstName', 'Tên', 'none')"/>
-                <th th:replace="fragments :: column_link('/customers', 'lastName', 'Họ', 'none')"/>
+                <th th:replace="fragments :: column_link('id', 'ID', 'none')"/>
+                <th th:replace="fragments :: column_link('firstName', 'Tên', 'none')"/>
+                <th th:replace="fragments :: column_link('lastName', 'Họ', 'none')"/>
 
                 <th class="hideable-column">
-                <th th:replace="fragments :: column_link('/customers', 'email', 'E-mail', 'tag')"/>
+                <th th:replace="fragments :: column_link('email', 'E-mail', 'tag')"/>
                 </th>
 
-                <th th:replace="fragments :: column_link('/customers', 'country', 'Quốc gia', 'none')"/>
+                <th th:replace="fragments :: column_link('country', 'Quốc gia', 'none')"/>
 
                 <th class="hideable-column">
-                <th th:replace="fragments :: column_link('/customers', 'city', 'Thành phố', 'tag')"/>
+                <th th:replace="fragments :: column_link('city', 'Thành phố', 'tag')"/>
                 </th>
 
                 <th class="hideable-column">
-                <th th:replace="fragments :: column_link('/customers', 'state', 'Quận', 'tag')"/>
+                <th th:replace="fragments :: column_link('state', 'Quận', 'tag')"/>
                 </th>
 
                 <th>Trạng thái</th>
@@ -46,12 +47,11 @@
                 <td class="hideable-column">[[${customer.state}]]</td>
                 <td class="hideable-column">[[${customer.city}]]</td>
                 <td>
-                    <div th:replace="fragments :: status(${customer.enabled}, 'Khách hàng', '/customers/' + ${customer.id})"/>
+                    <div th:replace="fragments :: status(${customer.enabled}, 'khách hàng', '/customers/' + ${customer.id})"/>
                 </td>
                 <td>
                     <a class="fas fa-file-alt fa-2x icon-green link-detail"
-                       th:href="@{'/customers/detail/' + ${customer.id}}"
-                       title="Xem chi tiết"
+                       th:href="@{'/customers/detail/' + ${customer.id}}" title="Xem chi tiết"
                     ></a>
                     &nbsp;
                     <div th:replace="fragments :: delete('Khách hàng', ${customer.id}, '/customers/delete/' + ${customer.id}, true)"/>
@@ -71,7 +71,7 @@
                     <span>[[${customer.country.name}]]</span>
                 </div>
                 <div>
-                    <div th:replace="fragments :: status(${customer.enabled}, 'Khách hàng', '/customers/' + ${customer.id})"/>
+                    <div th:replace="fragments :: status(${customer.enabled}, 'khách hàng', '/customers/' + ${customer.id})"/>
                     &nbsp;
                     <a class="fas fa-file-alt fa-2x icon-green link-detail"
                        th:href="@{'/customers/detail/' + ${customer.id}}"
@@ -85,7 +85,7 @@
         </div>
     </div>
 
-    <div th:replace="fragments :: pagination('/customers', 'Khách hàng')"></div>
+    <div th:replace="fragments :: pagination('khách hàng')"/>
 
     <div th:replace="modal_fragments :: confirm_modal"/>
 
@@ -96,7 +96,7 @@
         </div>
     </div>
 
-    <div th:replace="fragments :: footer"></div>
+    <div th:replace="fragments :: footer"/>
 
 </div>
 <script th:src="@{/js/common_list.js}"></script>
@@ -106,7 +106,7 @@
     $(document).ready(function () {
         $(".link-delete").on("click", function (e) {
             e.preventDefault();
-            showDeleteConfirmModal($(this), 'customer');
+            showDeleteConfirmModal($(this), 'khách hàng');
         });
 
         $(".link-detail").on("click", function (e) {
