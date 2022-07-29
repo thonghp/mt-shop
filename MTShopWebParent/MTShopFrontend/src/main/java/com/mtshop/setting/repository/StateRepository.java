@@ -1,4 +1,4 @@
-package com.mtshop.setting;
+package com.mtshop.setting.repository;
 
 import com.mtshop.common.entity.Country;
 import com.mtshop.common.entity.State;

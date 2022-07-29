@@ -1,0 +1,36 @@
+server:
+  port: 80
+  servlet:
+    context-path: /MTShop
+spring:
+  datasource:
+    password: 123456
+    url: jdbc:mysql://localhost:3306/mtshopdb
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: false
+  main:
+    allow-circular-references: 'true'
+    
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 872406022704-rfiulnqh7aktjdhsvkv7dk264rkrf9na.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+            - email
+            - profile
+          facebook:
+            client-id: 419510976629531
+            client-secret: c0b02b4963c49100f41a361cd8abe5e8
+            scope:
+              - email
+              - public_profile

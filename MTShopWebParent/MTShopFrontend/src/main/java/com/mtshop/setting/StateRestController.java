@@ -3,6 +3,7 @@ package com.mtshop.setting;
 import com.mtshop.common.dto.StateDTO;
 import com.mtshop.common.entity.Country;
 import com.mtshop.common.entity.State;
+import com.mtshop.setting.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

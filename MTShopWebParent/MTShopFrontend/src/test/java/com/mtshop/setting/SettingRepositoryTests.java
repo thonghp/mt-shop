@@ -2,6 +2,7 @@ package com.mtshop.setting;
 
 import com.mtshop.common.entity.setting.Setting;
 import com.mtshop.common.entity.setting.SettingCategory;
+import com.mtshop.setting.repository.SettingRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

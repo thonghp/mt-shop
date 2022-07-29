@@ -1,4 +1,4 @@
-package com.mtshop.setting;
+package com.mtshop.setting.repository;
 
 import com.mtshop.common.entity.setting.Setting;
 import com.mtshop.common.entity.setting.SettingCategory;
