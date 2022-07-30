@@ -47,45 +47,34 @@
 
                 <!-- description -->
                 <div class="tab-pane" id="description" role="tabpanel">
-                    <th:block th:if="${!#authorization.expression('hasAuthority(''Admin'')') &&
-                    !#authorization.expression('hasAuthority(''Editor'')')}">
-                        <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
-                            <div th:replace="products/product_description_read_only :: content"></div>
-                        </th:block>
+
+                    <th:block th:if="${isReadOnlyForSalesperson}">
+                        <div th:replace="products/product_description_read_only :: content"></div>
                     </th:block>
 
-                    <th:block th:if="${#authorization.expression('hasAuthority(''Admin'')') ||
-                        #authorization.expression('hasAuthority(''Editor'')')}">
+                    <th:block th:unless="${isReadOnlyForSalesperson}">
                         <div th:replace="products/product_description :: content"/>
                     </th:block>
                 </div>
 
                 <!-- image -->
                 <div class="tab-pane" id="images" role="tabpanel">
-                    <th:block th:if="${!#authorization.expression('hasAuthority(''Admin'')') &&
-                    !#authorization.expression('hasAuthority(''Editor'')')}">
-                        <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
-                            <div th:replace="products/product_images_read_only :: content"></div>
-                        </th:block>
+                    <th:block th:if="${isReadOnlyForSalesperson}">
+                        <div th:replace="products/product_images_read_only :: content"></div>
                     </th:block>
 
-                    <th:block th:if="${#authorization.expression('hasAuthority(''Admin'')') ||
-                    #authorization.expression('hasAuthority(''Editor'')')}">
+                    <th:block th:unless="${isReadOnlyForSalesperson}">
                         <div th:replace="products/product_image :: content"/>
                     </th:block>
                 </div>
 
                 <!-- detail -->
                 <div class="tab-pane p-3" id="details" role="tabpanel">
-                    <th:block th:if="${!#authorization.expression('hasAuthority(''Admin'')') &&
-                    !#authorization.expression('hasAuthority(''Editor'')')}">
-                        <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
-                            <div th:replace="products/product_details_read_only :: content"></div>
-                        </th:block>
+                    <th:block th:if="${isReadOnlyForSalesperson}">
+                        <div th:replace="products/product_details_read_only :: content"></div>
                     </th:block>
 
-                    <th:block th:if="${#authorization.expression('hasAuthority(''Admin'')') ||
-                    #authorization.expression('hasAuthority(''Editor'')')}">
+                    <th:block th:unless="${isReadOnlyForSalesperson}">
                         <div th:replace="products/product_detail :: content"/>
                         <div>
                             <input type="button" class="btn btn-secondary" value="Thêm chi tiết"
@@ -96,14 +85,11 @@
 
                 <!-- shipping -->
                 <div class="tab-pane p-3" id="shipping" role="tabpanel">
-                    <th:block th:if="${!#authorization.expression('hasAuthority(''Admin'')') &&
-                    !#authorization.expression('hasAuthority(''Editor'')')}">
-                        <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
-                            <div th:replace="products/product_shipping_read_only :: content"></div>
-                        </th:block>
+                    <th:block th:if="${isReadOnlyForSalesperson}">
+                        <div th:replace="products/product_shipping_read_only :: content"></div>
                     </th:block>
-                    <th:block th:if="${#authorization.expression('hasAuthority(''Admin'')') ||
-                    #authorization.expression('hasAuthority(''Editor'')')}">
+
+                    <th:block th:unless="${isReadOnlyForSalesperson}">
                         <div th:replace="products/product_shipping :: content"/>
                     </th:block>
                 </div>

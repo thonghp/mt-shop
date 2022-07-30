@@ -37,6 +37,8 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
+    private String defaultRedirectURL = "redirect:/products/page/1?sortField=name&sortType=asc&categoryId=0";
+
     @GetMapping("/products")
     public String listFirstPage(Model model) {
         return listByPage(1, model, "name", "asc", null, 0);
@@ -107,11 +109,13 @@ public class ProductController {
                               @RequestParam(name = "imageIDs", required = false) String[] imageIDs,
                               @RequestParam(name = "imageNames", required = false) String[] imageNames,
                               @AuthenticationPrincipal MTShopUserDetails logger) throws IOException {
-        if (logger.hasRole("Salesperson")) {
-            productService.saveProductPrice(product);
-            redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được lưu thành công !");
+        if (!logger.hasRole("Admin") && !logger.hasRole("Editor")) {
+            if (logger.hasRole("Salesperson")) {
+                productService.saveProductPrice(product);
+                redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được lưu thành công !");
 
-            return "redirect:/products";
+                return defaultRedirectURL;
+            }
         }
 
         ProductSaveHelper.setMainImageName(mainImageMultipart, product);
@@ -127,18 +131,27 @@ public class ProductController {
 
         redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được lưu thành công !");
 
-        return "redirect:/products";
+        return defaultRedirectURL;
     }
 
 
     @GetMapping("/products/edit/{id}")
     public String editProduct(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes
-            redirectAttributes) {
+            redirectAttributes, @AuthenticationPrincipal MTShopUserDetails loggedUser) {
         try {
             Product product = productService.get(id);
             List<Brand> listBrands = brandService.listAll();
             Integer numberOfExistingExtraImages = product.getImages().size();
 
+            boolean isReadOnlyForSalesperson = false;
+
+            if (!loggedUser.hasRole("Admin") && !loggedUser.hasRole("Editor")) {
+                if (loggedUser.hasRole("Salesperson")) {
+                    isReadOnlyForSalesperson = true;
+                }
+            }
+
+            model.addAttribute("isReadOnlyForSalesperson", isReadOnlyForSalesperson);
             model.addAttribute("product", product);
             model.addAttribute("listBrands", listBrands);
             model.addAttribute("pageTitle", "Sửa sản phẩm với (ID: " + id + ")");
@@ -148,7 +161,7 @@ public class ProductController {
         } catch (ProductNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
 
-            return "redirect:/products";
+            return defaultRedirectURL;
         }
     }
 
@@ -164,7 +177,7 @@ public class ProductController {
         } catch (ProductNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
 
-            return "redirect:/products";
+            return defaultRedirectURL;
         }
     }
 
@@ -178,7 +191,7 @@ public class ProductController {
             FileUploadUtil.removeDir(productExtraImagesDir);
             FileUploadUtil.removeDir(producImagesDir);
 
-            redirectAttributes.addFlashAttribute("message", "Nhãn hiệu có id  " + id +
+            redirectAttributes.addFlashAttribute("message", "Sản phẩm có id  " + id +
                     " được xoá thành công !");
         } catch (ProductNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
@@ -198,6 +211,6 @@ public class ProductController {
 
         redirectAttributes.addFlashAttribute("message", message);
 
-        return "redirect:/products";
+        return defaultRedirectURL;
     }
 }
