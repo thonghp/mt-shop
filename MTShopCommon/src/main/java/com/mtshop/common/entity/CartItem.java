@@ -1,15 +1,13 @@
 package com.mtshop.common.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import com.mtshop.common.entity.product.Product;
+import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "cart_items")
+@Data
 public class CartItem extends IdBasedEntity {
 	
 	@ManyToOne
@@ -24,39 +22,6 @@ public class CartItem extends IdBasedEntity {
 	
 	@Transient
 	private float shippingCost;
-	
-	public CartItem() {
-	}
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	@Override
-	public String toString() {
-		return "CartItem [id=" + id + ", customer=" + customer.getFullName() + ", product=" + product.getShortName() + ", quantity=" + quantity
-				+ "]";
-	}
 
 	@Transient
 	public float getSubtotal() {
@@ -71,6 +36,5 @@ public class CartItem extends IdBasedEntity {
 	public void setShippingCost(float shippingCost) {
 		this.shippingCost = shippingCost;
 	}
-	
 	
 }
