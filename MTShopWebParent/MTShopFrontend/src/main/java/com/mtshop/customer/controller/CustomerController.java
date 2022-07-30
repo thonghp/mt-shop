@@ -1,6 +1,6 @@
 package com.mtshop.customer.controller;
 
-import com.mtshop.Ultility;
+import com.mtshop.Utility;
 import com.mtshop.common.entity.Country;
 import com.mtshop.common.entity.Customer;
 import com.mtshop.customer.CustomerService;
@@ -59,7 +59,7 @@ public class CustomerController {
     private void sendVerificationEmail(HttpServletRequest request, Customer customer)
             throws UnsupportedEncodingException, MessagingException {
         EmailSettingBag emailSettings = settingService.getEmailSettings();
-        JavaMailSenderImpl mailSender = Ultility.prepareMailSender(emailSettings);
+        JavaMailSenderImpl mailSender = Utility.prepareMailSender(emailSettings);
 
         String toAddress = customer.getEmail();
         String subject = emailSettings.getCustomerVerifySubject();
@@ -74,7 +74,7 @@ public class CustomerController {
 
         content = content.replace("[[name]]", customer.getFullName());
 
-        String verifyURL = Ultility.getSiteURL(request) + "/verify?code=" + customer.getVerificationCode();
+        String verifyURL = Utility.getSiteURL(request) + "/verify?code=" + customer.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyURL);
 
@@ -95,7 +95,7 @@ public class CustomerController {
 
     @GetMapping("/account_details")
     public String viewAccountDetails(Model model, HttpServletRequest request) {
-        String email = getEmailOfAuthenticatedCustomer(request);
+        String email = Utility.getEmailOfAuthenticatedCustomer(request);
         Customer customer = customerService.getCustomerByEmail(email);
         List<Country> listCountries = customerService.listAllCountries();
 
@@ -103,22 +103,6 @@ public class CustomerController {
         model.addAttribute("listCountries", listCountries);
 
         return "customer/account_form";
-    }
-
-    private String getEmailOfAuthenticatedCustomer(HttpServletRequest request) {
-        Object principal = request.getUserPrincipal();
-        String customerEmail = null;
-
-        if (principal instanceof UsernamePasswordAuthenticationToken
-                || principal instanceof RememberMeAuthenticationToken) {
-            customerEmail = request.getUserPrincipal().getName();
-        } else if (principal instanceof OAuth2AuthenticationToken) {
-            OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) principal;
-            CustomerOAuth2User oauth2User = (CustomerOAuth2User) oauth2Token.getPrincipal();
-            customerEmail = oauth2User.getEmail();
-        }
-
-        return customerEmail;
     }
 
     @PostMapping("/update_account_details")

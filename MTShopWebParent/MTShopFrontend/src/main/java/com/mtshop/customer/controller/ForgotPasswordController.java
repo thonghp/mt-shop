@@ -1,6 +1,6 @@
 package com.mtshop.customer.controller;
 
-import com.mtshop.Ultility;
+import com.mtshop.Utility;
 import com.mtshop.common.entity.Customer;
 import com.mtshop.common.exception.CustomerNotFoundException;
 import com.mtshop.customer.CustomerService;
@@ -37,7 +37,7 @@ public class ForgotPasswordController {
         String email = request.getParameter("email");
         try {
             String token = customerService.updateResetPasswordToken(email);
-            String link = Ultility.getSiteURL(request) + "/reset_password?token=" + token;
+            String link = Utility.getSiteURL(request) + "/reset_password?token=" + token;
             sendEmail(link, email);
 
             model.addAttribute("message", "Chúng tôi đã gửi một liên kết đặt lại mật khẩu đến email của bạn."
@@ -54,7 +54,7 @@ public class ForgotPasswordController {
     private void sendEmail(String link, String email)
             throws UnsupportedEncodingException, MessagingException {
         EmailSettingBag emailSettings = settingService.getEmailSettings();
-        JavaMailSenderImpl mailSender = Ultility.prepareMailSender(emailSettings);
+        JavaMailSenderImpl mailSender = Utility.prepareMailSender(emailSettings);
 
         String toAddress = email;
         String subject = "Đây là liên kết để đặt lại mật khẩu của bạn";
