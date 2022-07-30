@@ -8,7 +8,7 @@ $(document).ready(function() {
 		if (newQuantity > 0) {
 			quantityInput.val(newQuantity);
 		} else {
-			showWarningModal('Minimum quantity is 1');
+			showWarningModal('Số lượng tối thiểu là 1');
 		}
 	});
 	
@@ -21,7 +21,7 @@ $(document).ready(function() {
 		if (newQuantity <= 5) {
 			quantityInput.val(newQuantity);
 		} else {
-			showWarningModal('Maximum quantity is 5');
+			showWarningModal('Số lượng tối đa là 5');
 		}
 	});	
 });
