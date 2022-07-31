@@ -1,13 +1,14 @@
 package com.mtshop.common.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "shipping_rates")
+@Getter
+@Setter
 public class ShippingRate extends IdBasedEntity {
 
 	private float rate;
@@ -22,46 +23,6 @@ public class ShippingRate extends IdBasedEntity {
 	
 	@Column(nullable = false, length = 45)
 	private String state;
-
-	public float getRate() {
-		return rate;
-	}
-
-	public void setRate(float rate) {
-		this.rate = rate;
-	}
-
-	public int getDays() {
-		return days;
-	}
-
-	public void setDays(int days) {
-		this.days = days;
-	}
-
-	public boolean isCodSupported() {
-		return codSupported;
-	}
-
-	public void setCodSupported(boolean codSupported) {
-		this.codSupported = codSupported;
-	}
-
-	public Country getCountry() {
-		return country;
-	}
-
-	public void setCountry(Country country) {
-		this.country = country;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
 
 	@Override
 	public String toString() {
@@ -92,7 +53,6 @@ public class ShippingRate extends IdBasedEntity {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}	
+	}
 
-	
 }
