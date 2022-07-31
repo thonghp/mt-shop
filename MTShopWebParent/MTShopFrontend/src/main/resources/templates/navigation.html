@@ -45,7 +45,7 @@
     <div class="col-md">
         <th:block sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
-                <input type="submit" value="Logout" />
+                <input type="submit" value="Logout"/>
             </form>
         </th:block>
 
@@ -79,13 +79,14 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="">Giỏ hàng</a>
+                            <a class="nav-link fas fa-shopping-cart fa-2x" th:href="@{/cart}"></a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="javascript: document.logoutForm.submit()">Đăng xuất</a>
                         </li>
                     </th:block>
+                </ul>
             </div>
         </nav>
     </div>

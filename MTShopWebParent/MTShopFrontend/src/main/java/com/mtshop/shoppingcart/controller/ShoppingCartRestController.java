@@ -45,31 +45,31 @@ public class ShoppingCartRestController {
 				
 		return customerService.getCustomerByEmail(email);
 	}
-	
-//	@PostMapping("/cart/update/{productId}/{quantity}")
-//	public String updateQuantity(@PathVariable("productId") Integer productId,
-//			@PathVariable("quantity") Integer quantity, HttpServletRequest request) {
-//		try {
-//			Customer customer = getAuthenticatedCustomer(request);
-//			float subtotal = cartService.updateQuantity(productId, quantity, customer);
-//
-//			return String.valueOf(subtotal);
-//		} catch (CustomerNotFoundException ex) {
-//			return "You must login to change quantity of product.";
-//		}
-//	}
-//
-//	@DeleteMapping("/cart/remove/{productId}")
-//	public String removeProduct(@PathVariable("productId") Integer productId,
-//			HttpServletRequest request) {
-//		try {
-//			Customer customer = getAuthenticatedCustomer(request);
-//			cartService.removeProduct(productId, customer);
-//
-//			return "The product has been removed from your shopping cart.";
-//
-//		} catch (CustomerNotFoundException e) {
-//			return "You must login to remove product.";
-//		}
-//	}
+
+	@PostMapping("/cart/update/{productId}/{quantity}")
+	public String updateQuantity(@PathVariable("productId") Integer productId,
+								 @PathVariable("quantity") Integer quantity, HttpServletRequest request) {
+		try {
+			Customer customer = getAuthenticatedCustomer(request);
+			float subtotal = cartService.updateQuantity(productId, quantity, customer);
+
+			return String.valueOf(subtotal);
+		} catch (CustomerNotFoundException ex) {
+			return "Bạn phải đăng nhập để thay đổi số lượng sản phẩm.";
+		}
+	}
+
+	@DeleteMapping("/cart/remove/{productId}")
+	public String removeProduct(@PathVariable("productId") Integer productId,
+								HttpServletRequest request) {
+		try {
+			Customer customer = getAuthenticatedCustomer(request);
+			cartService.removeProduct(productId, customer);
+
+			return "Sản phẩm đã được xóa khỏi giỏ hàng của bạn.";
+
+		} catch (CustomerNotFoundException e) {
+			return "Bạn phải đăng nhập để xóa sản phẩm.";
+		}
+	}
 }

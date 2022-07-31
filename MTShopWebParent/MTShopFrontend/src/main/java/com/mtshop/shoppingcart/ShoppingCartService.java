@@ -17,7 +17,8 @@ public class ShoppingCartService {
 
     @Autowired
     private CartItemRepository cartRepo;
-//	@Autowired private ProductRepository productRepo;
+    @Autowired
+    private ProductRepository productRepo;
 
     public Integer addProduct(Integer productId, Integer quantity, Customer customer)
             throws ShoppingCartException {
@@ -46,18 +47,18 @@ public class ShoppingCartService {
         return updatedQuantity;
     }
 
-//	public List<CartItem> listCartItems(Customer customer) {
-//		return cartRepo.findByCustomer(customer);
-//	}
-//
-//	public float updateQuantity(Integer productId, Integer quantity, Customer customer) {
-//		cartRepo.updateQuantity(quantity, customer.getId(), productId);
-//		Product product = productRepo.findById(productId).get();
-//		float subtotal = product.getDiscountPrice() * quantity;
-//		return subtotal;
-//	}
-//
-//	public void removeProduct(Integer productId, Customer customer) {
-//		cartRepo.deleteByCustomerAndProduct(customer.getId(), productId);
-//	}
+    public List<CartItem> listCartItems(Customer customer) {
+        return cartRepo.findByCustomer(customer);
+    }
+
+    public float updateQuantity(Integer productId, Integer quantity, Customer customer) {
+        cartRepo.updateQuantity(quantity, customer.getId(), productId);
+        Product product = productRepo.findById(productId).get();
+        float subtotal = product.getDiscountPrice() * quantity;
+        return subtotal;
+    }
+
+    public void removeProduct(Integer productId, Customer customer) {
+        cartRepo.deleteByCustomerAndProduct(customer.getId(), productId);
+    }
 }
