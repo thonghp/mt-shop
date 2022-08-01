@@ -5,30 +5,30 @@
 <div class="container-fluid">
 	<div th:replace="navigation :: menu"></div>
 	<div>
-		<h2>Manage Orders</h2>	
+		<h2>Quản Lý Đơn Hàng</h2>
 	</div>
 		
-	<div th:replace="fragments :: search_form_and_message" />
+	<div th:replace="fragments :: search_form_and_message()" />
 	
 	<div class="full-details">
 		<table class="table table-bordered table-striped table-hover table-responsive-xl">
 			<thead class="thead-dark">
 				<tr>
 					<th th:replace="fragments :: column_link('id', 'ID', 'none')" />
-					<th th:replace="fragments :: column_link('customer', 'Customer', 'none')" />
-					<th th:replace="fragments :: column_link('total', 'Total', 'none')" />
+					<th th:replace="fragments :: column_link('customer', 'Khách hàng', 'none')" />
+					<th th:replace="fragments :: column_link('total', 'Tổng cộng', 'none')" />
 					<th th:replace="fragments :: column_link('orderTime', 'Order Time', 'none')" />
 					
 					<th class="hideable-column">
-					<th th:replace="fragments :: column_link('destination', 'Destination', 'tag')" />
+					<th th:replace="fragments :: column_link('destination', 'Địa điểm', 'tag')" />
 					</th>
 					
 					<th class="hideable-column">
-					<th th:replace="fragments :: column_link('paymentMethod', 'Payment Method', 'tag')" />
+					<th th:replace="fragments :: column_link('paymentMethod', 'Phương thức thanh toán', 'tag')" />
 					</th>
 					
 					<th class="hideable-column">
-					<th th:replace="fragments :: column_link('status', 'Status', 'tag')" />
+					<th th:replace="fragments :: column_link('status', 'Trạng thái', 'tag')" />
 					</th>
 					
 					<th></th>
@@ -93,7 +93,7 @@
 		</th:block>
 	</div>	
 	
-	<div th:replace="fragments :: pagination('orders')"></div>
+	<div th:replace="fragments :: pagination('đơn hàng')"></div>
 	
 	<div th:replace="modal_fragments :: confirm_modal"></div>
 	
