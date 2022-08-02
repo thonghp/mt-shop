@@ -30,7 +30,11 @@
                             </th:block>
 
                             <th:block th:unless="${usePrimaryAddressAsDefault}">
-                                <a th:href="@{'/address_book/default/0'}">[Chọn làm mặc định]</a>
+                                <a th:unless="${param.redirect}" th:href="@{'/address_book/default/0'}">[Chọn làm mặc
+                                    định]</a>
+                                <a th:if="${param.redirect}"
+                                   th:href="@{'/address_book/default/0?redirect=' + ${param.redirect}}">[Chọn làm mặc
+                                    định]</a>
                             </th:block>
                         </div>
                         <div class="col">
@@ -60,7 +64,11 @@
                                 </th:block>
 
                                 <th:block th:unless="${address.defaultForShipping}">
-                                    <a th:href="@{'/address_book/default/' + ${address.id}}">[Chọn làm mặc định]</a>
+                                    <a th:unless="${param.redirect}"
+                                       th:href="@{'/address_book/default/' + ${address.id}}">[Chọn làm mặc định]</a>
+                                    <a th:if="${param.redirect}"
+                                       th:href="@{'/address_book/default/' + ${address.id} + '?redirect=' + ${param.redirect}}">[Chọn
+                                        làm mặc định]</a>
                                 </th:block>
 
                             </div>
